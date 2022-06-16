@@ -5,7 +5,20 @@ using TMPro;
 
 public class Login : MonoBehaviour
 {
-    public TextMeshProUGUI token;
-    public TMP_InputField token_input_fild;
-    
+    private string token;
+
+    public void getToken(string token)
+    {
+        this.token = token;
+        Debug.Log(token);
+    }
+
+    public void login()
+    {
+        DataBase db = new DataBase();
+        Debug.Log(this.token);
+        db.login(this.token);
+
+    }
+
 }
