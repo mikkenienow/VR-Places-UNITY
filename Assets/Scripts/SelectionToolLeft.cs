@@ -18,10 +18,10 @@ public class SelectionToolLeft : MonoBehaviour
     BoxCollider selectedObject;
 
     //experimental
-    /*SaveLoad saveLoad = new SaveLoad();
+    SaveLoad saveLoad = new SaveLoad();
     public List<SavableObjects> savebleObjects = new List<SavableObjects>();
     public Identification[] placebleObjects;
-    Transform parent;*/
+    Transform parent;
 
 
     //experimental
@@ -126,8 +126,8 @@ public class SelectionToolLeft : MonoBehaviour
                 triggerButtonCountPress = 0;
                 acao = "";
 
-                /*savebleObjects.Add(new SavableObjects("parede", parede.transform.position, parede.transform.rotation));
-                saveLoad.Save();*/
+                savebleObjects.Add(new SavableObjects("parede", parede.transform.position, parede.transform.rotation));
+                saveLoad.Save();
             }
         }
         if (controleEsquerdo.TryGetFeatureValue(CommonUsages.gripButton, out gripButtonAction) && gripButtonAction && !gripButtonLock)
@@ -391,26 +391,6 @@ public class SelectionToolLeft : MonoBehaviour
                     case "modificarParedeJanela":
                         break;
                 }
-                /*
-                if (modoConstrucao == "criarParede")
-                {
-                    wallCreation();
-                }
-                if (modoConstrucao.Equals("modificarParede"))
-                {
-                    wallTransformation();
-                }
-                //PORTA
-                if (modoConstrucao == "criarParedePorta")
-                {
-                    doorCreation();
-                }
-                if (modoConstrucao.Equals("modificarParedePorta"))
-                {
-                    doorTransformation();
-                }
-                //JANELA
-                */
             }
             
             if (ferramentaAtiva.Equals("selecao"))
@@ -442,6 +422,23 @@ public class SelectionToolLeft : MonoBehaviour
         }
     }
 
+    public void Reinstantiate()
+    {
+        for (int i = 0; i < savebleObjects.Count; i++)
+        {
+            for (int z = 0; z < placebleObjects.Length; z++)
+            {
+                if (savebleObjects[i].id == placebleObjects[z].id)
+                {
+                    GameObject obj = Instantiate(placebleObjects[z].prefab);
+                    obj.transform.position = savebleObjects[i].ReturnPosition();
+                    obj.transform.rotation = savebleObjects[i].ReturnRotation();
+                    obj.transform.parent = parent;
+
+                }
+            }
+        }
+    }
 }
 
 
@@ -454,28 +451,3 @@ if (hit.collider.tag == "Bola Azul")
     //print("Bola Azul");
 }*/
 
-
-/*
-print(inverterAngulo(hit));
-eixos(inverterAngulo(hit));
-switch (inverterAngulo(hit))
-{
-    case "eixoX0":
-
-        parede.transform.eulerAngles = new Vector3(0f,180f,0f);
-        parede.transform.localScale = new Vector3(eixoX0, 2, 0.15f);
-        break;
-    case "eixoX1":
-        parede.transform.eulerAngles = new Vector3(0f, 0f, 0f);
-        parede.transform.localScale = new Vector3(eixoX1, 2, 0.15f);
-        break;
-    case "eixoZ0":
-        parede.transform.eulerAngles = new Vector3(0f, 90f, 0f);
-        parede.transform.localScale = new Vector3(eixoZ0, 2, 0.15f);
-        break;
-    case "eixoZ1":
-        parede.transform.eulerAngles = new Vector3(0f, 270f, 0f);
-        parede.transform.localScale = new Vector3(eixoZ1, 2, 0.15f);
-        break;
-}
-*/
