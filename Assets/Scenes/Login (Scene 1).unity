@@ -362,7 +362,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1159487809}
         m_TargetAssemblyTypeName: Login, Assembly-CSharp
-        m_MethodName: getToken
+        m_MethodName: GetToken
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1233,7 +1233,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1159487809}
         m_TargetAssemblyTypeName: Login, Assembly-CSharp
-        m_MethodName: login
+        m_MethodName: UserLogin
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

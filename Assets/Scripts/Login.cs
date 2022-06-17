@@ -1,24 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Login : MonoBehaviour
 {
     private string token;
 
-    public void getToken(string token)
+    public void GetToken(string token)
     {
         this.token = token;
-        Debug.Log(token);
+        print(this.token);
     }
 
-    public void login()
+    public void UserLogin()
     {
+        print(this.token);
         DataBase db = new DataBase();
-        Debug.Log(this.token);
-        db.login(this.token);
-
+        User user = db.GetUser(db.loginByToken(this.token), this.token);
+        
+        if (user.GetStatus())
+        {
+            SceneManager.LoadScene("MainScene");
+        }
+        else
+        {
+            print("Usuário não cadastrado");
+        }
     }
 
 }

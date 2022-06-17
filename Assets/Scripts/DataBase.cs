@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using UnityEngine;
 
@@ -9,33 +7,63 @@ public class DataBase : MonoBehaviour
 
 
     [ContextMenu("Login")]
-    public void login(string token)
+    public string loginByToken(string token)
     {
         MySqlConnection conn = new MySqlConnection(connSrt);
+        string result = "Token inválido";
         try
         {
             conn.Open();
-            string sqlSelect = "SELECT idusuario FROM token WHERE token='" + token + "';";
+            string sqlSelect = "SELECT idusuario FROM token WHERE token='" + token + "' and status = 1;";
 
             MySqlCommand cmd = new MySqlCommand(sqlSelect, conn);
             MySqlDataReader reader = cmd.ExecuteReader();
 
-            reader.Read();
-            int cont = 0;
             while (reader.Read())
             {
-                string projeto = reader[cont].ToString();
-                cont += 1;
-                print(projeto);
+                result = reader["idusuario"].ToString();
             }
-
-            string resultado = reader.GetString(0);
             reader.Close();
-            print(resultado);
+            return result;
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
-            print("Token inválido");
+            return "Token inválido";
+            throw;
+        }
+    }
+
+
+    public User GetUser(string id, string token)
+    {
+        MySqlConnection conn = new MySqlConnection(connSrt);
+        User result = null;
+        string Usertoken = token;
+        try
+        {
+            conn.Open();
+            string sqlSelect = "SELECT * FROM usuario WHERE idusuario=" + id + ";";
+
+            MySqlCommand cmd = new MySqlCommand(sqlSelect, conn);
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string idusuario = reader["idusuario"].ToString();
+                string nome = reader["nome"].ToString();
+                string sobrenome = reader["sobrenome"].ToString();
+                string email = reader["email"].ToString();
+                int funcao = (int)reader["funcao"];
+                string assinatura = reader["assinatura"].ToString();
+
+                result = new User(idusuario, nome, sobrenome, email, funcao, assinatura, token);
+            }
+            reader.Close();
+            return result;
+        }
+        catch (System.Exception)
+        {
+            return result;
             throw;
         }
     }
