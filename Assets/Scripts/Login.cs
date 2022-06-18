@@ -15,7 +15,7 @@ public class Login : MonoBehaviour
     {
         print(this.token);
         DataBase db = new DataBase();
-        User user = db.GetUser(db.loginByToken(this.token), this.token);
+        Usuario user = db.GetUser(db.loginByToken(this.token), this.token);
         
         if (user.GetStatus())
         {

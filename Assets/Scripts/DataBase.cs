@@ -34,11 +34,10 @@ public class DataBase : MonoBehaviour
     }
 
 
-    public User GetUser(string id, string token)
+    public Usuario GetUser(string id, string token)
     {
         MySqlConnection conn = new MySqlConnection(connSrt);
-        User result = null;
-        string Usertoken = token;
+        Usuario result = null;
         try
         {
             conn.Open();
@@ -56,7 +55,7 @@ public class DataBase : MonoBehaviour
                 int funcao = (int)reader["funcao"];
                 string assinatura = reader["assinatura"].ToString();
 
-                result = new User(idusuario, nome, sobrenome, email, funcao, assinatura, token);
+                result = new Usuario(idusuario, nome, sobrenome, email, funcao, assinatura, token);
             }
             reader.Close();
             return result;
@@ -67,5 +66,7 @@ public class DataBase : MonoBehaviour
             throw;
         }
     }
+
+
 
 }

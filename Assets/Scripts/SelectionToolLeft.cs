@@ -18,15 +18,6 @@ public class SelectionToolLeft : MonoBehaviour
     BoxCollider selectedObject;
 
     //experimental
-    SaveLoad saveLoad = new SaveLoad();
-    public List<SavableObjects> savebleObjects = new List<SavableObjects>();
-    public Identification[] placebleObjects;
-    Transform parent;
-
-
-    //experimental
-
-
 
 
     string ferramentaAtiva = "construção"; //construção  selecao
@@ -35,15 +26,9 @@ public class SelectionToolLeft : MonoBehaviour
     private List<InputDevice> devices = new List<InputDevice>();
     private InputDevice controleEsquerdo;
 
-    //sistema de 3 pontos
-    Vector3 p1;
     public float range = 20;
     //funções do TRIGGER/GATILHO
-    bool triggerOn = true;
-    int countTriggerOn = 0;
     //variaveis de rotação
-    bool eixoRotX = false;
-    bool eixoRotZ = true;
     bool cont = false;
     bool anguloLivre = false;
     bool snapLigado = false;
@@ -125,9 +110,6 @@ public class SelectionToolLeft : MonoBehaviour
                 triggerButtonCount = 15;
                 triggerButtonCountPress = 0;
                 acao = "";
-
-                savebleObjects.Add(new SavableObjects("parede", parede.transform.position, parede.transform.rotation));
-                saveLoad.Save();
             }
         }
         if (controleEsquerdo.TryGetFeatureValue(CommonUsages.gripButton, out gripButtonAction) && gripButtonAction && !gripButtonLock)
@@ -414,31 +396,12 @@ public class SelectionToolLeft : MonoBehaviour
             //finalizador
             pontoInicial.transform.localScale = new Vector3(0, 0, 0);
             pontoFinal.transform.localScale = new Vector3(0, 0, 0);
-            triggerOn = true; //libera o uso do trigger
-            countTriggerOn = 0; //libera delay do trigger
             cont = false; //tranca o finalizador
             anguloLivre = false; //tranca a rotação
             
         }
     }
 
-    public void Reinstantiate()
-    {
-        for (int i = 0; i < savebleObjects.Count; i++)
-        {
-            for (int z = 0; z < placebleObjects.Length; z++)
-            {
-                if (savebleObjects[i].id == placebleObjects[z].id)
-                {
-                    GameObject obj = Instantiate(placebleObjects[z].prefab);
-                    obj.transform.position = savebleObjects[i].ReturnPosition();
-                    obj.transform.rotation = savebleObjects[i].ReturnRotation();
-                    obj.transform.parent = parent;
-
-                }
-            }
-        }
-    }
 }
 
 

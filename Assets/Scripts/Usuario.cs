@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class User : MonoBehaviour
+public class Usuario : MonoBehaviour
 {
     private string idusuario;
     private string nome;
@@ -13,7 +13,7 @@ public class User : MonoBehaviour
     private string token;
     private bool status = false;
 
-    public User(string idusuario, string nome, string sobrenome, string email, int funcao, string assinatura, string token)
+    public Usuario(string idusuario, string nome, string sobrenome, string email, int funcao, string assinatura, string token)
     {
         this.idusuario = idusuario;
         this.nome = nome;
