@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Projeto : MonoBehaviour
@@ -17,36 +17,34 @@ public class Projeto : MonoBehaviour
 
     public Projeto(string idprojeto, string idusuario, string titulo, string dimensao, string criacao, string modificacao, string referencia_tipo)
     {
-        this.idprojeto = idprojeto;
-        this.idusuario = idusuario;
-        this.titulo = titulo;
-        this.dimensao = dimensao;
-        this.criacao = criacao;
-        this.modificacao = modificacao;
-        this.referencia_tipo = referencia_tipo;
-        this.projetovrp = GetProjetoVRP();
+        this.Idprojeto = idprojeto;
+        this.Idusuario = idusuario;
+        this.Titulo = titulo;
+        this.Dimensao = dimensao;
+        this.Criacao = criacao;
+        this.Modificacao = modificacao;
+        this.Referencia_tipo = referencia_tipo;
+        this.Projetovrp = GetProjetoVRP();
     }
 
-    public string GetIdprojeto()
-    {
-        return this.idprojeto;
-    }
-    public void SetIdprojeto(string idprojeto)
-    {
-        this.idprojeto = idprojeto;
-    }
+    public string Idprojeto { get => idprojeto; set => idprojeto = value; }
+    public string Idusuario { get => idusuario; set => idusuario = value; }
+    public string Titulo { get => titulo; set => titulo = value; }
+    public string Dimensao { get => dimensao; set => dimensao = value; }
+    public string Criacao { get => criacao; set => criacao = value; }
+    public string Modificacao { get => modificacao; set => modificacao = value; }
+    public string Referencia_tipo { get => referencia_tipo; set => referencia_tipo = value; }
+    public SaveSystem Projetovrp { get => projetovrp; set => projetovrp = value; }
 
     public SaveSystem GetProjetoVRP()
     {
-        string fileOrigin = "https://vrplaces.com.br/_files/_projetos/" + idusuario + "/" + idprojeto + ".vrp";
+        string fileOrigin = "https://vrplaces.com.br/_files/_projetos/" + Idusuario + "/" + Idprojeto + ".vrp";
         if (TransferDown.URLExists(fileOrigin))
         {
             print("Arquivo localizado");
-            TransferDown td = new TransferDown("/temp/projetos/", idprojeto, ".vrp", fileOrigin);
-            SaveMethods sm = new SaveMethods();
-            //arquivo lê antes de baixar
-            
-            SaveSystem projetoVRP = sm.Load(idprojeto);
+            TransferDown td = new TransferDown("/temp/projetos/", Idprojeto, ".vrp", fileOrigin);
+            SaveMethods sm = new SaveMethods();           
+            SaveSystem projetoVRP = sm.Load(Idprojeto);
             return projetoVRP;
         } else
         {

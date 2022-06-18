@@ -17,7 +17,7 @@ public class Login : MonoBehaviour
         DataBase db = new DataBase();
         Usuario user = db.GetUser(db.loginByToken(this.token), this.token);
         
-        if (user.GetStatus())
+        if (user.Status)
         {
             SceneManager.LoadScene("MainScene");
         }

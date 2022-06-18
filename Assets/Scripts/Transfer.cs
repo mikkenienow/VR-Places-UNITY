@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Transfer : MonoBehaviour
@@ -23,28 +25,49 @@ public class TransferDown : MonoBehaviour
         this.nameFile = nameFile;
         this.formatFile = formatFile;
         this.urlFileOrigin = urlFileOrigin;
-        StartDownloadfile();
+        DownloadFile();
     }
+    public void DownloadFile()
+    {
+        string path = urlFileOrigin;
+        DirectoryInfo di = Directory.CreateDirectory(Application.persistentDataPath + "/temp/projetos/");
+        using (WebClient client = new WebClient())
+        {
+            
+            client.DownloadFile(path, di + nameFile + formatFile);
+        }
 
-    public void StartDownloadfile()
+        if (File.Exists(di + nameFile + formatFile))
+        {
+            print("Baixou");
+        }
+        else
+        {
+            print("Não baixou");
+        }
+    }
+    public void StartDownloadfile_OLD()
     {
         WebClient webClient = new WebClient();
         webClient.DownloadDataAsync(new Uri(urlFileOrigin));
-        webClient.DownloadDataCompleted += DownloadComplete;
+        webClient.DownloadDataCompleted += DownloadComplete_OLD;
+
     }
 
-    public void DownloadComplete(object sender, DownloadDataCompletedEventArgs e)
+
+    public void DownloadComplete_OLD(object sender, DownloadDataCompletedEventArgs e)
     {
         DirectoryInfo di = Directory.CreateDirectory(Application.persistentDataPath + "/temp/projetos/");
         string nameFileFinal = string.Concat(nameFile, formatFile);
         string pathCompleteFile = Path.Combine(pathOutput, nameFileFinal);
-        File.WriteAllBytes(pathCompleteFile, e.Result);
 
+        File.WriteAllBytes(pathCompleteFile,e.Result);
         if (File.Exists(Application.persistentDataPath + "/temp/projetos/" + nameFile + ".vrp"))
         {
             print("Arquivo criado");
         }
     }
+
 
     static public bool URLExists(string url)
     {

@@ -123,37 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &707179275
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 707179276}
-  m_Layer: 0
-  m_Name: Cenario
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &707179276
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 707179275}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30.322212, y: 0, z: 18.90867}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1019315452
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +175,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 86.3
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -231,14 +200,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1019315452}
-  m_LocalRotation: {x: 0.21021691, y: 0.67513615, z: -0.21021691, w: 0.67513615}
-  m_LocalPosition: {x: 0, y: 13.1, z: 19.4}
+  m_LocalRotation: {x: 0.27799165, y: 0.65016973, z: -0.27799165, w: 0.65016973}
+  m_LocalPosition: {x: -6.6, y: 12.8, z: 24.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 34.59, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 46.3, y: 90, z: 0}
 --- !u!114 &1019315456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,7 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1018ba66b69f19448fba1ffdb12fb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cenario: {fileID: 707179275}
+  cenario: {fileID: 7293571318303773101, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
   wallPrefab: {fileID: 5518310411021971013, guid: b14feb699e2a87a46abd66e8bf1c25ef, type: 3}
 --- !u!1 &1826673860
 GameObject:
@@ -445,3 +414,60 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &7293571318939640486
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7293571318303773098, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293571318303773098, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 30.322212
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293571318303773098, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293571318303773098, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 18.90867
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293571318303773098, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293571318303773098, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293571318303773098, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293571318303773098, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293571318303773098, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293571318303773098, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293571318303773098, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293571318303773101, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}
+      propertyPath: m_Name
+      value: Cenario
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e02c848c31fc32e41a88239cab9720f0, type: 3}

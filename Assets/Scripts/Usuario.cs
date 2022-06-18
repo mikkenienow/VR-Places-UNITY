@@ -13,51 +13,39 @@ public class Usuario : MonoBehaviour
     private string token;
     private bool status = false;
 
+
+
     public Usuario(string idusuario, string nome, string sobrenome, string email, int funcao, string assinatura, string token)
     {
-        this.idusuario = idusuario;
-        this.nome = nome;
-        this.sobrenome = sobrenome;
-        this.email = email;
-        this.funcao = funcao;
-        this.assinatura = assinatura;
-        this.token = token;
-        this.status = true;
+        this.Idusuario = idusuario;
+        this.Nome = nome;
+        this.Sobrenome = sobrenome;
+        this.Email = email;
+        this.Funcao = funcao;
+        this.Assinatura = assinatura;
+        this.Token = token;
+        this.Status = true;
     }
 
     public string GetIdusuario()
     {
-        return this.idusuario;
+        return this.Idusuario;
     }
     public string GetNome(){
-        return this.nome;
+        return this.Nome;
     }
 
     public string GetSobrenome(){
-        return this.sobrenome;
+        return this.Sobrenome;
     }
 
-    public string GetEmail()
-    {
-        return this.email;
-    }
+    public string Idusuario { get => idusuario; set => idusuario = value; }
+    public string Nome { get => nome; set => nome = value; }
+    public string Sobrenome { get => sobrenome; set => sobrenome = value; }
+    public string Email { get => email; set => email = value; }
+    public int Funcao { get => funcao; set => funcao = value; }
+    public string Assinatura { get => assinatura; set => assinatura = value; }
+    public string Token { get => token; set => token = value; }
+    public bool Status { get => status; set => status = value; }
 
-    public int Getfuncao()
-    {
-        return this.funcao;
-    }
-
-    public string GetAssinatura()
-    {
-        return this.assinatura;
-    }
-    public string GetToken()
-    {
-        return this.token;
-    }
-
-    public bool GetStatus()
-    {
-        return this.status;
-    }
 }

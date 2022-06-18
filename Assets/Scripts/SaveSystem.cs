@@ -89,26 +89,29 @@ public class SaveMethods : MonoBehaviour
 
     public void LoadOnScene(Projeto projeto, GameObject cenario, GameObject wallPrefab)
     {
-        SaveSystem saveSystem = projeto.GetProjetoVRP();
+        SaveSystem saveSystem = projeto.Projetovrp;
 
-        if (File.Exists(Application.persistentDataPath + "/temp/projetos/" + projeto.GetIdprojeto() + ".vrp"))
+        if (File.Exists(Application.persistentDataPath + "/temp/projetos/" + projeto.Idprojeto + ".vrp"))
         {
-            
 
+            print("Carregando VRPFile na cena");
+            print(saveSystem.GetListObj().Count);
             for (int i = 0; i < saveSystem.GetListObj().Count; i++)
             {
-                wallPrefab = Instantiate(wallPrefab, saveSystem.GetListObj()[i].GetPosition(), saveSystem.GetListObj()[i].GetRotation());
+                wallPrefab = Instantiate(wallPrefab, saveSystem.GetListObj()[i].GetPosition(), saveSystem.GetListObj()[i].GetRotation(), cenario.transform);
                 wallPrefab.transform.localScale = saveSystem.GetListObj()[i].GetScale();
-                wallPrefab.transform.parent = cenario.transform;
+                //wallPrefab.transform.parent = cenario.transform;
             }
             saveSystem.GetListObj().Clear();
+        } else
+        {
+            print("arquivo n encontrado");
         }
     }
 
     public SaveSystem Load(string idprojeto)
     {
         BinaryFormatter bf = new BinaryFormatter();
-        
         FileStream fileStream = File.Open(Application.persistentDataPath + "/temp/projetos/" + idprojeto + ".vrp", FileMode.Open);
         SaveSystem saveSystem = (SaveSystem)bf.Deserialize(fileStream);
         fileStream.Close();
