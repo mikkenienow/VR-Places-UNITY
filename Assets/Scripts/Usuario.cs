@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Usuario : MonoBehaviour
+[System.Serializable]
+public class Usuario
 {
     private string idusuario;
     private string nome;
@@ -31,11 +30,13 @@ public class Usuario : MonoBehaviour
     {
         return this.Idusuario;
     }
-    public string GetNome(){
+    public string GetNome()
+    {
         return this.Nome;
     }
 
-    public string GetSobrenome(){
+    public string GetSobrenome()
+    {
         return this.Sobrenome;
     }
 

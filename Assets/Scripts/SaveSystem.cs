@@ -29,7 +29,7 @@ public class SaveSystem
 }
 [System.Serializable]
 public class SaveMethods : MonoBehaviour
-{ 
+{
 
     private List<VRPfile> CreateVRPFile_OLD()
     {
@@ -72,13 +72,15 @@ public class SaveMethods : MonoBehaviour
         {
             filePathLocal = filePathLocal + "/";
         }
-        if (filePathLocal.StartsWith("/")) 
+        if (filePathLocal.StartsWith("/"))
         {
             pathAndName = Application.persistentDataPath + filePathLocal + fileNameComplete;
             di = Directory.CreateDirectory(Application.persistentDataPath + filePathLocal);
             fileStream = File.Create(pathAndName);
             bf.Serialize(fileStream, objToSave);
-        } else {
+        }
+        else
+        {
             pathAndName = Application.persistentDataPath + "/" + filePathLocal + fileNameComplete;
             di = Directory.CreateDirectory(Application.persistentDataPath + "/" + filePathLocal);
             fileStream = File.Create(pathAndName);
@@ -102,7 +104,8 @@ public class SaveMethods : MonoBehaviour
         {
             pathAndName = Application.persistentDataPath + filePathLocal + fileNameLocal;
             fs = File.Open(pathAndName, FileMode.Open);
-        } else
+        }
+        else
         {
             pathAndName = Application.persistentDataPath + "/" + filePathLocal + fileNameLocal;
             fs = File.Open(pathAndName, FileMode.Open);
@@ -147,7 +150,8 @@ public class SaveMethods : MonoBehaviour
                 //wallPrefab.transform.parent = cenario.transform;
             }
             saveSystem.GetListObj().Clear();
-        } else
+        }
+        else
         {
             print("arquivo n encontrado");
         }

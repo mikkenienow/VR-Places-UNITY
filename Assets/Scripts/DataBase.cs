@@ -10,7 +10,7 @@ public class DataBase : MonoBehaviour
     public string loginByToken(string token)
     {
         MySqlConnection conn = new MySqlConnection(connSrt);
-        string result = "Token inválido";
+        string result = null;
         try
         {
             conn.Open();
@@ -28,7 +28,7 @@ public class DataBase : MonoBehaviour
         }
         catch (System.Exception)
         {
-            return "Token inválido";
+            return result;
             throw;
         }
     }
@@ -56,6 +56,7 @@ public class DataBase : MonoBehaviour
                 string assinatura = reader["assinatura"].ToString();
 
                 result = new Usuario(idusuario, nome, sobrenome, email, funcao, assinatura, token);
+                print(result);
             }
             reader.Close();
             return result;
