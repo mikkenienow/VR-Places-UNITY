@@ -14,7 +14,7 @@ public class RotinaDeTeste : MonoBehaviour
 
     }
 
-    [ContextMenu("Salvar")]
+    [ContextMenu("Salvar 01")]
     void SalvarTeste()
     {
         SaveMethods sm = new SaveMethods();
@@ -25,7 +25,23 @@ public class RotinaDeTeste : MonoBehaviour
         {
             if (rootObjects[i].tag == "SceneEditor")
             {
-                sm.SaveProjectFile("2", "1",rootObjects[i]);
+                sm.SaveProjectFile("1", "1",rootObjects[i]);
+            }
+        }
+    }
+
+    [ContextMenu("Salvar 02")]
+    void SalvarTeste2()
+    {
+        SaveMethods sm = new SaveMethods();
+        Scene scene = SceneManager.GetActiveScene();
+        List<GameObject> rootObjects = new List<GameObject>();
+        scene.GetRootGameObjects(rootObjects);
+        for (int i = 0; i < rootObjects.Count; ++i)
+        {
+            if (rootObjects[i].tag == "SceneEditor")
+            {
+                sm.SaveProjectFile("2", "1", rootObjects[i]);
             }
         }
     }

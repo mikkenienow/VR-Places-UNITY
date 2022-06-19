@@ -64,55 +64,48 @@ public class SaveMethods : MonoBehaviour
 
     public string SaveExecute(string filePathLocal, string fileNameComplete, object objToSave)
     {
-        BinaryFormatter bf = new BinaryFormatter();
         DirectoryInfo di;
-        FileStream fileStream;
         string pathAndName;
-        if (!filePathLocal.EndsWith("/"))
-        {
-            filePathLocal = filePathLocal + "/";
-        }
-        if (filePathLocal.StartsWith("/")) 
-        {
-            pathAndName = Application.persistentDataPath + filePathLocal + fileNameComplete;
-            di = Directory.CreateDirectory(Application.persistentDataPath + filePathLocal);
-            fileStream = File.Create(pathAndName);
-            bf.Serialize(fileStream, objToSave);
-        } else {
-            pathAndName = Application.persistentDataPath + "/" + filePathLocal + fileNameComplete;
-            di = Directory.CreateDirectory(Application.persistentDataPath + "/" + filePathLocal);
-            fileStream = File.Create(pathAndName);
-            bf.Serialize(fileStream, objToSave);
-        }
+        FileStream fileStream;
+        BinaryFormatter bf = new BinaryFormatter();
+
+        di = Directory.CreateDirectory(Application.persistentDataPath + checkPath(filePathLocal, true));
+        pathAndName = di + fileNameComplete;
+        fileStream = File.Create(pathAndName);
+        bf.Serialize(fileStream, objToSave);
         fileStream.Close();
+
         return pathAndName;
     }
 
     public object LoadExecute(string filePathLocal, string fileNameLocal)
     {
-        BinaryFormatter bf = new BinaryFormatter();
+        string pathAndName;
         FileStream fs;
         object objToLoad;
-        string pathAndName;
-        if (!filePathLocal.EndsWith("/"))
-        {
-            filePathLocal = filePathLocal + "/";
-        }
-        if (filePathLocal.StartsWith("/"))
-        {
-            pathAndName = Application.persistentDataPath + filePathLocal + fileNameLocal;
-            fs = File.Open(pathAndName, FileMode.Open);
-        } else
-        {
-            pathAndName = Application.persistentDataPath + "/" + filePathLocal + fileNameLocal;
-            fs = File.Open(pathAndName, FileMode.Open);
-        }
+        BinaryFormatter bf = new BinaryFormatter();
+
+        pathAndName = Application.persistentDataPath + checkPath(filePathLocal, true) + fileNameLocal;
+        fs = File.Open(pathAndName, FileMode.Open);
         objToLoad = (object)bf.Deserialize(fs);
         fs.Close();
+
         return objToLoad;
     }
 
+    private string checkPath(string pathToCheck, bool onlyPath)
+    {
+        if (!pathToCheck.EndsWith("/") && onlyPath)
+        {
+            pathToCheck = pathToCheck + "/";
+        }
+        if (!pathToCheck.StartsWith("/"))
+        {
+            pathToCheck = "/" + pathToCheck;
+        }
 
+        return pathToCheck;
+    }
     private SaveSystem CreateVRPFile(GameObject cenario)
     {
 
