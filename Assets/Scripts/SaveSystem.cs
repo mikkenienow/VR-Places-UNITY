@@ -51,22 +51,66 @@ public class SaveMethods : MonoBehaviour
     }
 
 
-    public void SaveProjectFile(string idusuario, string idprojeto, GameObject cenario)
+    public void SaveProjectFile(string idprojeto, string idusuario, GameObject cenario)
     {
         SaveSystem save = CreateVRPFile(cenario);
-        BinaryFormatter bf = new BinaryFormatter();
-        DirectoryInfo di = Directory.CreateDirectory(Application.persistentDataPath + "/temp/projetos/");
-        string filePath = "temp/projetos/" + idprojeto + ".vrp";
+        string fileNameComplete = idprojeto + ".vrp";
+        string filePath = "temp/projetos/";
+        print(SaveExecute(filePath, fileNameComplete, save));
         string filePathOut = "/public_html/_files/_projetos/" + idusuario + "/" + idprojeto + ".vrp";
-        FileStream fileStream = File.Create(Application.persistentDataPath + "/" + filePath);
-        bf.Serialize(fileStream, save);
-        fileStream.Close();
-        print(Application.persistentDataPath + "/temp/projetos/" + idprojeto + ".vrp");
-        
-        TransferUp tu = new TransferUp(filePath, filePathOut);
+        TransferUp tu = new TransferUp(filePath + fileNameComplete, filePathOut);
         tu.UploadFile();
     }
 
+    public string SaveExecute(string filePathLocal, string fileNameComplete, object objToSave)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        DirectoryInfo di;
+        FileStream fileStream;
+        string pathAndName;
+        if (!filePathLocal.EndsWith("/"))
+        {
+            filePathLocal = filePathLocal + "/";
+        }
+        if (filePathLocal.StartsWith("/")) 
+        {
+            pathAndName = Application.persistentDataPath + filePathLocal + fileNameComplete;
+            di = Directory.CreateDirectory(Application.persistentDataPath + filePathLocal);
+            fileStream = File.Create(pathAndName);
+            bf.Serialize(fileStream, objToSave);
+        } else {
+            pathAndName = Application.persistentDataPath + "/" + filePathLocal + fileNameComplete;
+            di = Directory.CreateDirectory(Application.persistentDataPath + "/" + filePathLocal);
+            fileStream = File.Create(pathAndName);
+            bf.Serialize(fileStream, objToSave);
+        }
+        fileStream.Close();
+        return pathAndName;
+    }
+
+    public object LoadExecute(string filePathLocal, string fileNameLocal)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream fs;
+        object objToLoad;
+        string pathAndName;
+        if (!filePathLocal.EndsWith("/"))
+        {
+            filePathLocal = filePathLocal + "/";
+        }
+        if (filePathLocal.StartsWith("/"))
+        {
+            pathAndName = Application.persistentDataPath + filePathLocal + fileNameLocal;
+            fs = File.Open(pathAndName, FileMode.Open);
+        } else
+        {
+            pathAndName = Application.persistentDataPath + "/" + filePathLocal + fileNameLocal;
+            fs = File.Open(pathAndName, FileMode.Open);
+        }
+        objToLoad = (object)bf.Deserialize(fs);
+        fs.Close();
+        return objToLoad;
+    }
 
 
     private SaveSystem CreateVRPFile(GameObject cenario)
@@ -111,11 +155,9 @@ public class SaveMethods : MonoBehaviour
 
     public SaveSystem Load(string idprojeto)
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream fileStream = File.Open(Application.persistentDataPath + "/temp/projetos/" + idprojeto + ".vrp", FileMode.Open);
-        SaveSystem saveSystem = (SaveSystem)bf.Deserialize(fileStream);
-        fileStream.Close();
-
+        string filePathLocal = "/temp/projetos/";
+        string fileNameLocal = idprojeto + ".vrp";
+        SaveSystem saveSystem = (SaveSystem)LoadExecute(filePathLocal, fileNameLocal);
         return saveSystem;
     }
 }
