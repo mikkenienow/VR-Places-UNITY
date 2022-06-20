@@ -12,6 +12,7 @@ TagManager:
   - parede
   - Plane
   - SceneEditor
+  - wallpaper
   layers:
   - Default
   - TransparentFX

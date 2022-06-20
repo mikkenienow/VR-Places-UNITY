@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,11 @@ public class RotinaDeTeste : MonoBehaviour
 {
     public GameObject cenario;
     public GameObject wallPrefab;
+    public GameObject wallpaper;
+    public Color color;
+    public string colecaoId;
+    public string texturaId;
+    public GameObject teste;
 
     [ContextMenu("acao")]
     void exemplo()
@@ -84,8 +90,9 @@ public class RotinaDeTeste : MonoBehaviour
     [ContextMenu("Teste de conceito")]
     void TesteDeConceito()
     {
-        string filePathOut = "terezinha";
-        if (filePathOut.StartsWith("/")) { print("Tem /"); } else { print("Não tem /"); }
+        string file = Application.persistentDataPath + "/temp/_materials/" + colecaoId + "/" + texturaId + ".jpg";
+        VRPNewMaterial vrpm = new VRPNewMaterial(wallpaper, file, true, color, teste);
+
     }
 
     void Start()

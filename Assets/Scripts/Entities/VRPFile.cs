@@ -9,7 +9,7 @@ public class VRPfile
     public float px, py, pz;
     public float rx, ry, rz, rw;
     public float sx, sy, sz;
-    //material
+    public VRPMaterial[] vrpmaterial;
 
     public VRPfile(string id, Transform obj)
     {
@@ -25,7 +25,21 @@ public class VRPfile
         this.sy = obj.transform.localScale.y;
         this.sz = obj.transform.localScale.z;
     }
-
+    public VRPfile(string id, Transform obj, VRPMaterial[] vrpMaterial)
+    {
+        this.id = id;
+        this.px = obj.transform.position.x;
+        this.py = obj.transform.position.y;
+        this.pz = obj.transform.position.z;
+        this.rx = obj.transform.rotation.x;
+        this.ry = obj.transform.rotation.y;
+        this.rz = obj.transform.rotation.z;
+        this.rw = obj.transform.rotation.w;
+        this.sx = obj.transform.localScale.x;
+        this.sy = obj.transform.localScale.y;
+        this.sz = obj.transform.localScale.z;
+        this.vrpmaterial = vrpMaterial;
+    }
     public Vector3 GetPosition()
     {
         Vector3 pos = new Vector3(px, py, pz);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 using UnityEngine.SceneManagement;
 
 [System.Serializable]
@@ -111,12 +112,32 @@ public class SaveMethods : MonoBehaviour
 
         Scene scene = SceneManager.GetActiveScene();
         List<VRPfile> listaObj = new List<VRPfile>();
-        Transform[] lista = cenario.transform.GetComponentsInChildren<Transform>();
+        GameObject[] lista = cenario.transform.GetComponentsInChildren<GameObject>();
         for (int i = 0; i < lista.Length; i++)
         {
             if (lista[i].tag == "parede")
             {
-                listaObj.Add(new VRPfile(lista[i].tag, lista[i]));
+                listaObj.Add(new VRPfile(lista[i].tag, lista[i].transform));
+
+                List<VRPMaterial> vrpMaterialList = new List<VRPMaterial>();
+                GameObject[] wallpapers = lista[i].transform.GetComponentsInChildren<GameObject>();
+                for (int i2 = 0; i < wallpapers.Length; i++)
+                {
+                    Color color = wallpapers[i].GetComponent<Renderer>().material.color;
+
+                    int w = wallpapers[i].GetComponent<Renderer>().material.mainTexture.width;
+                    int h = wallpapers[i].GetComponent<Renderer>().material.mainTexture.height;
+                    GraphicsFormat format = wallpapers[i].GetComponent<Renderer>().material.mainTexture.graphicsFormat;
+                    int mc = wallpapers[i].GetComponent<Renderer>().material.mainTexture.mipmapCount;
+                    TextureCreationFlags flags = new TextureCreationFlags();
+
+                    Texture2D texture = new Texture2D(w, h, format, mc, flags);
+
+                    vrpMaterialList.Add(new VRPMaterial(color, texture));
+                }
+
+
+
             }
         }
         SaveSystem saveSystem = new SaveSystem();
