@@ -12,7 +12,8 @@ public class RotinaDeTeste : MonoBehaviour
     public Color color;
     public string colecaoId;
     public string texturaId;
-    public GameObject teste;
+    public GameObject source;
+    public GameObject target;
 
     [ContextMenu("acao")]
     void exemplo()
@@ -91,15 +92,23 @@ public class RotinaDeTeste : MonoBehaviour
     void TesteDeConceito()
     {
         string file = Application.persistentDataPath + "/temp/_materials/" + colecaoId + "/" + texturaId + ".jpg";
-        VRPNewMaterial vrpm = new VRPNewMaterial(wallpaper, file, true, color, teste);
+        VRPNewMaterial vrpm = new VRPNewMaterial(wallpaper, file, true, color);
 
     }
-
-    void Start()
+    [ContextMenu("_____")]
+    void Start() { }
+    [ContextMenu("Trocar cores")]
+    void troca()
     {
-        
+        string name = source.GetComponent<Renderer>().material.mainTexture.name;
+        Color color = source.GetComponent<Renderer>().material.color;
+        string colecaoId = name.Split("/")[0];
+        string texturaId = name.Split("/")[1];
+        print(colecaoId);
+        print(texturaId);
+        string file = Application.persistentDataPath + "/temp/_materials/" + colecaoId + "/" + texturaId + ".jpg";
+        VRPNewMaterial vrpm = new VRPNewMaterial(target, file, true, color);
     }
-
     void Update()
     {
         

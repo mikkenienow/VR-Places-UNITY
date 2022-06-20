@@ -23,7 +23,7 @@ public class VRPNewMaterial : MonoBehaviour
         this.newTexture = newTexture;
         this.fileData = TextureFile(filePath);
         this.texturaId = GetTextureId(filePath);
-        string colecaoId = GetColecaoId(filePath);
+        this.colecaoId = GetColecaoId(filePath);
         this.color = color;
         this.ChangeTexture();
         this.MaterialTransform();
@@ -37,7 +37,9 @@ public class VRPNewMaterial : MonoBehaviour
             this.texture = new Texture2D(1, 1);
             texture.LoadImage(this.fileData);
             texture.name = this.colecaoId + "/" + this.texturaId;
+            print(texture.name);
             this.target.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
+
         }
         
     }
