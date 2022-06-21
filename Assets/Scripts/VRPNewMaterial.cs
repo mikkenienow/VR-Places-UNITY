@@ -8,7 +8,7 @@ using UnityEngine.Experimental.Rendering;
 using UnityEngine.SceneManagement;
 
 [System.Serializable]
-public class VRPNewMaterial : MonoBehaviour
+public class VRPNewMaterial
 {
     GameObject target;
     byte[] fileData;
@@ -37,9 +37,7 @@ public class VRPNewMaterial : MonoBehaviour
             this.texture = new Texture2D(1, 1);
             texture.LoadImage(this.fileData);
             texture.name = this.colecaoId + "/" + this.texturaId;
-            print(texture.name);
             this.target.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
-
         }
         
     }
@@ -53,7 +51,6 @@ public class VRPNewMaterial : MonoBehaviour
 
     public void ChangeColor()
     {
-        print(this.color);
         this.target.GetComponent<Renderer>().material.color = this.color;
     }
 
@@ -71,34 +68,16 @@ public class VRPNewMaterial : MonoBehaviour
         string[] name = filePath.Split("/");
         string final = name[name.Length-1];
         final = final.Substring(0, final.Length - 4);
-        print(final);
         return final;
     }
     public string GetColecaoId(string filePath)
     {
         string[] name = filePath.Split("/");
         string final = name[name.Length - 2];
-        print(final);
         return final;
     }
-    private Texture2D TextureToTexture2D(Texture texture)
-    {
-        Texture2D texture2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
-        RenderTexture currentRT = RenderTexture.active;
-        RenderTexture renderTexture = RenderTexture.GetTemporary(texture.width, texture.height, 32);
-        Graphics.Blit(texture, renderTexture);
-
-        RenderTexture.active = renderTexture;
-        texture2D.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
-        texture2D.Apply();
-
-        RenderTexture.active = currentRT;
-        RenderTexture.ReleaseTemporary(renderTexture);
-        return texture2D;
-    }
-
 }
-
+[System.Serializable]
 public class VRPMaterial
 {
     float r;
@@ -109,26 +88,26 @@ public class VRPMaterial
     string colecaoId;
     string texturaId;
 
-    public VRPMaterial(Color color, Texture2D texture)
+    public VRPMaterial(Color color, string mainTexture)
     {
         this.r = color.r;
         this.g = color.g;
         this.b = color.b;
         this.a = color.a;
-        this.colecaoId = GetTexturaId(texture);
-        this.texturaId = GetColecaoId(texture);
+        this.colecaoId = GetTexturaId(mainTexture);
+        this.texturaId = GetColecaoId(mainTexture);
     }
 
-    string GetTexturaId(Texture2D texture)
+    string GetTexturaId(string mainTexture)
     {
-        string[] name = texture.name.Split("/");
+        string[] name = mainTexture.Split("/");
         string final = name[name.Length - 2];
 
         return final;
     }
-    string GetColecaoId(Texture2D texture)
+    string GetColecaoId(string mainTexture)
     {
-        string[] name = texture.name.Split("/");
+        string[] name = mainTexture.Split("/");
         string final = name[name.Length - 1];
 
         return final;

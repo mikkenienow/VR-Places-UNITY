@@ -94,15 +94,25 @@ public class TransferUp : MonoBehaviour
     public TransferUp(string completeFilePath, string filePathOut)
     {
         this.completeFilePath = Application.persistentDataPath + checkPath(completeFilePath, false);
-        this.filePathOut = checkPath(filePathOut, true);
+        this.filePathOut = checkPath(filePathOut, false);
     }
 
     public void UploadFile()
     {
         WebClient client = new System.Net.WebClient();
         string uriPath = ftpHostUpload + filePathOut;
+        string[] directoryCreate = filePathOut.Split("/");
+        string directory = "";
+        for (int i = 0; i < directoryCreate.Length; i++)
+        {
+            if (i+1 != directoryCreate.Length)
+            {
+                directory = directory + directoryCreate[i] + "/";
+            }
+        }
+        print(directory);
         Uri fullUri = new Uri(uriPath);
-
+        CheckMakeDir(directory);
         client.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
         client.UploadFileAsync(fullUri, completeFilePath);
     }
@@ -119,5 +129,20 @@ public class TransferUp : MonoBehaviour
         }
 
         return pathToCheck;
+    }
+
+    private void CheckMakeDir(string pathToCreate)
+    {
+        if (!Directory.Exists(pathToCreate))
+        {
+            WebRequest request = WebRequest.Create(Autentication.FtpHostUpload + pathToCreate);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential(Autentication.FtpUserName, Autentication.FtpPassword);
+            using (var resp = (FtpWebResponse)request.GetResponse())
+            {
+                print(resp.StatusCode);
+            }
+        }
+        
     }
 }

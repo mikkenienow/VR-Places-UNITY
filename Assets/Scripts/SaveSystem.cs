@@ -13,6 +13,7 @@ public class SaveSystem
     Scene scene;
     List<VRPfile> listObj = new List<VRPfile>();
 
+
     public void SceneObjectsConstructor(Scene scene, List<VRPfile> listObj)
     {
         this.scene = scene;
@@ -27,6 +28,7 @@ public class SaveSystem
     {
         return this.scene;
     }
+
 }
 [System.Serializable]
 public class SaveMethods : MonoBehaviour
@@ -112,32 +114,25 @@ public class SaveMethods : MonoBehaviour
 
         Scene scene = SceneManager.GetActiveScene();
         List<VRPfile> listaObj = new List<VRPfile>();
-        GameObject[] lista = cenario.transform.GetComponentsInChildren<GameObject>();
+        Transform[] lista = cenario.transform.GetComponentsInChildren<Transform>();
+
         for (int i = 0; i < lista.Length; i++)
         {
             if (lista[i].tag == "parede")
             {
-                listaObj.Add(new VRPfile(lista[i].tag, lista[i].transform));
-
                 List<VRPMaterial> vrpMaterialList = new List<VRPMaterial>();
-                GameObject[] wallpapers = lista[i].transform.GetComponentsInChildren<GameObject>();
+
+                Transform[] wallpapers = lista[i].transform.GetComponentsInChildren<Transform>();
                 for (int i2 = 0; i < wallpapers.Length; i++)
                 {
-                    Color color = wallpapers[i].GetComponent<Renderer>().material.color;
-
-                    int w = wallpapers[i].GetComponent<Renderer>().material.mainTexture.width;
-                    int h = wallpapers[i].GetComponent<Renderer>().material.mainTexture.height;
-                    GraphicsFormat format = wallpapers[i].GetComponent<Renderer>().material.mainTexture.graphicsFormat;
-                    int mc = wallpapers[i].GetComponent<Renderer>().material.mainTexture.mipmapCount;
-                    TextureCreationFlags flags = new TextureCreationFlags();
-
-                    Texture2D texture = new Texture2D(w, h, format, mc, flags);
-
-                    vrpMaterialList.Add(new VRPMaterial(color, texture));
+                    if (wallpapers[i2].tag == "wallpaper") {
+                        Color color = wallpapers[i].GetComponent<Renderer>().material.color;
+                        string mainTexture = wallpapers[i].GetComponent<Renderer>().material.mainTexture.name;
+                        vrpMaterialList.Add(new VRPMaterial(color, mainTexture));
+                    }
                 }
 
-
-
+                listaObj.Add(new VRPfile(lista[i].tag, lista[i]));
             }
         }
         SaveSystem saveSystem = new SaveSystem();
@@ -145,7 +140,7 @@ public class SaveMethods : MonoBehaviour
         return saveSystem;
     }
 
-    public void LoadOnScene(Projeto projeto, GameObject cenario, GameObject wallPrefab)
+    public void LoadOnScene(Projeto projeto, GameObject cenario, GameObject paredePrefab)
     {
         SaveSystem saveSystem = projeto.Projetovrp;
 
@@ -156,9 +151,19 @@ public class SaveMethods : MonoBehaviour
             print(saveSystem.GetListObj().Count);
             for (int i = 0; i < saveSystem.GetListObj().Count; i++)
             {
-                wallPrefab = Instantiate(wallPrefab, saveSystem.GetListObj()[i].GetPosition(), saveSystem.GetListObj()[i].GetRotation(), cenario.transform);
-                wallPrefab.transform.localScale = saveSystem.GetListObj()[i].GetScale();
-                //wallPrefab.transform.parent = cenario.transform;
+                VRPfile get = saveSystem.GetListObj()[i];
+                paredePrefab = Instantiate(paredePrefab, saveSystem.GetListObj()[i].GetPosition(), saveSystem.GetListObj()[i].GetRotation(), cenario.transform);
+                paredePrefab.transform.localScale = saveSystem.GetListObj()[i].GetScale();
+                Transform[] walpapers = paredePrefab.GetComponentsInChildren<Transform>();
+                for (int i2 = 0; i2 < walpapers.Length; i2++)
+                {
+                    if(walpapers[i2].tag == "walpaper")
+                    {
+                        VRPMaterial material = get.GetMaterialList()[i2];
+                        walpapers[i2].GetComponent<Renderer>().material.SetTexture("_MainTex", material.GetTexture());
+                    }
+                }
+
             }
             saveSystem.GetListObj().Clear();
         }

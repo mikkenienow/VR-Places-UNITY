@@ -9,7 +9,7 @@ public class VRPfile
     public float px, py, pz;
     public float rx, ry, rz, rw;
     public float sx, sy, sz;
-    public VRPMaterial[] vrpmaterial;
+    public List<VRPMaterial> materialList;
 
     public VRPfile(string id, Transform obj)
     {
@@ -25,7 +25,7 @@ public class VRPfile
         this.sy = obj.transform.localScale.y;
         this.sz = obj.transform.localScale.z;
     }
-    public VRPfile(string id, Transform obj, VRPMaterial[] vrpMaterial)
+    public VRPfile(string id, Transform obj, List<VRPMaterial> materialList)
     {
         this.id = id;
         this.px = obj.transform.position.x;
@@ -38,7 +38,7 @@ public class VRPfile
         this.sx = obj.transform.localScale.x;
         this.sy = obj.transform.localScale.y;
         this.sz = obj.transform.localScale.z;
-        this.vrpmaterial = vrpMaterial;
+        this.materialList = materialList;
     }
     public Vector3 GetPosition()
     {
@@ -56,5 +56,10 @@ public class VRPfile
     {
         Vector3 sca = new Vector3(sx, sy, sz);
         return sca;
+    }
+
+    public List<VRPMaterial> GetMaterialList()
+    {
+        return this.materialList;
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,6 +21,21 @@ public class RotinaDeTeste : MonoBehaviour
     {
 
     }
+    [ContextMenu("Criar pasta")]
+    void CriarPastaNoServer()
+    {
+        string pathToCreate = Autentication.FtpHostUpload + "/public_html/_files/_projetos/projeto";
+
+        WebRequest request = WebRequest.Create(pathToCreate);
+        request.Method = WebRequestMethods.Ftp.MakeDirectory;
+        request.Credentials = new NetworkCredential(Autentication.FtpUserName, Autentication.FtpPassword);
+        using (var resp = (FtpWebResponse)request.GetResponse())
+        {
+            print(resp.StatusCode);
+        }
+        
+
+    }
 
     [ContextMenu("Salvar 01")]
     void SalvarTeste()
@@ -32,7 +48,7 @@ public class RotinaDeTeste : MonoBehaviour
         {
             if (rootObjects[i].tag == "SceneEditor")
             {
-                sm.SaveProjectFile("1", "1",rootObjects[i]);
+                sm.SaveProjectFile("5", "2",rootObjects[i]);
             }
         }
     }
@@ -68,7 +84,7 @@ public class RotinaDeTeste : MonoBehaviour
             }
         }
         SaveMethods sm = new SaveMethods();
-        sm.LoadOnScene(new Projeto("1", "1", "TESTE", "", "", "", ""), Instantiate(cenario, cenario.transform.position, cenario.transform.rotation), wallPrefab);
+        sm.LoadOnScene(new Projeto("5", "2", "TESTE", "", "", "", ""), Instantiate(cenario, cenario.transform.position, cenario.transform.rotation), wallPrefab);
     }
     [ContextMenu("Abrir 02")]
     void AbrirTeste2()
