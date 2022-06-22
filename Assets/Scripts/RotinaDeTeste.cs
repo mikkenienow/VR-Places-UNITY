@@ -11,6 +11,7 @@ public class RotinaDeTeste : MonoBehaviour
     public GameObject wallPrefab;
     public GameObject wallpaper;
     public Color color;
+    public Material material;
     public string colecaoId;
     public string texturaId;
     public GameObject source;
@@ -20,6 +21,47 @@ public class RotinaDeTeste : MonoBehaviour
     void exemplo()
     {
 
+    }
+    [ContextMenu("Listar objetos")]
+    void ListarObjetos()
+    {
+
+        Scene scene = SceneManager.GetActiveScene();
+        List<GameObject> rootObjects = new List<GameObject>();
+        scene.GetRootGameObjects(rootObjects);
+        for (int i = 0; i < rootObjects.Count; ++i)
+        {
+            if (rootObjects[i].tag == "SceneEditor")
+            {
+                Transform[] lista = rootObjects[i].transform.GetComponentsInChildren<Transform>();
+                //print(lista.Length);
+                for (int i2 = 0; i2 < lista.Length; i2++)
+                {
+                    //print(i2);
+                    //print(lista[i2].name);
+                    if (lista[i2].tag == "parede")
+                    {
+                        Transform[] lista2 = lista[i2].transform.GetComponentsInChildren<Transform>();
+
+                        for (int i3 = 0; i3 < lista2.Length; i3++)
+                        {
+                            if (lista2[i3].tag == "wallpaper")
+                            {
+                                print(lista2[i3].name);
+                            }
+                            
+                        }
+
+
+
+                    }
+
+
+
+
+                }
+            }
+        }
     }
     [ContextMenu("Criar pasta")]
     void CriarPastaNoServer()
@@ -33,7 +75,6 @@ public class RotinaDeTeste : MonoBehaviour
         {
             print(resp.StatusCode);
         }
-        
 
     }
 
@@ -108,7 +149,9 @@ public class RotinaDeTeste : MonoBehaviour
     void TesteDeConceito()
     {
         string file = Application.persistentDataPath + "/temp/_materials/" + colecaoId + "/" + texturaId + ".jpg";
-        VRPNewMaterial vrpm = new VRPNewMaterial(wallpaper, file, true, color);
+
+        VRPMaterial material = new VRPMaterial(color, "none/none");
+        VRPNewMaterial vrpm = new VRPNewMaterial(wallpaper.transform, material, true);
 
     }
     [ContextMenu("_____")]
@@ -123,7 +166,7 @@ public class RotinaDeTeste : MonoBehaviour
         print(colecaoId);
         print(texturaId);
         string file = Application.persistentDataPath + "/temp/_materials/" + colecaoId + "/" + texturaId + ".jpg";
-        VRPNewMaterial vrpm = new VRPNewMaterial(target, file, true, color);
+        //VRPNewMaterial vrpm = new VRPNewMaterial(target, file, true, color);
     }
     void Update()
     {

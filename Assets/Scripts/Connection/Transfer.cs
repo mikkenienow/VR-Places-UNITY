@@ -133,7 +133,7 @@ public class TransferUp : MonoBehaviour
 
     private void CheckMakeDir(string pathToCreate)
     {
-        if (!Directory.Exists(pathToCreate))
+        if (!Directory.Exists(Autentication.FtpHostUpload + pathToCreate))
         {
             WebRequest request = WebRequest.Create(Autentication.FtpHostUpload + pathToCreate);
             request.Method = WebRequestMethods.Ftp.MakeDirectory;

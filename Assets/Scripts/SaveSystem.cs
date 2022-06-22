@@ -115,24 +115,42 @@ public class SaveMethods : MonoBehaviour
         Scene scene = SceneManager.GetActiveScene();
         List<VRPfile> listaObj = new List<VRPfile>();
         Transform[] lista = cenario.transform.GetComponentsInChildren<Transform>();
-
         for (int i = 0; i < lista.Length; i++)
         {
+
             if (lista[i].tag == "parede")
             {
+                VRPfile vrpFile = new VRPfile(lista[i].tag, lista[i]);
                 List<VRPMaterial> vrpMaterialList = new List<VRPMaterial>();
 
-                Transform[] wallpapers = lista[i].transform.GetComponentsInChildren<Transform>();
-                for (int i2 = 0; i < wallpapers.Length; i++)
+                for (int i2 = 0; i2 < 5; i2++)
                 {
-                    if (wallpapers[i2].tag == "wallpaper") {
-                        Color color = wallpapers[i].GetComponent<Renderer>().material.color;
-                        string mainTexture = wallpapers[i].GetComponent<Renderer>().material.mainTexture.name;
+                    i++;
+                    if (lista[i].tag == "wallpaper") {
+                      
+                        Color color = lista[i].GetComponent<Renderer>().material.color;
+                        print(color);
+                        string mainTexture = "none/none";
+
+
+                        if (lista[i].GetComponent<Material>() == null)
+                        {
+                            print("Setando material padrão");
+                            RotinaDeTeste rt = new RotinaDeTeste();
+                            Renderer rend = lista[i].GetComponent<Renderer>();
+                            rend.enabled = true;
+                            rend.sharedMaterial = rt.material;
+                        } else
+                        {
+                            mainTexture = lista[i].GetComponent<Renderer>().material.mainTexture.name;
+                            print(mainTexture);
+                        }
+                        
                         vrpMaterialList.Add(new VRPMaterial(color, mainTexture));
                     }
                 }
-
-                listaObj.Add(new VRPfile(lista[i].tag, lista[i]));
+                vrpFile.SetMaterialList(vrpMaterialList);
+                listaObj.Add(vrpFile);
             }
         }
         SaveSystem saveSystem = new SaveSystem();
@@ -152,18 +170,22 @@ public class SaveMethods : MonoBehaviour
             for (int i = 0; i < saveSystem.GetListObj().Count; i++)
             {
                 VRPfile get = saveSystem.GetListObj()[i];
-                paredePrefab = Instantiate(paredePrefab, saveSystem.GetListObj()[i].GetPosition(), saveSystem.GetListObj()[i].GetRotation(), cenario.transform);
-                paredePrefab.transform.localScale = saveSystem.GetListObj()[i].GetScale();
+                paredePrefab = Instantiate(
+                    paredePrefab, 
+                    get.GetPosition(), 
+                    get.GetRotation(), 
+                    cenario.transform);
+
+                paredePrefab.transform.localScale = get.GetScale();
                 Transform[] walpapers = paredePrefab.GetComponentsInChildren<Transform>();
                 for (int i2 = 0; i2 < walpapers.Length; i2++)
                 {
                     if(walpapers[i2].tag == "walpaper")
                     {
                         VRPMaterial material = get.GetMaterialList()[i2];
-                        walpapers[i2].GetComponent<Renderer>().material.SetTexture("_MainTex", material.GetTexture());
+                        VRPNewMaterial newMaterial = new VRPNewMaterial(walpapers[i2], material, true);
                     }
                 }
-
             }
             saveSystem.GetListObj().Clear();
         }

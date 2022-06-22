@@ -5,11 +5,11 @@ using UnityEngine;
 [System.Serializable]
 public class VRPfile
 {
-    public string id;
-    public float px, py, pz;
-    public float rx, ry, rz, rw;
-    public float sx, sy, sz;
-    public List<VRPMaterial> materialList;
+    private string id;
+    private float px, py, pz;
+    private float rx, ry, rz, rw;
+    private float sx, sy, sz;
+    private List<VRPMaterial> materialList;
 
     public VRPfile(string id, Transform obj)
     {
@@ -46,10 +46,25 @@ public class VRPfile
         return pos;
     }
 
+    public void SetPosition(Transform obj)
+    {
+        this.px = obj.transform.position.x;
+        this.py = obj.transform.position.y;
+        this.pz = obj.transform.position.z;
+    }
+
     public Quaternion GetRotation()
     {
         Quaternion rot = new Quaternion(rx, ry, rz, rw);
         return rot;
+    }
+
+    public void SetRotation(Transform obj)
+    {
+        this.rx = obj.transform.rotation.x;
+        this.ry = obj.transform.rotation.y;
+        this.rz = obj.transform.rotation.z;
+        this.rw = obj.transform.rotation.w;
     }
 
     public Vector3 GetScale()
@@ -58,8 +73,20 @@ public class VRPfile
         return sca;
     }
 
+    public void SetScale(Transform obj)
+    {
+        this.sx = obj.transform.localScale.x;
+        this.sy = obj.transform.localScale.y;
+        this.sz = obj.transform.localScale.z;
+    }
     public List<VRPMaterial> GetMaterialList()
     {
         return this.materialList;
     }
+
+    public void SetMaterialList(List<VRPMaterial> materialList)
+    {
+        this.materialList = materialList;
+    }
+
 }

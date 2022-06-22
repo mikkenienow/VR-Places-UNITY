@@ -823,8 +823,6 @@ MonoBehaviour:
   ParedeZ: {fileID: 5518310411021971013, guid: b14feb699e2a87a46abd66e8bf1c25ef, type: 3}
   pontoInicial: {fileID: 5518310411021971013, guid: 385596afe6d715b499d86eac445ecda6, type: 3}
   pontoFinal: {fileID: 5518310411021971013, guid: 5d1bb2ea1a4a1c9469c06a4582f40ad9, type: 3}
-  savebleObjects: []
-  placebleObjects: []
   range: 10
 --- !u!114 &435924272
 MonoBehaviour:

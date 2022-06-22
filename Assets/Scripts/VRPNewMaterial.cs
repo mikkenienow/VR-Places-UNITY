@@ -10,21 +10,22 @@ using UnityEngine.SceneManagement;
 [System.Serializable]
 public class VRPNewMaterial
 {
-    GameObject target;
+    Transform target;
     byte[] fileData;
     bool newTexture;
     Color color;
-    Texture2D texture;
+    string mainText;
     string texturaId;
     string colecaoId;
-    public VRPNewMaterial(GameObject target, string filePath, bool newTexture, Color color)
+    public VRPNewMaterial(Transform target, VRPMaterial texture, bool newTexture)
     {
         this.target = target;
         this.newTexture = newTexture;
-        this.fileData = TextureFile(filePath);
-        this.texturaId = GetTextureId(filePath);
-        this.colecaoId = GetColecaoId(filePath);
-        this.color = color;
+        this.mainText = texture.GetMainTexture();
+        this.texturaId = texture.GetTexturaId();
+        this.colecaoId = texture.GetColecaoId();
+        this.color = texture.GetColor();
+        this.fileData = this.GetTexture();
         this.ChangeTexture();
         this.MaterialTransform();
         this.ChangeColor();
@@ -32,14 +33,15 @@ public class VRPNewMaterial
 
     public void ChangeTexture()
     {
-        if (this.newTexture)
-        {
-            this.texture = new Texture2D(1, 1);
-            texture.LoadImage(this.fileData);
-            texture.name = this.colecaoId + "/" + this.texturaId;
-            this.target.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
+        if (this.mainText != "none/none") {
+            if (this.newTexture)
+            {
+                Texture2D texture = new Texture2D(1, 1);
+                texture.LoadImage(this.fileData);
+                texture.name = this.colecaoId + "/" + this.texturaId;
+                this.target.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
+            }
         }
-        
     }
     public void MaterialTransform()
     {
@@ -76,15 +78,38 @@ public class VRPNewMaterial
         string final = name[name.Length - 2];
         return final;
     }
+    public byte[] GetTexture()
+    {
+        byte[] file = null;
+        if (this.mainText != "none/none") { 
+        string texturePath = "_materials / " + this.colecaoId + " / " + this.texturaId;
+        string fileFormat = ".jpg";
+        string localPath = Application.persistentDataPath + "/temp/";
+        string serverPath = "ftp://vrplaces@ftp.vrplaces.com.br/public_html/_files/" + texturePath + fileFormat;
+        Texture2D texture = new Texture2D(1, 1);
+
+        if (File.Exists(localPath + texturePath + fileFormat))
+        {
+            file = File.ReadAllBytes(localPath + texturePath + fileFormat);
+        }
+        else
+        {
+            TransferDown td = new TransferDown(localPath, this.texturaId, fileFormat, serverPath);
+            file = File.ReadAllBytes(localPath + texturePath + fileFormat);
+        } 
+        }
+        return file;
+    }
+
 }
 [System.Serializable]
-public class VRPMaterial
+public class VRPMaterial 
 {
     float r;
     float g;
     float b;
     float a;
-
+    string mainTexture;
     string colecaoId;
     string texturaId;
 
@@ -94,20 +119,22 @@ public class VRPMaterial
         this.g = color.g;
         this.b = color.b;
         this.a = color.a;
-        this.colecaoId = GetTexturaId(mainTexture);
-        this.texturaId = GetColecaoId(mainTexture);
+        this.mainTexture = mainTexture;
+        this.colecaoId = GetTexturaId();
+        this.texturaId = GetColecaoId();
     }
 
-    string GetTexturaId(string mainTexture)
+    public string GetTexturaId()
     {
-        string[] name = mainTexture.Split("/");
+
+        string[] name = this.mainTexture.Split("/");
         string final = name[name.Length - 2];
 
         return final;
     }
-    string GetColecaoId(string mainTexture)
+    public string GetColecaoId()
     {
-        string[] name = mainTexture.Split("/");
+        string[] name = this.mainTexture.Split("/");
         string final = name[name.Length - 1];
 
         return final;
@@ -118,6 +145,10 @@ public class VRPMaterial
         return new Color(this.r, this.g, this.b, this.a);
     }
 
+    public string GetMainTexture()
+    {
+        return this.mainTexture;
+    }
     public Texture2D GetTexture()
     {
         string texturePath = "_materials / " + this.colecaoId + " / " + this.texturaId;
@@ -126,16 +157,17 @@ public class VRPMaterial
         string serverPath = "ftp://vrplaces@ftp.vrplaces.com.br/public_html/_files/" + texturePath + fileFormat;
         Texture2D texture = new Texture2D(1,1);
         texture.name = this.colecaoId + "/" + this.texturaId;
+        byte[] file;
 
         if (File.Exists(localPath + texturePath + fileFormat))
         {
-            byte[] file = File.ReadAllBytes(localPath + texturePath + fileFormat);
+            file = File.ReadAllBytes(localPath + texturePath + fileFormat);
             texture.LoadImage(file);
         }
         else
         {
             TransferDown td = new TransferDown(localPath, this.texturaId,fileFormat, serverPath);
-            byte[] file = File.ReadAllBytes(localPath + texturePath + fileFormat);
+            file = File.ReadAllBytes(localPath + texturePath + fileFormat);
             texture.LoadImage(file);
         }
 
