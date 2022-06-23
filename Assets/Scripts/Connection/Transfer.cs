@@ -110,6 +110,7 @@ public class TransferUp : MonoBehaviour
                 directory = directory + directoryCreate[i] + "/";
             }
         }
+        directory = directory.Substring(0, directory.Length - 1);
         print(directory);
         Uri fullUri = new Uri(uriPath);
         CheckMakeDir(directory);
@@ -133,16 +134,32 @@ public class TransferUp : MonoBehaviour
 
     private void CheckMakeDir(string pathToCreate)
     {
-        if (!Directory.Exists(Autentication.FtpHostUpload + pathToCreate))
+        print("Verificando se diretorio existe: " + Directory.Exists("ftp://vrplaces@ftp.vrplaces.com.br" + pathToCreate));
+
+        if (!Directory.Exists("ftp://vrplaces@ftp.vrplaces.com.br" + pathToCreate))
         {
             WebRequest request = WebRequest.Create(Autentication.FtpHostUpload + pathToCreate);
             request.Method = WebRequestMethods.Ftp.MakeDirectory;
             request.Credentials = new NetworkCredential(Autentication.FtpUserName, Autentication.FtpPassword);
-            using (var resp = (FtpWebResponse)request.GetResponse())
+            try
             {
-                print(resp.StatusCode);
+                using (var resp = (FtpWebResponse)request.GetResponse())
+                {
+                    print(resp.StatusCode);
+                }
+            }
+            catch (WebException ex)
+            {
+                print(ex);
+                /*if (ex.Response != null)
+                {
+                    FtpWebResponse response = (FtpWebResponse)ex.Response;
+                    if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                    {
+                        // Directory not found.  
+                    }
+                }*/
             }
         }
-        
     }
 }

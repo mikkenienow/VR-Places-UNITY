@@ -33,15 +33,21 @@ public class VRPNewMaterial
 
     public void ChangeTexture()
     {
-        if (this.mainText != "none/none") {
-            if (this.newTexture)
-            {
-                Texture2D texture = new Texture2D(1, 1);
-                texture.LoadImage(this.fileData);
-                texture.name = this.colecaoId + "/" + this.texturaId;
-                this.target.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
-            }
+        if (this.mainText != "none/none" && this.newTexture) {
+            Texture2D texture = new Texture2D(1, 1);
+            texture.LoadImage(this.fileData);
+            //texture.name = this.colecaoId + "/" + this.texturaId;
+            this.target.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
+            this.target.GetComponent<Renderer>().material.name = this.colecaoId + "/" + this.texturaId;
+        } else
+        {
+            Texture2D texture = new Texture2D(1, 1);
+            //texture.name = this.mainText;
+            this.target.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
+            this.target.GetComponent<Renderer>().material.name = this.mainText;
+            Debug.Log(this.target.GetComponent<Renderer>().material.name);
         }
+
     }
     public void MaterialTransform()
     {

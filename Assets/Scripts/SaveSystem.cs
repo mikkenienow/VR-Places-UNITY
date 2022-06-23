@@ -129,23 +129,9 @@ public class SaveMethods : MonoBehaviour
                     if (lista[i].tag == "wallpaper") {
                       
                         Color color = lista[i].GetComponent<Renderer>().material.color;
-                        print(color);
-                        string mainTexture = "none/none";
-
-
-                        if (lista[i].GetComponent<Material>() == null)
-                        {
-                            print("Setando material padrão");
-                            RotinaDeTeste rt = new RotinaDeTeste();
-                            Renderer rend = lista[i].GetComponent<Renderer>();
-                            rend.enabled = true;
-                            rend.sharedMaterial = rt.material;
-                        } else
-                        {
-                            mainTexture = lista[i].GetComponent<Renderer>().material.mainTexture.name;
-                            print(mainTexture);
-                        }
-                        
+                        List<Material> m = new List<Material>();
+                        lista[i].GetComponent<Renderer>().GetMaterials(m);
+                        string mainTexture = m[0].name;
                         vrpMaterialList.Add(new VRPMaterial(color, mainTexture));
                     }
                 }
@@ -178,12 +164,22 @@ public class SaveMethods : MonoBehaviour
 
                 paredePrefab.transform.localScale = get.GetScale();
                 Transform[] walpapers = paredePrefab.GetComponentsInChildren<Transform>();
+                print("total de filhos" + paredePrefab.GetComponentsInChildren<Transform>().Length);
                 for (int i2 = 0; i2 < walpapers.Length; i2++)
                 {
-                    if(walpapers[i2].tag == "walpaper")
+                    print("objeto" + walpapers[i2].name);
+                    if(walpapers[i2].tag == "wallpaper")
                     {
-                        VRPMaterial material = get.GetMaterialList()[i2];
-                        VRPNewMaterial newMaterial = new VRPNewMaterial(walpapers[i2], material, true);
+                        for (int w = 0; w < get.GetMaterialList().Count; w++)
+                        {
+                            print(walpapers[i2].name);
+                            VRPMaterial material = get.GetMaterialList()[w];
+                            print("Material encontrado" + get.GetMaterialList().Count);
+                            print("maintexture:" + material.GetMainTexture());
+                            VRPNewMaterial newMaterial = new VRPNewMaterial(walpapers[i2], material, true);
+                            i2++;
+                        }
+                        
                     }
                 }
             }
