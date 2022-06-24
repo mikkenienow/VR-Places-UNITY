@@ -79,7 +79,7 @@ public class DataBase : MonoBehaviour
 
             MySqlCommand cmd = new MySqlCommand(sqlSelect, conn);
             MySqlDataReader reader = cmd.ExecuteReader();
-
+            int i = 0;
             while (reader.Read())
             {
                 string idprojeto = reader["idprojeto"].ToString();
@@ -88,9 +88,9 @@ public class DataBase : MonoBehaviour
                 string criacao = reader["criacao"].ToString();
                 string modificacao = reader["modificacao"].ToString();
                 string referencia_tipo = reader["referencia_tipo"].ToString();
-
+                print("Projeto " + i++);
                 result.Add(new Projeto(idprojeto, idusuario, titulo, dimensao, criacao, modificacao, referencia_tipo));
-                print(result);
+                
             }
             reader.Close();
             return result;
