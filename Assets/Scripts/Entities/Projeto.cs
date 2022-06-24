@@ -25,6 +25,7 @@ public class Projeto : MonoBehaviour
         this.Modificacao = modificacao;
         this.Referencia_tipo = referencia_tipo;
         this.Projetovrp = GetProjetoVRP();
+        //precisamos tratar a string de data para se comportar como data
     }
 
     public string Idprojeto { get => idprojeto; set => idprojeto = value; }

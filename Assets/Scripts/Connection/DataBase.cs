@@ -1,4 +1,5 @@
 using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DataBase : MonoBehaviour
@@ -34,21 +35,20 @@ public class DataBase : MonoBehaviour
     }
 
 
-    public Usuario GetUser(string id, string token)
+    public Usuario GetUser(string idusuario, string token)
     {
         MySqlConnection conn = new MySqlConnection(connSrt);
         Usuario result = null;
         try
         {
             conn.Open();
-            string sqlSelect = "SELECT * FROM usuario WHERE idusuario=" + id + ";";
+            string sqlSelect = "SELECT * FROM usuario WHERE idusuario=" + idusuario + ";";
 
             MySqlCommand cmd = new MySqlCommand(sqlSelect, conn);
             MySqlDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
-                string idusuario = reader["idusuario"].ToString();
                 string nome = reader["nome"].ToString();
                 string sobrenome = reader["sobrenome"].ToString();
                 string email = reader["email"].ToString();
@@ -68,6 +68,38 @@ public class DataBase : MonoBehaviour
         }
     }
 
+    public List<Projeto> GetProjects(string idusuario)
+    {
+        MySqlConnection conn = new MySqlConnection(connSrt);
+        List<Projeto> result = null;
+        try
+        {
+            conn.Open();
+            string sqlSelect = "SELECT * FROM projeto WHERE idusuario=" + idusuario + ";";
 
+            MySqlCommand cmd = new MySqlCommand(sqlSelect, conn);
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string idprojeto = reader["idprojeto"].ToString();
+                string titulo = reader["titulo"].ToString();
+                string dimensao = reader["dimensao"].ToString();
+                string criacao = reader["criacao"].ToString();
+                string modificacao = reader["modificacao"].ToString();
+                string referencia_tipo = reader["referencia_tipo"].ToString();
+
+                result.Add(new Projeto(idprojeto, idusuario, titulo, dimensao, criacao, modificacao, referencia_tipo));
+                print(result);
+            }
+            reader.Close();
+            return result;
+        }
+        catch (System.Exception)
+        {
+            return result;
+            throw;
+        }
+    }
 
 }
