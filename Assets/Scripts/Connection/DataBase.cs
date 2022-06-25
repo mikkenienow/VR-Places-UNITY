@@ -2,7 +2,7 @@ using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DataBase : MonoBehaviour
+public class DataBase
 {
     string connSrt = "Server = vrplaces.com.br; Port = 3306; Database = vrplaces_vrplaces; Uid = vrplaces; Pwd = M4c4c0s3d3nt4r10";
 
@@ -56,7 +56,6 @@ public class DataBase : MonoBehaviour
                 string assinatura = reader["assinatura"].ToString();
 
                 result = new Usuario(idusuario, nome, sobrenome, email, funcao, assinatura, token);
-                print(result);
             }
             reader.Close();
             return result;
@@ -71,7 +70,7 @@ public class DataBase : MonoBehaviour
     public List<Projeto> GetProjects(string idusuario)
     {
         MySqlConnection conn = new MySqlConnection(connSrt);
-        List<Projeto> result = null;
+        List<Projeto> result = new List<Projeto>();
         try
         {
             conn.Open();
@@ -79,24 +78,25 @@ public class DataBase : MonoBehaviour
 
             MySqlCommand cmd = new MySqlCommand(sqlSelect, conn);
             MySqlDataReader reader = cmd.ExecuteReader();
-            int i = 0;
+
             while (reader.Read())
             {
                 string idprojeto = reader["idprojeto"].ToString();
+                string idusuarioBD = reader["idusuario"].ToString();
                 string titulo = reader["titulo"].ToString();
                 string dimensao = reader["dimensao"].ToString();
                 string criacao = reader["criacao"].ToString();
                 string modificacao = reader["modificacao"].ToString();
                 string referencia_tipo = reader["referencia_tipo"].ToString();
-                print("Projeto " + i++);
-                result.Add(new Projeto(idprojeto, idusuario, titulo, dimensao, criacao, modificacao, referencia_tipo));
-                
+
+                result.Add(new Projeto(idprojeto, idusuarioBD, titulo, dimensao, criacao, modificacao, referencia_tipo));
             }
             reader.Close();
             return result;
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
+            Debug.Log("Deu erro" + e);
             return result;
             throw;
         }

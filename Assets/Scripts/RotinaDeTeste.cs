@@ -125,7 +125,7 @@ public class RotinaDeTeste : MonoBehaviour
             }
         }
         SaveMethods sm = new SaveMethods();
-        sm.LoadOnScene(new Projeto("5", "2", "TESTE", "", "", "", ""), Instantiate(cenario, cenario.transform.position, cenario.transform.rotation), wallPrefab);
+        //sm.LoadOnScene(new Projeto("5", "2", "TESTE", "", "", "", ""), Instantiate(cenario, cenario.transform.position, cenario.transform.rotation), wallPrefab);
     }
     [ContextMenu("Abrir 02")]
     void AbrirTeste2()
@@ -142,7 +142,7 @@ public class RotinaDeTeste : MonoBehaviour
             }
         }
         SaveMethods sm = new SaveMethods();
-        sm.LoadOnScene(new Projeto("2", "1", "TESTE", "", "", "", ""), Instantiate(cenario, cenario.transform.position, cenario.transform.rotation), wallPrefab);
+        //sm.LoadOnScene(new Projeto("2", "1", "TESTE", "", "", "", ""), Instantiate(cenario, cenario.transform.position, cenario.transform.rotation), wallPrefab);
     }
 
     [ContextMenu("Teste de conceito")]

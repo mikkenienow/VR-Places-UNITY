@@ -144,11 +144,15 @@ public class SaveMethods : MonoBehaviour
         return saveSystem;
     }
 
-    public void LoadOnScene(Projeto projeto, GameObject cenario, GameObject paredePrefab)
+    public void LoadOnScene(Projeto projeto, GameObject cenario, GameObject paredePrefab, GameObject baseRef)
     {
-        SaveSystem saveSystem = projeto.Projetovrp;
+        GameObject sceneEditor = Instantiate(cenario, cenario.transform.position, cenario.transform.rotation);
+        GameObject baseReferencia = Instantiate(cenario, cenario.transform.position, cenario.transform.rotation, sceneEditor.transform);
+        baseReferencia.transform.localScale = projeto.GetDimensao();
 
-        if (File.Exists(Application.persistentDataPath + "/temp/projetos/" + projeto.Idprojeto + ".vrp"))
+        SaveSystem saveSystem = projeto.projetovrp;
+
+        if (File.Exists(Application.persistentDataPath + "/temp/projetos/" + projeto.idprojeto + ".vrp"))
         {
 
             print("Carregando VRPFile na cena");
@@ -159,8 +163,8 @@ public class SaveMethods : MonoBehaviour
                 paredePrefab = Instantiate(
                     paredePrefab, 
                     get.GetPosition(), 
-                    get.GetRotation(), 
-                    cenario.transform);
+                    get.GetRotation(),
+                    sceneEditor.transform);
 
                 paredePrefab.transform.localScale = get.GetScale();
                 Transform[] walpapers = paredePrefab.GetComponentsInChildren<Transform>();
