@@ -38,7 +38,7 @@ public class GetProjectsPanel : MonoBehaviour
             print(i);
             g.GetComponentsInChildren<TextMeshProUGUI>()[1].text = pjList[i].dimensao;
             print(i);
-            if (pjList[i].referencia_tipo == null)
+            if (pjList[i].referencia_tipo == "")
             {
                 g.GetComponentsInChildren<TextMeshProUGUI>()[2].text = "Sem referencia";
             }

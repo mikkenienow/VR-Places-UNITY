@@ -57,5 +57,24 @@ public class Projeto
         return new SaveSystem();
     }
 
+    public byte[] GetReferencia()
+    {
+        byte[] referencia = null;
+        string fileOrigin = "https://vrplaces.com.br/_files/_referencia/" + this.idprojeto + "/" + this.referencia_tipo;
+        if (TransferDown.URLExists(fileOrigin))
+        {
+            string[] ext = referencia_tipo.Split(".");
+            ext[1] = "." + ext[1];
+            TransferDown td = new TransferDown("/temp/_referencia/", this.idprojeto, ext[1], fileOrigin);
+            SaveMethods sm = new SaveMethods();
+            referencia = File.ReadAllBytes(Application.persistentDataPath + "/temp/_referencia/" + this.idprojeto + ext[1]);
 
+            return referencia;
+        }
+        else
+        {
+            Debug.Log("Arquivo não localizado");
+        }
+        return referencia;
+    }
 }
