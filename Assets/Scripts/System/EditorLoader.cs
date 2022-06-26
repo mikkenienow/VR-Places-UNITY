@@ -22,6 +22,11 @@ public class EditorLoader : MonoBehaviour
             {
                 Object.Destroy(rootObjects[i]);
             }
+            if(rootObjects[i].tag == "Limits")
+            {
+                AdjustScenarioLimits(rootObjects[i], GetProjectsPanel.projetoSelecionado);
+
+            }
         }
         SaveMethods sm = new SaveMethods();
         sm.LoadOnScene(GetProjectsPanel.projetoSelecionado, cenario, parede, baseReferencia);
@@ -54,6 +59,11 @@ public class EditorLoader : MonoBehaviour
                 }
             }
         }
+    }
+
+    void AdjustScenarioLimits(GameObject limits, Projeto projeto)
+    {
+        limits.transform.localScale = projeto.GetDimensao();
     }
     void Update()
     {
