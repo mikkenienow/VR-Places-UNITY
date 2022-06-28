@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
@@ -55,18 +56,45 @@ public class Menu : MonoBehaviour
         }
     }
 
+    [ContextMenu("Salvar")]
     public void Save()
     {
+        GameObject cenario = new GameObject();
+        SaveMethods save = new SaveMethods();
+        Scene scene = SceneManager.GetActiveScene();
+        List<GameObject> rootObjects = new List<GameObject>();
+        scene.GetRootGameObjects(rootObjects);
+        for(int i = 0; i < rootObjects.Count; i++)
+        {
+            if (rootObjects[i].tag == "SceneEditor")
+            {
+                cenario = rootObjects[i];
+            }
+        }
+
+
+        save.SaveProjectFile(GetProjectsPanel.projetoSelecionado.idprojeto, GetProjectsPanel.projetoSelecionado.idusuario, cenario);
+        print("foi");
+        
+        
+
 
     }
 
+    [ContextMenu("sair")]
     public void Exit()
     {
+        print("saindo");
+        SceneManager.LoadScene("MainScene");
 
     }
 
+    [ContextMenu("Exportar")]
     public void Export()
     {
+        print(GetProjectsPanel.projetoSelecionado.idprojeto);
+        print(GetProjectsPanel.projetoSelecionado.idusuario);
+      
 
     }
 }
