@@ -112,7 +112,7 @@ public class SelectionToolLeft : MonoBehaviour
                 acao = "";
             }
         }
-        if (controleEsquerdo.TryGetFeatureValue(CommonUsages.gripButton, out gripButtonAction) && gripButtonAction && !gripButtonLock)
+        if (controleEsquerdo.TryGetFeatureValue(CommonUsages.  gripButton, out gripButtonAction) && gripButtonAction && !gripButtonLock)
         {//liberar rotação
             anguloLivre = true;
         }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
 
 public class RotinaDeTeste : MonoBehaviour
 {
@@ -20,7 +21,8 @@ public class RotinaDeTeste : MonoBehaviour
     [ContextMenu("acao")]
     void exemplo()
     {
-
+        Joystick j = new Joystick(XRNode.LeftHand) ;
+        j.SetButtonDelay();
     }
     [ContextMenu("Listar objetos")]
     void ListarObjetos()
