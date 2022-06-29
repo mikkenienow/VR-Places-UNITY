@@ -12,7 +12,9 @@ public class Construction : MonoBehaviour
     public GameObject janela;
     public GameObject pI;
     public GameObject pF;
-    Vector3 pf2 = new Vector3();
+    Vector3 pF2 = new Vector3();
+    bool finish = true;
+    bool wallExtension = false;
 
 
 
@@ -51,12 +53,10 @@ public class Construction : MonoBehaviour
             if (!rTrigger.SecondAction())
             {
                 SetOperation(SubOperation.CONSTRUIRPAREDE);
-                JoystickManager.jR.LockAllBut(ButtonName.TRIGGER);
-
             }
             if (rTrigger.SecondAction())
             {
-
+                SetOperation(SubOperation.NULL);
             }
         } else
         { //caso seja esquerdo
@@ -99,6 +99,35 @@ public class Construction : MonoBehaviour
     }
     void Create()
     {
+        finish = false;
+        switch (subOp)
+        {
+            case SubOperation.CONSTRUIRPAREDE:
+                subOp = SubOperation.MODIFICARPAREDE;
+                if (wallExtension)
+                {
+                    print("Criando parede continuada...");
+                    pI = Instantiate(pI, pF2, porta.transform.rotation);
+                    pF = Instantiate(pF, JoystickManager.hit.point, new Quaternion(0, 0, 0, 1));
+                    parede = Instantiate(parede, pI.transform.position, pI.transform.rotation);
+                    wallExtension = false;
+                    JoystickManager.jR.jTrigger.SecondAction();
+                }
+                else
+                {
+                    print("criando parede do 0");
+                    pI = Instantiate(pI, JoystickManager.hit.point, new Quaternion(0, 0, 0, 1));
+                    pF = Instantiate(pF, JoystickManager.hit.point, new Quaternion(0, 0, 0, 1));
+                    parede = Instantiate(parede, pI.transform.position, Quaternion.identity);
+                };
+                break;
+            case SubOperation.CONSTRUIRPORTA:
+                ;
+                break;
+            case SubOperation.CONSTRUIRJANELA:
+                ;
+                break;
+        }
 
     }
 

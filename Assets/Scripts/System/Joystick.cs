@@ -61,17 +61,51 @@ public class Joystick : MonoBehaviour
             }
         }
     }
-    public void LockAllBut(ButtonName button)
+    public void LockAllButSome(ButtonName[] button)
+    {
+        List<JoystickButtons> buttonList = GetButtons();
+        for (int i = 0; i < buttonList.Count; i++)
+        {
+            for (int i2 = 0; i2 < button.Length; i2++) {
+                if (buttonList[i].buttonName != button[i2])
+                {
+                    buttonList[i].LockButton();
+                }
+            }
+        }
+    }
+    public void LockAllButOne(ButtonName button)
     {
         List<JoystickButtons> buttonList = GetButtons();
         for (int i = 0; i < buttonList.Count; i++)
         {
             if (buttonList[i].buttonName != button)
             {
-                buttonList[i].bLock = true;
+                buttonList[i].LockButton();
             }
         }
     }
+    public void LockOnly(ButtonName button)
+    {
+        List<JoystickButtons> buttonList = GetButtons();
+        for (int i = 0; i < buttonList.Count; i++)
+        {
+            if (buttonList[i].buttonName == button)
+            {
+                buttonList[i].LockButton();
+            }
+        }
+    }
+
+    public void UnlockAll()
+    {
+        List<JoystickButtons> buttonList = GetButtons();
+        for (int i = 0; i < buttonList.Count; i++)
+        {
+            buttonList[i].UnLockButton();
+        }
+    }
+
 
     public void DecreaseButtonDelay()
     {
@@ -99,7 +133,7 @@ public class JoystickButtons
 {
     public ButtonName buttonName;
     public bool bAction = false;
-    public bool bLock = false;
+    private bool bLock = false;
     private int bLongPressingDelay = 0;
     private int bDelay = 0;
     private bool bSecondAction = false;
@@ -120,9 +154,9 @@ public class JoystickButtons
     }
     public void DecreaseDelay()
     {
-        if (bDelay > 0)
+        if (this.bDelay > 0)
         {
-            bDelay--;
+            this.bDelay--;
         }
     }
     public void DecreaseLongPressingDelay()
@@ -146,6 +180,23 @@ public class JoystickButtons
             return true;
         }
         return false;
+    }
+    
+    public void LockButton()
+    {
+        if(this.buttonName != ButtonName.MENU)
+        {
+            this. bLock = true;
+        }
+    }
+
+    public void UnLockButton()
+    {
+        this.bLock = false;
+    }
+    public bool IsLocked()
+    {
+        return this.bLock;
     }
 }
 
