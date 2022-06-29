@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.XR;
 
-public class Joystick
+public class Joystick : MonoBehaviour
 {
     //jMenu / jTrigger / jGrip / jPrimaruButton / jSecondButton
     public JoystickButtons jMenu = new JoystickButtons(ButtonName.MENU);
@@ -61,6 +61,17 @@ public class Joystick
             }
         }
     }
+    public void LockAllBut(ButtonName button)
+    {
+        List<JoystickButtons> buttonList = GetButtons();
+        for (int i = 0; i < buttonList.Count; i++)
+        {
+            if (buttonList[i].buttonName != button)
+            {
+                buttonList[i].bLock = true;
+            }
+        }
+    }
 
     public void DecreaseButtonDelay()
     {
@@ -70,6 +81,15 @@ public class Joystick
              buttonList[i].DecreaseDelay();
         }
     }
+
+    public void OnEnable()
+    {
+        if (!joystick.isValid)
+        {
+            GetDevice();
+        }
+    }
+
 }
 
 
@@ -82,9 +102,9 @@ public class JoystickButtons
     public bool bLock = false;
     private int bLongPressingDelay = 0;
     private int bDelay = 0;
-    public int bPress = 0;
-    private int defaultDelay = 15;
-    private int defaultLongPressingDelay = 15;
+    private bool bSecondAction = false;
+    public int defaultDelay = 15;
+    public int defaultLongPressingDelay = 15;
 
     public JoystickButtons(ButtonName name)
     {
@@ -111,6 +131,21 @@ public class JoystickButtons
         {
             bLongPressingDelay--;
         }
+    }
+
+    public bool SecondAction()
+    {
+        this.bSecondAction = !this.bSecondAction;
+        return this.bSecondAction;
+    }
+
+    public bool DelayInactive()
+    {
+        if (bDelay == 0)
+        {
+            return true;
+        }
+        return false;
     }
 }
 

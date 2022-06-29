@@ -6,62 +6,40 @@ using UnityEngine.XR;
 
 public class JoystickManager : MonoBehaviour
 {
-    Joystick jL = new Joystick(XRNode.LeftHand);
-    Joystick jR = new Joystick(XRNode.RightHand);
+    public static Joystick jL = new Joystick(XRNode.LeftHand);
+    public static Joystick jR = new Joystick(XRNode.RightHand);
+    public static Operation op = Operation.MENU;
+    public static Operation lastOp = Operation.CONTRUCAOPAREDE;
+    public static RaycastHit hit;
+    Ray theRay;
+    Vector3 direction = Vector3.forward;
+    float range = 20;
 
-
+    static void SetOperation(Operation newOp)
+    {
+        if (newOp != Operation.MENU)
+        {
+            lastOp = op;
+        }
+        op = newOp;
+    }
     void Start()
     {
         print(jL.jGrip.buttonName);
     }
     void ButtonPressedAction()
     {
-        IfAction(TempAction, jL.jMenu.bAction, !jL.jMenu.bLock);
-
-        IfAction(TempAction, jL.jTrigger.bAction, !jL.jTrigger.bLock);
-
-        IfAction(TempAction, jL.jGrip.bAction, !jL.jGrip.bLock);
-
-        IfAction(TempAction, jL.jPrimaryButton.bAction, !jL.jPrimaryButton.bLock);
-
-        IfAction(TempAction, jL.jSecondaryButton.bAction, !jL.jSecondaryButton.bLock);
-
-        //Para usar um metodo que retorne condição ELSE, usar o metodo ElIfAction e acrescentar o método 
-        // a ser executado em ELSE ño segundo parametro.
-
-        //rigth
-        IfAction(TempAction, jR.jMenu.bAction, !jR.jMenu.bLock);
-
-        IfAction(TempAction, jR.jTrigger.bAction, !jR.jTrigger.bLock);
-
-        IfAction(TempAction, jR.jGrip.bAction, !jR.jGrip.bLock);
-
-        IfAction(TempAction, jR.jPrimaryButton.bAction, !jR.jPrimaryButton.bLock);
-
-        IfAction(TempAction, jR.jSecondaryButton.bAction, !jR.jSecondaryButton.bLock);
-    }
-
-    void IfAction(Action ifAction, bool firsCondition, bool secondCondition)
-    {
-        if (firsCondition && secondCondition)
+        for (int i = 0; i < 5; i++)
         {
-            ifAction();
+            if (jL.GetButtons()[i].bAction && !jL.GetButtons()[i].bLock && jL.GetButtons()[i].DelayInactive())
+            {
+                ButtonCallAction(XRNode.LeftHand, jL.GetButtons()[i].buttonName);
+            }
+            if (jR.GetButtons()[i].bAction && !jR.GetButtons()[i].bLock && jR.GetButtons()[i].DelayInactive())
+            {
+                ButtonCallAction(XRNode.RightHand, jR.GetButtons()[i].buttonName);
+            }
         }
-    }
-    void ElIfAction(Action ifAction, Action elseAction, bool firsCondition, bool secondCondition)
-    {
-        if (firsCondition && secondCondition)
-        {
-            ifAction();
-        } else
-        {
-            elseAction();
-        }
-    }
-
-    void TempAction()
-    {
-        //metodo para substiuir metodos não criados
     }
 
     void DecreaseButtonDelay()
@@ -75,21 +53,62 @@ public class JoystickManager : MonoBehaviour
         jL.IsButtonPressed();
         jR.IsButtonPressed();
     }
-    void Update()
+
+    void SuperExecute()
     {
+        Construction.FinalExecute();
+        Placebles.FinalExecute();
+        Painting.FinalExecute();
+    }
+    void RaycastCollision()
+    {
+        theRay = new Ray(transform.position, transform.TransformDirection(direction * range));
+        Debug.DrawRay(transform.position, transform.TransformDirection(direction * range));
+    }
+    void OnEnable()
+    {
+        jL.OnEnable();
+        jR.OnEnable();
+    }
+
+    void Update()
+    {   
+        OnEnable();
+        RaycastCollision();
         IsButtonPressed();
         ButtonPressedAction();
+
+        if (Physics.Raycast(theRay, out hit, range))
+        {
+            SuperExecute(); 
+        }
+            
         DecreaseButtonDelay();
+    }
+
+    //methodos por botão
+
+    void ButtonCallAction(XRNode joystickSide, ButtonName button)
+    {
+        switch (op)
+        {        
+            case Operation.CONTRUCAOPAREDE:
+                Construction.IndexAction(joystickSide, button);
+                break;                      
+            case Operation.PINTURA:
+                Painting.IndexAction(joystickSide, button);
+                break;            
+            case Operation.DECORACAO:
+                Placebles.IndexAction(joystickSide, button);
+                break;
+        }
     }
 }
 
-public enum operation
+public enum Operation
 {
     MENU,
     CONTRUCAOPAREDE,
-    CONSTRUCAOPORTA,
-    CONSTRUCAOJANELA,
-    CONSTRUCAOSELECAO,
     PINTURA,
     DECORACAO
 }
