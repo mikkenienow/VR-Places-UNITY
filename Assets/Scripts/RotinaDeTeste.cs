@@ -21,8 +21,7 @@ public class RotinaDeTeste : MonoBehaviour
     [ContextMenu("acao")]
     void exemplo()
     {
-        Joystick j = new Joystick(XRNode.LeftHand) ;
-        j.SetButtonDelay();
+
     }
     [ContextMenu("Listar objetos")]
     void ListarObjetos()

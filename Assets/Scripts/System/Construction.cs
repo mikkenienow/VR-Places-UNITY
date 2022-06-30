@@ -6,55 +6,73 @@ using UnityEngine.XR;
 public class Construction : MonoBehaviour
 {
     public static Operation op = JoystickManager.op;
-    public static SubOperation subOp = SubOperation.CONSTRUIRPAREDE;
-    public GameObject parede;
-    public GameObject porta;
-    public GameObject janela;
+    public static SubOperation subOp = SubOperation.WALLCREATION;
+    public GameObject wall;
+    public GameObject door;
+    public GameObject window;
     public GameObject pI;
     public GameObject pF;
     Vector3 pF2 = new Vector3();
-    bool finish = true;
     bool wallExtension = false;
-
-
-
+    bool snapSwitch = false;
+    bool freeAngle = false;
+    Vector3 direction = Vector3.forward;
+    Vector3 direction2 = new Vector3();
 
 
     static void SetOperation(SubOperation newOp)
     {
         subOp = newOp;
     }
-
-    public static void IndexAction(XRNode joystickSide, ButtonName button)
+    Vector3 Snap(Vector3 originalPosition)
     {
+        Vector3 result = originalPosition;
+        if (snapSwitch)
+        {
+            float granularity = 0.15f;
+            Vector3 snappedPosition = new Vector3(Mathf.Floor(originalPosition.x / granularity) * granularity, originalPosition.y, Mathf.Floor(originalPosition.z / granularity) * granularity);
+            result = snappedPosition;
+        }
+        return result;
+    }
+    Vector3 EndPoint(Vector3 currentPosition, float distance, float angle)
+    {
+        var x = distance * Mathf.Sin(angle * Mathf.Deg2Rad);
+        var z = distance * Mathf.Cos(angle * Mathf.Deg2Rad);
+        Vector3 newPosition = currentPosition;
+        newPosition.x += x;
+        newPosition.z += z;
+
+        return newPosition;
+    }
+    public static void IndexAction(ButtonName button, Joystick joystick)
+    {
+
         switch (button)
         {
             case ButtonName.TRIGGER:
-                TriggerAction(joystickSide);
+                TriggerAction(joystick);
                 break;
             case ButtonName.GRIP:
-                GripAction(joystickSide);
+                GripAction(joystick);
                 break;
             case ButtonName.PRIMARYBUTTON:
-                PrimaryButtonAction(joystickSide);
+                PrimaryButtonAction(joystick);
                 break;
             case ButtonName.SECONDARYBUTTON:
-                SecondaryButtonAction(joystickSide);
+                SecondaryButtonAction(joystick);
                 break;
         }
     }
-    public static void TriggerAction(XRNode joystickSide)
+    public static void TriggerAction(Joystick joystick)
     {
-        JoystickButtons lTrigger = JoystickManager.jL.jTrigger;
-        JoystickButtons rTrigger = JoystickManager.jR.jTrigger;
-
-        if (joystickSide == XRNode.RightHand)
+        if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
-            if (!rTrigger.SecondAction())
+            if (!joystick.jTrigger.SecondAction())
             {
-                SetOperation(SubOperation.CONSTRUIRPAREDE);
+                SetOperation(SubOperation.WALLCREATION);
             }
-            if (rTrigger.SecondAction())
+            if (joystick.jTrigger.SecondAction())
             {
                 SetOperation(SubOperation.NULL);
             }
@@ -64,9 +82,9 @@ public class Construction : MonoBehaviour
         }
     }
 
-    public static void GripAction(XRNode joystickSide)
+    public static void GripAction(Joystick joystick)
     {
-        if (joystickSide == XRNode.RightHand)
+        if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
 
         }
@@ -75,96 +93,113 @@ public class Construction : MonoBehaviour
 
         }
     }
-    public static void PrimaryButtonAction(XRNode joystickSide)
+    public static void PrimaryButtonAction(Joystick joystick)
     {
-        if (joystickSide == XRNode.RightHand)
+        if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
-
+            SetOperation(SubOperation.DOORCREATION);
         }
         else
         { //caso seja esquerdo
 
         }
     }
-    public static void SecondaryButtonAction(XRNode joystickSide)
+    public static void SecondaryButtonAction(Joystick joystick)
     {
-        if (joystickSide == XRNode.RightHand)
+        if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
-
+            SetOperation(SubOperation.WINDOWCREATION);
         }
         else
         { //caso seja esquerdo
 
         }
     }
-    void Create()
+    void Create(Joystick jL, Joystick jR)
     {
-        finish = false;
         switch (subOp)
         {
-            case SubOperation.CONSTRUIRPAREDE:
-                subOp = SubOperation.MODIFICARPAREDE;
+            case SubOperation.WALLCREATION:
+                subOp = SubOperation.WALLTRANSFORMATION;
                 if (wallExtension)
                 {
                     print("Criando parede continuada...");
-                    pI = Instantiate(pI, pF2, porta.transform.rotation);
-                    pF = Instantiate(pF, JoystickManager.hit.point, new Quaternion(0, 0, 0, 1));
-                    parede = Instantiate(parede, pI.transform.position, pI.transform.rotation);
-                    wallExtension = false;
-                    JoystickManager.jR.jTrigger.SecondAction();
+                    this.pI = Instantiate(this.pI, this.pF2, this.door.transform.rotation);
+                    this.pF = Instantiate(this.pF, JoystickManager.hit.point, new Quaternion(0, 0, 0, 1));
+                    this.wall = Instantiate(this.wall, this.pI.transform.position, this.pI.transform.rotation);
+                    this.wallExtension = false;
+                    jR.jTrigger.SecondAction();
                 }
                 else
                 {
                     print("criando parede do 0");
-                    pI = Instantiate(pI, JoystickManager.hit.point, new Quaternion(0, 0, 0, 1));
-                    pF = Instantiate(pF, JoystickManager.hit.point, new Quaternion(0, 0, 0, 1));
-                    parede = Instantiate(parede, pI.transform.position, Quaternion.identity);
+                    this.pI = Instantiate(this.pI, JoystickManager.hit.point, new Quaternion(0, 0, 0, 1));
+                    this.pF = Instantiate(this.pF, JoystickManager.hit.point, new Quaternion(0, 0, 0, 1));
+                    this.wall = Instantiate(this.wall, this.pI.transform.position, Quaternion.identity);
                 };
                 break;
-            case SubOperation.CONSTRUIRPORTA:
-                ;
+            case SubOperation.DOORCREATION:
+                subOp = SubOperation.DOORTRANSFORMATION;
+                this.pI = Instantiate(this.pI, this.pF2, this.wall.transform.rotation);
+                this.pF = Instantiate(this.pF, JoystickManager.hit.point, new Quaternion(0, 0, 0, 1));
+                this.door = Instantiate(this.door, this.pI.transform.position, this.wall.transform.rotation);
                 break;
-            case SubOperation.CONSTRUIRJANELA:
+            case SubOperation.WINDOWCREATION:
+                subOp = SubOperation.WINDOWTRANSFORMATION;
+                this.pI = Instantiate(this.pI, this.pF2, this.wall.transform.rotation);
+                this.pF = Instantiate(this.pF, JoystickManager.hit.point, new Quaternion(0, 0, 0, 1));
+                this.window = Instantiate(this.window, this.pI.transform.position, this.wall.transform.rotation);
                 ;
                 break;
         }
-
     }
 
-    void Transform()
+    void Transform(GameObject target)
     {
+        pF.transform.position = Snap(JoystickManager.hit.point);
+        ;
+        if (freeAngle)
+        {
+            pI.transform.LookAt(pF.transform.position);
+            pF.transform.LookAt(pI.transform.position);
+            freeAngle = false;
+        }
+        float distance = Vector3.Distance(pI.transform.position, pF.transform.position);
 
+        if (freeAngle)
+        {
+            target.transform.LookAt(pF.transform.position);
+            freeAngle = false;
+        }
+        target.transform.localScale = new Vector3(target.transform.localScale.x, target.transform.localScale.y, distance);
+        direction2 = target.transform.eulerAngles;
+        pF2 = EndPoint(target.transform.position, distance, direction2.y);
     }
-
-    void CreateFrom()
-    {
-
-    }
-
-
-    public static void FinalExecute()
+    public void FinalExecute(Joystick jL, Joystick jR)
     {
         switch (subOp)
         {
-            case SubOperation.CONSTRUIRPAREDE:
-                ;
+            case SubOperation.WALLCREATION:
+                Create(jL, jR);
                 break;            
-            case SubOperation.MODIFICARPAREDE:
-                ;
+            case SubOperation.WALLTRANSFORMATION:
+                Transform(this.wall);
                 break;            
-            case SubOperation.CONSTRUIRPORTA:
-                ;
+            case SubOperation.DOORCREATION:
+                wallExtension = true;
+                Create(jL, jR);
                 break;            
-            case SubOperation.MODIFICARPORTA:
-                ;
+            case SubOperation.DOORTRANSFORMATION:
+                Transform(this.door);
                 break;            
-            case SubOperation.CONSTRUIRJANELA:
-                ;
+            case SubOperation.WINDOWCREATION:
+                wallExtension = true;
+                Create(jL, jR);
                 break;            
-            case SubOperation.MODIFICARJANELA:
-                ;
+            case SubOperation.WINDOWTRANSFORMATION:
+                Transform(this.window);
                 break;            
-            case SubOperation.SELECAO:
+            case SubOperation.SELECTION:
                 ;
                 break;
         }
@@ -175,12 +210,12 @@ public class Construction : MonoBehaviour
 }
 public enum SubOperation
 {
-    CONSTRUIRPAREDE,
-    MODIFICARPAREDE,
-    CONSTRUIRPORTA,
-    MODIFICARPORTA,
-    CONSTRUIRJANELA,
-    MODIFICARJANELA,
-    SELECAO,
+    WALLCREATION,
+    WALLTRANSFORMATION,
+    DOORCREATION,
+    DOORTRANSFORMATION,
+    WINDOWCREATION,
+    WINDOWTRANSFORMATION,
+    SELECTION,
     NULL
 }

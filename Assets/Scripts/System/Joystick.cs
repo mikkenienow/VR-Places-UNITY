@@ -12,22 +12,14 @@ public class Joystick : MonoBehaviour
     public JoystickButtons jGrip = new JoystickButtons(ButtonName.GRIP);
     public JoystickButtons jPrimaryButton = new JoystickButtons(ButtonName.PRIMARYBUTTON);
     public JoystickButtons jSecondaryButton = new JoystickButtons(ButtonName.SECONDARYBUTTON);
-    private XRNode xrNode;
+    public XRNode xrNode;
     private List<InputDevice> device = new List<InputDevice>();
     private InputDevice joystick;
-
-
-    JoystickButtons b1 = new JoystickButtons(ButtonName.MENU);
-    public Joystick(XRNode side)
-    {
-        this.xrNode = side;
-        GetDevice(); 
-    }
 
     void GetDevice()
     {
         InputDevices.GetDevicesAtXRNode(xrNode, device);
-        joystick = device.FirstOrDefault();
+        joystick = device. FirstOrDefault();
     }
 
     public List<JoystickButtons> GetButtons()
@@ -40,22 +32,34 @@ public class Joystick : MonoBehaviour
         buttonList.Add(jSecondaryButton);
         return buttonList;
     }
-    public void IsButtonPressed()
+    public void SetButtonActive()
     {
-        joystick.TryGetFeatureValue(CommonUsages.menuButton, out jMenu.bAction);
-        joystick.TryGetFeatureValue(CommonUsages.triggerButton, out jTrigger.bAction);
-        joystick.TryGetFeatureValue(CommonUsages.gripButton, out jGrip.bAction);
-        joystick.TryGetFeatureValue(CommonUsages.primaryButton, out jPrimaryButton.bAction);
-        joystick.TryGetFeatureValue(CommonUsages.secondaryButton, out jSecondaryButton.bAction);
-        SetButtonDelay();
+        print("TESTANDO BOTOES");
+        joystick.TryGetFeatureValue(CommonUsages.menuButton, out jMenu.bActive);
+        joystick.TryGetFeatureValue(CommonUsages.triggerButton, out jTrigger.bActive);
+        joystick.TryGetFeatureValue(CommonUsages.gripButton, out jGrip.bActive);
+        joystick.TryGetFeatureValue(CommonUsages.primaryButton, out jPrimaryButton.bActive);
+        joystick.TryGetFeatureValue(CommonUsages. secondaryButton, out jSecondaryButton.bActive);
+        TestarInput();
     }
 
+    void TestarInput()
+    {
+        List<JoystickButtons> buttonList = GetButtons();
+        for (int i = 0; i < buttonList.Count; i++)
+        {
+            if (buttonList[i].bActive)
+            {
+                print(buttonList[i].buttonName + " " + xrNode + " Pressionado");
+            }
+        }
+    }
     public void SetButtonDelay()
     {
         List<JoystickButtons> buttonList = GetButtons();
         for (int i = 0; i < buttonList.Count; i++)
         {
-            if (buttonList[i].bAction)
+            if (buttonList[i].bActive)
             {
                 buttonList[i].SetDelay();
             }
@@ -63,6 +67,7 @@ public class Joystick : MonoBehaviour
     }
     public void LockAllButSome(ButtonName[] button)
     {
+        print("Trancando botões 1");
         List<JoystickButtons> buttonList = GetButtons();
         for (int i = 0; i < buttonList.Count; i++)
         {
@@ -76,6 +81,7 @@ public class Joystick : MonoBehaviour
     }
     public void LockAllButOne(ButtonName button)
     {
+        print("Trancando botões 2");
         List<JoystickButtons> buttonList = GetButtons();
         for (int i = 0; i < buttonList.Count; i++)
         {
@@ -87,6 +93,7 @@ public class Joystick : MonoBehaviour
     }
     public void LockOnly(ButtonName button)
     {
+        print("Trancando botões 3");
         List<JoystickButtons> buttonList = GetButtons();
         for (int i = 0; i < buttonList.Count; i++)
         {
@@ -132,7 +139,7 @@ public class Joystick : MonoBehaviour
 public class JoystickButtons
 {
     public ButtonName buttonName;
-    public bool bAction = false;
+    public bool bActive = false;
     private bool bLock = false;
     private int bLongPressingDelay = 0;
     private int bDelay = 0;
@@ -197,6 +204,10 @@ public class JoystickButtons
     public bool IsLocked()
     {
         return this.bLock;
+    }
+    public bool IsActive()
+    {
+        return this.bActive;
     }
 }
 

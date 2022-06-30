@@ -35,6 +35,10 @@ public class EditorLoader : MonoBehaviour
             LoadBaseReferencia(GetProjectsPanel.projetoSelecionado.GetReferencia());
         }
         print(GetProjectsPanel.projetoSelecionado.titulo);
+
+        //teste
+        JoystickManager.op = Operation.CONSTRUCTION;
+
     }
 
     void LoadBaseReferencia(byte[] referencia)

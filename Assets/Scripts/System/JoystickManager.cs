@@ -6,14 +6,27 @@ using UnityEngine.XR;
 
 public class JoystickManager : MonoBehaviour
 {
-    public static Joystick jL = new Joystick(XRNode.LeftHand);
-    public static Joystick jR = new Joystick(XRNode.RightHand);
+    private Joystick jL = new Joystick();
+    
+    private Joystick jR = new Joystick();
     public static Operation op = Operation.MENU;
-    public static Operation lastOp = Operation.CONTRUCAOPAREDE;
+    public static Operation lastOp = Operation.CONSTRUCTION;
     public static RaycastHit hit;
     Ray theRay;
     Vector3 direction = Vector3.forward;
-    float range = 20;
+    float range = 50;
+    Construction construction = new Construction();
+    Placebles placebles = new Placebles();
+    Painting painting = new Painting();
+
+
+    void Start()
+    {
+        print("Iniciando controles");
+        jL.xrNode = XRNode.LeftHand;
+        jR.xrNode = XRNode.RightHand;
+    }
+
 
     static void SetOperation(Operation newOp)
     {
@@ -23,21 +36,20 @@ public class JoystickManager : MonoBehaviour
         }
         op = newOp;
     }
-    void Start()
-    {
-        print(jL.jGrip.buttonName);
-    }
+
     void ButtonPressedAction()
     {
         for (int i = 0; i < 5; i++)
         {
-            if (jL.GetButtons()[i].bAction && !jL.GetButtons()[i].bLock && jL.GetButtons()[i].DelayInactive())
+            if (jL.GetButtons()[i].IsActive() && !jL.GetButtons()[i].IsLocked() && jL.GetButtons()[i].DelayInactive())
             {
-                ButtonCallAction(XRNode.LeftHand, jL.GetButtons()[i].buttonName);
+                jL.SetButtonDelay();
+                ButtonCallAction(jL.GetButtons()[i].buttonName, jL);
             }
-            if (jR.GetButtons()[i].bAction && !jR.GetButtons()[i].bLock && jR.GetButtons()[i].DelayInactive())
+            if (jR.GetButtons()[i].IsActive() && !jR.GetButtons()[i].IsLocked() && jR.GetButtons()[i].DelayInactive())
             {
-                ButtonCallAction(XRNode.RightHand, jR.GetButtons()[i].buttonName);
+                jR.SetButtonDelay();
+                ButtonCallAction(jR.GetButtons()[i].buttonName, jR);
             }
         }
     }
@@ -50,15 +62,15 @@ public class JoystickManager : MonoBehaviour
 
     void IsButtonPressed()
     {
-        jL.IsButtonPressed();
-        jR.IsButtonPressed();
+        jL.SetButtonActive();
+        jR.SetButtonActive();
     }
 
     void SuperExecute()
     {
-        Construction.FinalExecute();
-        Placebles.FinalExecute();
-        Painting.FinalExecute();
+        construction.FinalExecute(jL, jR);
+        placebles.FinalExecute();
+        painting.FinalExecute();
     }
     void RaycastCollision()
     {
@@ -72,34 +84,38 @@ public class JoystickManager : MonoBehaviour
     }
 
     void Update()
-    {   
+    {
+        print("Ativando controles");
         OnEnable();
         RaycastCollision();
         IsButtonPressed();
+        print("testando botões apertados");
         ButtonPressedAction();
 
         if (Physics.Raycast(theRay, out hit, range))
         {
-            SuperExecute(); 
-        }
-            
+            if (hit.collider.tag == "SceneEditor")
+            {
+                SuperExecute();
+            } 
+        } 
         DecreaseButtonDelay();
     }
 
     //methodos por botão
 
-    void ButtonCallAction(XRNode joystickSide, ButtonName button)
+    void ButtonCallAction(ButtonName button, Joystick joystick)
     {
         switch (op)
         {        
-            case Operation.CONTRUCAOPAREDE:
-                Construction.IndexAction(joystickSide, button);
+            case Operation.CONSTRUCTION:
+                Construction.IndexAction(button, joystick);
                 break;                      
-            case Operation.PINTURA:
-                Painting.IndexAction(joystickSide, button);
+            case Operation.PAINTING:
+                Painting.IndexAction(button, joystick);
                 break;            
-            case Operation.DECORACAO:
-                Placebles.IndexAction(joystickSide, button);
+            case Operation.PLACEBLES:
+                Placebles.IndexAction(button, joystick);
                 break;
         }
     }
@@ -108,7 +124,7 @@ public class JoystickManager : MonoBehaviour
 public enum Operation
 {
     MENU,
-    CONTRUCAOPAREDE,
-    PINTURA,
-    DECORACAO
+    CONSTRUCTION,
+    PAINTING,
+    PLACEBLES
 }

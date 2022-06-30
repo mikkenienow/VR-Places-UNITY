@@ -9,27 +9,28 @@ public class Placebles : MonoBehaviour
 
 
 
-    public static void IndexAction(XRNode joystickSide, ButtonName button)
+    public static void IndexAction(ButtonName button, Joystick joystick)
     {
+
         switch (button)
         {
             case ButtonName.TRIGGER:
-                TriggerAction(joystickSide);
+                TriggerAction(joystick);
                 break;
             case ButtonName.GRIP:
-                GripAction(joystickSide);
+                GripAction(joystick);
                 break;
             case ButtonName.PRIMARYBUTTON:
-                PrimaryButtonAction(joystickSide);
+                PrimaryButtonAction(joystick);
                 break;
             case ButtonName.SECONDARYBUTTON:
-                SecondaryButtonAction(joystickSide);
+                SecondaryButtonAction(joystick);
                 break;
         }
     }
-    public static void TriggerAction(XRNode joystickSide)
+    public static void TriggerAction(Joystick joystick)
     {
-        if (joystickSide == XRNode.RightHand)
+        if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
 
         }
@@ -39,9 +40,9 @@ public class Placebles : MonoBehaviour
         }
     }
 
-    public static void GripAction(XRNode joystickSide)
+    public static void GripAction(Joystick joystick)
     {
-        if (joystickSide == XRNode.RightHand)
+        if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
 
         }
@@ -50,9 +51,9 @@ public class Placebles : MonoBehaviour
 
         }
     }
-    public static void PrimaryButtonAction(XRNode joystickSide)
+    public static void PrimaryButtonAction(Joystick joystick)
     {
-        if (joystickSide == XRNode.RightHand)
+        if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
 
         }
@@ -61,9 +62,9 @@ public class Placebles : MonoBehaviour
 
         }
     }
-    public static void SecondaryButtonAction(XRNode joystickSide)
+    public static void SecondaryButtonAction(Joystick joystick)
     {
-        if (joystickSide == XRNode.RightHand)
+        if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
 
         }
@@ -72,7 +73,7 @@ public class Placebles : MonoBehaviour
 
         }
     }
-    public static void FinalExecute()
+    public void FinalExecute()
     {
 
     }
