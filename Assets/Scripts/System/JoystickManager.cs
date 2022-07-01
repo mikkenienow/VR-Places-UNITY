@@ -6,12 +6,20 @@ using UnityEngine.XR;
 
 public class JoystickManager : MonoBehaviour
 {
+    public GameObject wall;
+    public GameObject door;
+    public GameObject window;
+    public GameObject pI;
+    public GameObject pF;
+
+
     private Joystick jL = new Joystick();
     
     private Joystick jR = new Joystick();
-    public static Operation op = Operation.MENU;
-    public static Operation lastOp = Operation.CONSTRUCTION;
-    public static RaycastHit hit;
+    private static Operation op;
+    private static Operation lastOp = Operation.CONSTRUCTION;
+    public RaycastHit hit;
+    public static RaycastHit globalHit;
     Ray theRay;
     Vector3 direction = Vector3.forward;
     float range = 50;
@@ -20,21 +28,30 @@ public class JoystickManager : MonoBehaviour
     Painting painting = new Painting();
 
 
-    void Start()
+    public void Start()
     {
-        print("Iniciando controles");
         jL.xrNode = XRNode.LeftHand;
         jR.xrNode = XRNode.RightHand;
+        SetOperation(Operation.CONSTRUCTION);
+        ObjectSender();
     }
 
-
-    static void SetOperation(Operation newOp)
+    public void ObjectSender()
+    {
+        Construction.ObjectReceiver(wall, door, window, pI, pF);
+    }
+    public static void SetOperation(Operation newOp)
     {
         if (newOp != Operation.MENU)
         {
             lastOp = op;
         }
         op = newOp;
+    }
+
+    public static Operation GetOperation()
+    {
+        return op;
     }
 
     void ButtonPressedAction()
@@ -44,11 +61,14 @@ public class JoystickManager : MonoBehaviour
             if (jL.GetButtons()[i].IsActive() && !jL.GetButtons()[i].IsLocked() && jL.GetButtons()[i].DelayInactive())
             {
                 jL.SetButtonDelay();
+                
                 ButtonCallAction(jL.GetButtons()[i].buttonName, jL);
             }
             if (jR.GetButtons()[i].IsActive() && !jR.GetButtons()[i].IsLocked() && jR.GetButtons()[i].DelayInactive())
             {
+                print("Operação atual: " + op);
                 jR.SetButtonDelay();
+                print("Botão pressionado: " + jR.GetButtons()[i].buttonName);
                 ButtonCallAction(jR.GetButtons()[i].buttonName, jR);
             }
         }
@@ -85,20 +105,23 @@ public class JoystickManager : MonoBehaviour
 
     void Update()
     {
-        print("Ativando controles");
+        print("Operação atual: " + op);
         OnEnable();
         RaycastCollision();
         IsButtonPressed();
-        print("testando botões apertados");
         ButtonPressedAction();
 
         if (Physics.Raycast(theRay, out hit, range))
         {
-            if (hit.collider.tag == "SceneEditor")
+            globalHit = hit;
+            print("hiting");
+            if (hit.collider.tag == "BaseReferencia")
             {
+                print("colidendo em SceneEditor");
                 SuperExecute();
             } 
-        } 
+        }
+        print("Botão decreasing");
         DecreaseButtonDelay();
     }
 
@@ -107,8 +130,9 @@ public class JoystickManager : MonoBehaviour
     void ButtonCallAction(ButtonName button, Joystick joystick)
     {
         switch (op)
-        {        
+        {
             case Operation.CONSTRUCTION:
+                print("Iniciando classe CONSTRUCTION");
                 Construction.IndexAction(button, joystick);
                 break;                      
             case Operation.PAINTING:
@@ -123,8 +147,8 @@ public class JoystickManager : MonoBehaviour
 
 public enum Operation
 {
-    MENU,
-    CONSTRUCTION,
-    PAINTING,
-    PLACEBLES
+    MENU = 0,
+    CONSTRUCTION = 1,
+    PAINTING = 2,
+    PLACEBLES = 3
 }

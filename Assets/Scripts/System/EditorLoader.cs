@@ -37,7 +37,7 @@ public class EditorLoader : MonoBehaviour
         print(GetProjectsPanel.projetoSelecionado.titulo);
 
         //teste
-        JoystickManager.op = Operation.CONSTRUCTION;
+        JoystickManager.SetOperation(Operation.CONSTRUCTION);
 
     }
 
@@ -68,9 +68,5 @@ public class EditorLoader : MonoBehaviour
     void AdjustScenarioLimits(GameObject limits, Projeto projeto)
     {
         limits.transform.localScale = projeto.GetDimensao();
-    }
-    void Update()
-    {
-        
     }
 }

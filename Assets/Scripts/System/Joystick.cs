@@ -34,13 +34,11 @@ public class Joystick : MonoBehaviour
     }
     public void SetButtonActive()
     {
-        print("TESTANDO BOTOES");
         joystick.TryGetFeatureValue(CommonUsages.menuButton, out jMenu.bActive);
         joystick.TryGetFeatureValue(CommonUsages.triggerButton, out jTrigger.bActive);
         joystick.TryGetFeatureValue(CommonUsages.gripButton, out jGrip.bActive);
         joystick.TryGetFeatureValue(CommonUsages.primaryButton, out jPrimaryButton.bActive);
         joystick.TryGetFeatureValue(CommonUsages. secondaryButton, out jSecondaryButton.bActive);
-        TestarInput();
     }
 
     void TestarInput()
@@ -67,7 +65,6 @@ public class Joystick : MonoBehaviour
     }
     public void LockAllButSome(ButtonName[] button)
     {
-        print("Trancando botões 1");
         List<JoystickButtons> buttonList = GetButtons();
         for (int i = 0; i < buttonList.Count; i++)
         {
@@ -81,7 +78,6 @@ public class Joystick : MonoBehaviour
     }
     public void LockAllButOne(ButtonName button)
     {
-        print("Trancando botões 2");
         List<JoystickButtons> buttonList = GetButtons();
         for (int i = 0; i < buttonList.Count; i++)
         {
@@ -93,7 +89,6 @@ public class Joystick : MonoBehaviour
     }
     public void LockOnly(ButtonName button)
     {
-        print("Trancando botões 3");
         List<JoystickButtons> buttonList = GetButtons();
         for (int i = 0; i < buttonList.Count; i++)
         {
@@ -176,8 +171,9 @@ public class JoystickButtons
 
     public bool SecondAction()
     {
+        bool result = this.bSecondAction;
         this.bSecondAction = !this.bSecondAction;
-        return this.bSecondAction;
+        return result;
     }
 
     public bool DelayInactive()

@@ -5,7 +5,7 @@ using UnityEngine.XR;
 
 public class Painting : MonoBehaviour
 {
-    Operation op = JoystickManager.op;
+    Operation op = JoystickManager.GetOperation();
 
 
 
