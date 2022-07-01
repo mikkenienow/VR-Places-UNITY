@@ -54,6 +54,10 @@ public class Menu : MonoBehaviour
             menu.transform.SetParent(parent.transform);
             active = true;
         }
+
+        ItensMenuPainting painting = new ItensMenuPainting();
+        Color colors = painting.color;
+
     }
 
     [ContextMenu("Salvar")]
@@ -72,13 +76,9 @@ public class Menu : MonoBehaviour
             }
         }
 
-
         save.SaveProjectFile(GetProjectsPanel.projetoSelecionado.idprojeto, GetProjectsPanel.projetoSelecionado.idusuario, cenario);
         print("foi");
         
-        
-
-
     }
 
     [ContextMenu("sair")]
@@ -94,7 +94,21 @@ public class Menu : MonoBehaviour
     {
         print(GetProjectsPanel.projetoSelecionado.idprojeto);
         print(GetProjectsPanel.projetoSelecionado.idusuario);
-      
+          }
+}
 
-    }
+public class ItensMenuTexture : MonoBehaviour
+{
+  
+
+
+
+}
+
+public class ItensMenuPlacebles : MonoBehaviour
+{
+  
+
+
+
 }
