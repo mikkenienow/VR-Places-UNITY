@@ -418,7 +418,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &238358761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -435,7 +435,7 @@ MonoBehaviour:
   m_OriginBaseGameObject: {fileID: 238358760}
   m_CameraFloorOffsetObject: {fileID: 422036356}
   m_RequestedTrackingOriginMode: 0
-  m_CameraYOffset: 1.1176
+  m_CameraYOffset: 1.8
 --- !u!4 &238358762
 Transform:
   m_ObjectHideFlags: 0

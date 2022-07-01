@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
 
 public class RotinaDeTeste : MonoBehaviour
 {

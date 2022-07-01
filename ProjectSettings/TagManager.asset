@@ -14,7 +14,7 @@ TagManager:
   - SceneEditor
   - wallpaper
   - BaseReferencia
-  - Bounds
+  - Limits
   layers:
   - Default
   - TransparentFX
