@@ -20370,7 +20370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26298113071989d46a97df0c9d88c06d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MenuPrincipal: {fileID: 7948189520856466612, guid: ff810ef8148a52741b7bfa03a13d45ec, type: 3}
+  MenuPrincipal: {fileID: 1189646360}
   MenuPintura: {fileID: 84679077}
   "MenuConstru\xE7\xE3o": {fileID: 0}
   parent: {fileID: 0}

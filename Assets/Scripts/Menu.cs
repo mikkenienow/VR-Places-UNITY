@@ -17,7 +17,8 @@ public class Menu : MonoBehaviour
     {
         if (!active)
         {
-            menu = Instantiate<GameObject>(MenuPrincipal);
+            MenuPrincipal.SetActive(true);
+            menu = MenuPrincipal;
             menu.transform.SetParent(parent.transform);
             active = true;
         }
@@ -26,19 +27,19 @@ public class Menu : MonoBehaviour
     [ContextMenu("Fechar Menu")]
     public void CloseMenu()
     {
-        DestroyImmediate(menu);
+        MenuPrincipal.SetActive(false);
         active = false;
     }
 
     [ContextMenu("Menu Principal")]
     public void OpenMenuPrincipal()
     {
-        DestroyImmediate(menu);
+
+        MenuPrincipal.SetActive(false);
         active = false;
         if (!active)
         {
-            menu = Instantiate(MenuPrincipal, MenuPrincipal.transform);
-            menu.transform.SetParent(parent.transform);
+            MenuPrincipal.SetActive(true);
             active = true;
         }
     }
@@ -94,7 +95,14 @@ public class Menu : MonoBehaviour
     {
         print(GetProjectsPanel.projetoSelecionado.idprojeto);
         print(GetProjectsPanel.projetoSelecionado.idusuario);
-          }
+    }
+
+    public void Confirm()
+    {
+        JoystickManager.SetOperation(Operation.PAINTING);
+        CloseMenu();
+
+    }
 }
 
 public class ItensMenuTexture : MonoBehaviour
