@@ -5,59 +5,52 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-    public GameObject MenuPrincipal;
-    public GameObject MenuPintura;
-    public GameObject MenuConstrução;
-    public GameObject parent;
-    private GameObject menu;
+
+    public GameObject menuPrincipal;
+    public GameObject menuPintura;
+    public GameObject menuConstrução;
+    private static GameObject menu;
     private bool active = false;
 
-    [ContextMenu("Mostrar Menu")]
-    public void ShowMenu()
-    {
-        if (!active)
-        {
-            MenuPrincipal.SetActive(true);
-            menu = MenuPrincipal;
-            menu.transform.SetParent(parent.transform);
-            active = true;
-        }
-    }
+
 
     [ContextMenu("Fechar Menu")]
     public void CloseMenu()
     {
-        MenuPrincipal.SetActive(false);
+        menu.SetActive(false);
         active = false;
     }
 
     [ContextMenu("Menu Principal")]
-    public void OpenMenuPrincipal()
+    public void OpenmenuPrincipal()
     {
-
-        MenuPrincipal.SetActive(false);
+        if (menu)
+        {
+            menu.SetActive(false);
+        }
         active = false;
         if (!active)
         {
-            MenuPrincipal.SetActive(true);
+            menuPrincipal.SetActive(true);
             active = true;
+            menu = menuPrincipal;
         }
     }
 
     [ContextMenu("Menu Pintura")]
     public void OpenPintura()
     {
-        DestroyImmediate(menu);
+        if (menu)
+        {
+            menu.SetActive(false);
+        }
         active = false;
         if (!active)
         {
-            menu = Instantiate(MenuPintura, MenuPrincipal.transform);
-            menu.transform.SetParent(parent.transform);
+            menuPintura.SetActive(true);
+            menu = menuPintura;
             active = true;
         }
-
-        ItensMenuPainting painting = new ItensMenuPainting();
-        Color colors = painting.color;
 
     }
 
@@ -69,7 +62,7 @@ public class Menu : MonoBehaviour
         Scene scene = SceneManager.GetActiveScene();
         List<GameObject> rootObjects = new List<GameObject>();
         scene.GetRootGameObjects(rootObjects);
-        for(int i = 0; i < rootObjects.Count; i++)
+        for (int i = 0; i < rootObjects.Count; i++)
         {
             if (rootObjects[i].tag == "SceneEditor")
             {
@@ -79,7 +72,7 @@ public class Menu : MonoBehaviour
 
         save.SaveProjectFile(GetProjectsPanel.projetoSelecionado.idprojeto, GetProjectsPanel.projetoSelecionado.idusuario, cenario);
         print("foi");
-        
+
     }
 
     [ContextMenu("sair")]
@@ -107,7 +100,7 @@ public class Menu : MonoBehaviour
 
 public class ItensMenuTexture : MonoBehaviour
 {
-  
+
 
 
 
@@ -115,7 +108,7 @@ public class ItensMenuTexture : MonoBehaviour
 
 public class ItensMenuPlacebles : MonoBehaviour
 {
-  
+
 
 
 

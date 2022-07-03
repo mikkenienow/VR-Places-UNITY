@@ -10,5 +10,6 @@ public class ItensMenuPainting : MonoBehaviour
     public void SelectColor()
     {
         selectedColor = color;
+        print(selectedColor.ToString());
     }
 }
