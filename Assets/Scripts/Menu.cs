@@ -137,7 +137,24 @@ public class Menu : MonoBehaviour
 
     public void Confirm()
     {
-        JoystickManager.SetOperation(Operation.PAINTING);
+        if (menu == menuPintura || menu == menuTexture)
+        {
+            JoystickManager.SetOperation(Operation.PAINTING);
+        }
+        if (menu == menuPlaceable) 
+        {
+            JoystickManager.SetOperation(Operation.PLACEBLES);
+        }
+        if (menu == menuTexture)
+        {
+            JoystickManager.SetOperation(Operation.PAINTING);
+        }
+        if (menu == menuConstrução)
+        {
+            JoystickManager.SetOperation(Operation.CONSTRUCTION);
+        }
+
+
         CloseMenu();
 
     }
