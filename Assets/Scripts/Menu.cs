@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,11 +8,20 @@ public class Menu : MonoBehaviour
     public GameObject menuPrincipal;
     public GameObject menuPintura;
     public GameObject menuConstrução;
+    public GameObject menuTexture;
+    public GameObject menuPlaceable;
+    public GameObject player;
     private static GameObject menu;
     private bool active = false;
 
 
-
+    private void RecenterMenu()
+    {
+        Vector3 playerPosition = player.transform.position;
+        player.transform.position = new Vector3(playerPosition.x, 120, playerPosition.z);
+        playerPosition = player.transform.position;
+        menu.transform.position = new Vector3(playerPosition.x, playerPosition.y, playerPosition.z + 40);
+    }
     [ContextMenu("Fechar Menu")]
     public void CloseMenu()
     {
@@ -22,7 +30,7 @@ public class Menu : MonoBehaviour
     }
 
     [ContextMenu("Menu Principal")]
-    public void OpenmenuPrincipal()
+    public void OpenMenuPrincipal()
     {
         if (menu)
         {
@@ -32,13 +40,14 @@ public class Menu : MonoBehaviour
         if (!active)
         {
             menuPrincipal.SetActive(true);
-            active = true;
             menu = menuPrincipal;
+            RecenterMenu();
+            active = true;
         }
     }
 
     [ContextMenu("Menu Pintura")]
-    public void OpenPintura()
+    public void OpenMenuPintura()
     {
         if (menu)
         {
@@ -49,9 +58,45 @@ public class Menu : MonoBehaviour
         {
             menuPintura.SetActive(true);
             menu = menuPintura;
+            RecenterMenu();
+            active = true;
+        } 
+    }
+
+    public void OpenMenuTexture()
+    {
+        if (menu)
+        {
+            menu.SetActive(false);
+        }
+        active = false;
+        if (!active)
+        {
+            menuTexture.SetActive(true);
+            menu = menuTexture;
+            RecenterMenu();
             active = true;
         }
+    }
 
+    [ContextMenu("Menu Placeable")]
+    public void OpenMenuPlaceable()
+    {
+        if (menu)
+        {
+            RecenterMenu();
+            menu.SetActive(false);
+            print("aqui2222");
+        }
+        active = false;
+        if (!active)
+        {
+            print("aqui333333");
+            menuPlaceable.SetActive(true);
+            menu = menuPlaceable;
+            RecenterMenu();
+            active = true;
+        }
     }
 
     [ContextMenu("Salvar")]
@@ -96,20 +141,4 @@ public class Menu : MonoBehaviour
         CloseMenu();
 
     }
-}
-
-public class ItensMenuTexture : MonoBehaviour
-{
-
-
-
-
-}
-
-public class ItensMenuPlacebles : MonoBehaviour
-{
-
-
-
-
 }
