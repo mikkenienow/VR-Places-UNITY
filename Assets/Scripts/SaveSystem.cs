@@ -147,6 +147,7 @@ public class SaveMethods : MonoBehaviour
     public void LoadOnScene(Projeto projeto, GameObject cenario, GameObject paredePrefab, GameObject baseRef)
     {
         GameObject sceneEditor = Instantiate(cenario, cenario.transform.position, cenario.transform.rotation);
+        sceneEditor.transform.localScale = new Vector3(1, 1, 1);
         GameObject baseReferencia = Instantiate(baseRef, baseRef.transform.position, baseRef.transform.rotation, sceneEditor.transform);
         baseReferencia.transform.localScale = projeto.GetDimensao();
 

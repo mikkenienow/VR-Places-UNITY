@@ -99,7 +99,7 @@ public class Construction : MonoBehaviour
     }
     public static void IndexAction(ButtonName button, Joystick joystick)
     {
-        //cenario = JoystickManager.GetScene();
+        cenario = JoystickManager.GetScene();
         switch (button)
         {
             case ButtonName.TRIGGER:
@@ -207,7 +207,7 @@ public class Construction : MonoBehaviour
                     print("criando parede do 0");
                     pI = Instantiate(pI, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                     pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                    wall = Instantiate(wall, pI.transform.position, Quaternion.identity/*, cenario.transform*/);
+                    wall = Instantiate(wall, pI.transform.position, Quaternion.identity, cenario.transform);
                 };
                 break;
             case SubOperation.DOORCREATION:

@@ -1,4 +1,4 @@
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -122,7 +122,6 @@ public class JoystickManager : MonoBehaviour
 
     void Update()
     {
-        print("Rotina update joystickmanager");
         OnEnable();
         RaycastCollision();
         IsButtonPressed();

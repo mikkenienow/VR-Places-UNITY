@@ -340,7 +340,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 143148302}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0cb9aa70a22847b5925ee5f067c10a9, type: 3}
   m_Name: 
@@ -349,7 +349,7 @@ MonoBehaviour:
   m_OriginBaseGameObject: {fileID: 143148302}
   m_CameraFloorOffsetObject: {fileID: 1894330660}
   m_RequestedTrackingOriginMode: 1
-  m_CameraYOffset: 1.8
+  m_CameraYOffset: 0
 --- !u!4 &143148306
 Transform:
   m_ObjectHideFlags: 0
@@ -390,7 +390,6 @@ GameObject:
   m_Component:
   - component: {fileID: 419401018}
   - component: {fileID: 419401017}
-  - component: {fileID: 419401019}
   m_Layer: 0
   m_Name: BuildLoader
   m_TagString: Untagged
@@ -405,7 +404,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 419401016}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e9e82402ba429948aed8344a732668b, type: 3}
   m_Name: 
@@ -425,23 +424,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &419401019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 419401016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 983d36132d6eb2d4c8456f8c912e0f3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wall: {fileID: 5518310411021971013, guid: b14feb699e2a87a46abd66e8bf1c25ef, type: 3}
-  door: {fileID: 6659251640865032021, guid: f3504ec46160de945a2a29ceb3907f05, type: 3}
-  window: {fileID: 5518310411021971013, guid: bab89850d8f5f2d46a9179da12478d97, type: 3}
-  pI: {fileID: 5518310411021971013, guid: 385596afe6d715b499d86eac445ecda6, type: 3}
-  pF: {fileID: 5518310411021971013, guid: 5d1bb2ea1a4a1c9469c06a4582f40ad9, type: 3}
 --- !u!1001 &581438896
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -868,6 +850,7 @@ GameObject:
   - component: {fileID: 1298169500}
   - component: {fileID: 1298169499}
   - component: {fileID: 1298169504}
+  - component: {fileID: 1298169505}
   m_Layer: 0
   m_Name: RightHand Controller
   m_TagString: Untagged
@@ -1365,6 +1348,23 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 875253871413052681, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   m_ButtonPressPoint: 0.5
+--- !u!114 &1298169505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298169496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 983d36132d6eb2d4c8456f8c912e0f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wall: {fileID: 5518310411021971013, guid: b14feb699e2a87a46abd66e8bf1c25ef, type: 3}
+  door: {fileID: 6659251640865032021, guid: f3504ec46160de945a2a29ceb3907f05, type: 3}
+  window: {fileID: 5518310411021971013, guid: bab89850d8f5f2d46a9179da12478d97, type: 3}
+  pI: {fileID: 5518310411021971013, guid: 385596afe6d715b499d86eac445ecda6, type: 3}
+  pF: {fileID: 5518310411021971013, guid: 5d1bb2ea1a4a1c9469c06a4582f40ad9, type: 3}
 --- !u!1 &1757111279
 GameObject:
   m_ObjectHideFlags: 0
