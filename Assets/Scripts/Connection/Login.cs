@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,9 +21,9 @@ public class Login : MonoBehaviour
         }
     }
 
-    public void GetToken(string token)
+    public void GetToken(TMP_InputField token)
     {
-        this.token = token;
+        this.token = token.text;
         print(this.token);
     }
 
@@ -36,7 +37,9 @@ public class Login : MonoBehaviour
             if (user.Status)
             {
                 Cookie cookie = new Cookie(user, this.token);
-                SceneManager.LoadScene("MainScene");
+                //SceneManager.LoadScene("MainScene");
+                SceneLoader.Instance.LoadNewScene("MainScene");
+
             }
         }
         catch
@@ -55,7 +58,8 @@ public class Login : MonoBehaviour
         {
             if (cookie.Authorization)
             {
-                SceneManager.LoadScene("MainScene");
+                //SceneManager.LoadScene("MainScene");
+                SceneLoader.Instance.LoadNewScene("MainScene");
                 print("token valido");
             }
 

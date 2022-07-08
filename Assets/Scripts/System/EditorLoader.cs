@@ -12,7 +12,8 @@ public class EditorLoader : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        print("iniciando projeto");
+
+        JoystickManager.cenario = this.cenario;
         Scene scene = SceneManager.GetActiveScene();
         List<GameObject> rootObjects = new List<GameObject>();
         scene.GetRootGameObjects(rootObjects);
@@ -22,10 +23,9 @@ public class EditorLoader : MonoBehaviour
             {
                 Object.Destroy(rootObjects[i]);
             }
-            if(rootObjects[i].tag == "Limits")
+            if (rootObjects[i].tag == "Limits")
             {
                 AdjustScenarioLimits(rootObjects[i], GetProjectsPanel.projetoSelecionado);
-
             }
         }
         SaveMethods sm = new SaveMethods();
@@ -35,10 +35,7 @@ public class EditorLoader : MonoBehaviour
             LoadBaseReferencia(GetProjectsPanel.projetoSelecionado.GetReferencia());
         }
         print(GetProjectsPanel.projetoSelecionado.titulo);
-
-        //teste
-        JoystickManager.SetOperation(Operation.CONSTRUCTION);
-
+        //SceneManager.UnloadSceneAsync("MainScene");
     }
 
     void LoadBaseReferencia(byte[] referencia)

@@ -10,9 +10,11 @@ public class GetProjectsPanel : MonoBehaviour
 {
     public GameObject projectButtonTemplate;
     public GameObject panel;
+    public GameObject xrOrigin;
     public string userid;
     public static Projeto projetoSelecionado;
     public List<Projeto> pjList = new List<Projeto>();
+
 
     public List<Projeto> GetList()
     {
@@ -21,8 +23,11 @@ public class GetProjectsPanel : MonoBehaviour
     }
     void Load(int i)
     {
+        //xrOrigin.SetActive(false);
         projetoSelecionado = pjList[i];
-        SceneManager.LoadScene("VRPEditor");
+        SceneLoader.Instance.LoadNewScene("VRPEditor");
+        JoystickManager.SetOperation(Operation.CONSTRUCTION);
+        //SceneManager.LoadScene("VRPEditor");
     }
     void Start()
     {
@@ -31,13 +36,9 @@ public class GetProjectsPanel : MonoBehaviour
         int x = pjList.Count;
         for (int i = 0; i < x; i++)
         {
-            print(i);
             g = Instantiate(projectButtonTemplate, panel.transform);
-            print(i);
             g.GetComponentsInChildren<TextMeshProUGUI>()[0].text = pjList[i].titulo;
-            print(i);
             g.GetComponentsInChildren<TextMeshProUGUI>()[1].text = pjList[i].dimensao;
-            print(i);
             if (pjList[i].referencia_tipo == "")
             {
                 g.GetComponentsInChildren<TextMeshProUGUI>()[2].text = "Sem referencia";
@@ -46,14 +47,10 @@ public class GetProjectsPanel : MonoBehaviour
             {
                 g.GetComponentsInChildren<TextMeshProUGUI>()[2].text = "Com referencia";
             }
-            print(i);
-
             g.GetComponent<Button>().AddEventListener(i, Load);
-
         }
         Destroy(projectButtonTemplate);
     }
-
 }
 
 public static class ButtonExtension

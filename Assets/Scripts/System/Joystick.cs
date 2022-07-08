@@ -86,6 +86,13 @@ public class Joystick : MonoBehaviour
                 buttonList[i].LockButton();
             }
         }
+    }    public void LockAll()
+    {
+        List<JoystickButtons> buttonList = GetButtons();
+        for (int i = 0; i < buttonList.Count; i++)
+        {
+            buttonList[i].LockButton();
+        }
     }
     public void LockOnly(ButtonName button)
     {
@@ -145,6 +152,10 @@ public class JoystickButtons
     public JoystickButtons(ButtonName name)
     {
         this.buttonName = name;
+        if (name == ButtonName.PRIMARYBUTTON || name == ButtonName.SECONDARYBUTTON)
+        {
+            SetLongPressingDelay();
+        }
     }
     public void SetDelay()
     {
@@ -153,6 +164,15 @@ public class JoystickButtons
     public void SetLongPressingDelay()
     {
         this.bLongPressingDelay = this.defaultLongPressingDelay;
+    }
+    public bool IsLongPressingDelayed()
+    {
+        this.bLongPressingDelay--;
+        if (this.bLongPressingDelay == 0)
+        {
+            return false;
+        }
+        return true;
     }
     public void DecreaseDelay()
     {

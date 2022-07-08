@@ -6,31 +6,75 @@ using UnityEngine.XR;
 public class Construction : MonoBehaviour
 {
     public static Operation op = JoystickManager.GetOperation();
-    public static SubOperation subOp = SubOperation.WALLCREATION;
+    public static SubOperation subOp = SubOperation.NULL;
+    public static Joystick jL;
+    public static Joystick jR;
     public static GameObject wall;
     public static GameObject door;
     public static GameObject window;
     public static GameObject pI;
     public static GameObject pF;
+    public static GameObject cenario;
+
+
     Vector3 pF2 = new Vector3();
-    bool wallExtension = false;
+    public static bool wallExtension = false;
     bool snapSwitch = false;
-    bool freeAngle = false;
+    public static bool freeAngle = false;
     Vector3 direction = Vector3.forward;
     Vector3 direction2 = new Vector3();
 
-    public static void ObjectReceiver(GameObject obj0, GameObject obj1, GameObject obj2, GameObject obj3, GameObject obj4)
+    public static void ObjectReceiver(GameObject obj0, GameObject obj1, GameObject obj2, GameObject obj3, GameObject obj4, GameObject obj5)
     {
         wall = obj0;
         door = obj1;
         window = obj2;
         pI = obj3;
         pF = obj4;
+        cenario = obj5;
     }
-    static void SetOperation(SubOperation newOp)
+
+    public static void JoystickReceiver(Joystick jLOrigin, Joystick jROrigin)
+    {
+        jL = jLOrigin;
+        jR = jROrigin;
+    }
+
+    static void SetSubOperation(SubOperation newOp)
     {
         subOp = newOp;
-        print("Sub operação: " + subOp);
+        jR.UnlockAll();
+        jL.UnlockAll();
+        switch (newOp)
+        {
+            case SubOperation.WALLCREATION:
+                ;
+                break;
+            case SubOperation.WALLTRANSFORMATION:
+                ;
+                break;
+            case SubOperation.DOORCREATION:
+                ;
+                break;
+            case SubOperation.DOORTRANSFORMATION:
+                jR.LockAllButOne(ButtonName.PRIMARYBUTTON);
+                jL.LockAll();
+                ;
+                break;
+            case SubOperation.WINDOWCREATION:
+                ;
+                break;
+            case SubOperation.WINDOWTRANSFORMATION:
+                jR.LockAllButOne(ButtonName.SECONDARYBUTTON);
+                jL.LockAll();
+                break;
+            case SubOperation.SELECTION:
+                ;
+                break;
+            case SubOperation.NULL:
+                ;
+                break;
+        }
     }
     Vector3 Snap(Vector3 originalPosition)
     {
@@ -55,8 +99,7 @@ public class Construction : MonoBehaviour
     }
     public static void IndexAction(ButtonName button, Joystick joystick)
     {
-        print("IndexAction ---");
-        print("Suboperação: " + subOp);
+        //cenario = JoystickManager.GetScene();
         switch (button)
         {
             case ButtonName.TRIGGER:
@@ -75,18 +118,16 @@ public class Construction : MonoBehaviour
     }
     public static void TriggerAction(Joystick joystick)
     {
-        print("TriggerAction ---");
+        print("Ação do trigger");
         if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
-            print("Trigger direito");
             if (!joystick.jTrigger.SecondAction())
             {
-                print("Definindo subOp para WALLCREATION");
-                SetOperation(SubOperation.WALLCREATION);
-            }
-            if (joystick.jTrigger.SecondAction())
+                print("Ação do trigger: WALLCREATION" );
+                SetSubOperation(SubOperation.WALLCREATION);
+            } else
             {
-                SetOperation(SubOperation.NULL);
+                SetSubOperation(SubOperation.NULL);
             }
         } else
         { //caso seja esquerdo
@@ -98,7 +139,10 @@ public class Construction : MonoBehaviour
     {
         if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
-
+            if (subOp == SubOperation.WALLTRANSFORMATION)
+            {
+                freeAngle = true;
+            }
         }
         else
         { //caso seja esquerdo
@@ -109,7 +153,14 @@ public class Construction : MonoBehaviour
     {
         if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
-            SetOperation(SubOperation.DOORCREATION);
+            if (!joystick.jPrimaryButton.SecondAction())
+            {
+                SetSubOperation(SubOperation.DOORCREATION);
+            } else
+            {
+                SetSubOperation(SubOperation.WALLCREATION);
+                wallExtension = true;
+            }
         }
         else
         { //caso seja esquerdo
@@ -120,11 +171,20 @@ public class Construction : MonoBehaviour
     {
         if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
-            SetOperation(SubOperation.WINDOWCREATION);
+            if (!joystick.jSecondaryButton.SecondAction())
+            {
+                SetSubOperation(SubOperation.WINDOWCREATION);
+            }
+            else
+            {
+                SetSubOperation(SubOperation.WALLCREATION);
+                wallExtension = true;
+            }
+                
         }
         else
         { //caso seja esquerdo
-
+            
         }
     }
     void Create(Joystick jL, Joystick jR)
@@ -132,36 +192,35 @@ public class Construction : MonoBehaviour
         switch (subOp)
         {
             case SubOperation.WALLCREATION:
-                subOp = SubOperation.WALLTRANSFORMATION;
+                SetSubOperation(SubOperation.WALLTRANSFORMATION);
                 if (wallExtension)
                 {
                     print("Criando parede continuada...");
                     pI = Instantiate(pI, pF2, door.transform.rotation);
                     pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                    wall = Instantiate(wall, pI.transform.position, pI.transform.rotation);
-                    this.wallExtension = false;
-                    jR.jTrigger.SecondAction();
+                    wall = Instantiate(wall, pI.transform.position, pI.transform.rotation, cenario.transform);
+                    wallExtension = false;
+                    //jR.jTrigger.SecondAction();
                 }
                 else
                 {
                     print("criando parede do 0");
                     pI = Instantiate(pI, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                     pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                    wall = Instantiate(wall, pI.transform.position, Quaternion.identity);
+                    wall = Instantiate(wall, pI.transform.position, Quaternion.identity/*, cenario.transform*/);
                 };
                 break;
             case SubOperation.DOORCREATION:
-                subOp = SubOperation.DOORTRANSFORMATION;
+                SetSubOperation(SubOperation.DOORTRANSFORMATION);
                 pI = Instantiate(pI, pF2, wall.transform.rotation);
                 pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                door = Instantiate(door, pI.transform.position, wall.transform.rotation);
+                door = Instantiate(door, pI.transform.position, wall.transform.rotation, cenario.transform);
                 break;
             case SubOperation.WINDOWCREATION:
-                subOp = SubOperation.WINDOWTRANSFORMATION;
+                SetSubOperation(SubOperation.WINDOWTRANSFORMATION);
                 pI = Instantiate(pI, pF2, wall.transform.rotation);
                 pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                window = Instantiate(window, pI.transform.position, wall.transform.rotation);
-                ;
+                window = Instantiate(window, pI.transform.position, wall.transform.rotation, cenario.transform);
                 break;
         }
     }
@@ -173,18 +232,17 @@ public class Construction : MonoBehaviour
         {
             pI.transform.LookAt(pF.transform.position);
             pF.transform.LookAt(pI.transform.position);
-            freeAngle = false;
         }
         float distance = Vector3.Distance(pI.transform.position, pF.transform.position);
 
         if (freeAngle)
         {
             target.transform.LookAt(pF.transform.position);
-            freeAngle = false;
         }
         target.transform.localScale = new Vector3(target.transform.localScale.x, target.transform.localScale.y, distance);
         direction2 = target.transform.eulerAngles;
         pF2 = EndPoint(target.transform.position, distance, direction2.y);
+        freeAngle = false;
     }
     public void FinalExecute(Joystick jL, Joystick jR)
     {
@@ -197,7 +255,6 @@ public class Construction : MonoBehaviour
                 Transform(wall);
                 break;            
             case SubOperation.DOORCREATION:
-                wallExtension = true;
                 Create(jL, jR);
                 break;            
             case SubOperation.DOORTRANSFORMATION:

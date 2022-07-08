@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3630916063544542159}
   - component: {fileID: 3630916063544542156}
   - component: {fileID: 3630916063544542157}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Wallpaper02
   m_TagString: wallpaper
   m_Icon: {fileID: 0}
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 3630916063830592760}
   - component: {fileID: 3630916063830592761}
   - component: {fileID: 3630916063830592766}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 3630916063957750935}
   - component: {fileID: 3630916063957750932}
   - component: {fileID: 3630916063957750933}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Wallpaper04
   m_TagString: wallpaper
   m_Icon: {fileID: 0}
@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 3630916064912125070}
   - component: {fileID: 3630916064912125071}
   - component: {fileID: 3630916064912125068}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Wallpaper01
   m_TagString: wallpaper
   m_Icon: {fileID: 0}
@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: 3630916065100457543}
   - component: {fileID: 3630916065100457540}
   - component: {fileID: 3630916065100457541}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Wallpaper03
   m_TagString: wallpaper
   m_Icon: {fileID: 0}
@@ -502,7 +502,7 @@ GameObject:
   - component: {fileID: 6059345806766135279}
   - component: {fileID: 6189873155355601799}
   - component: {fileID: 702220174188663920}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Estrutura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -518,7 +518,7 @@ Transform:
   m_GameObject: {fileID: 4329860030348849990}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0.5}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
+  m_LocalScale: {x: 0.99, y: 0.99, z: 0.99}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7245611602280481496}
@@ -596,7 +596,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7245611602280481496}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Parede
   m_TagString: parede
   m_Icon: {fileID: 0}

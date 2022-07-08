@@ -1,7 +1,8 @@
-using System;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 
 public class JoystickManager : MonoBehaviour
@@ -11,10 +12,9 @@ public class JoystickManager : MonoBehaviour
     public GameObject window;
     public GameObject pI;
     public GameObject pF;
-
+    static public GameObject cenario;
 
     private Joystick jL = new Joystick();
-    
     private Joystick jR = new Joystick();
     private static Operation op;
     private static Operation lastOp = Operation.CONSTRUCTION;
@@ -30,15 +30,34 @@ public class JoystickManager : MonoBehaviour
 
     public void Start()
     {
+        print("start");
         jL.xrNode = XRNode.LeftHand;
+        jL.jGrip.defaultDelay = 0;
         jR.xrNode = XRNode.RightHand;
-        SetOperation(Operation.CONSTRUCTION);
+        jR.jGrip.defaultDelay = 0;
+        SetOperation(Operation.MENU);
         ObjectSender();
     }
 
     public void ObjectSender()
     {
-        Construction.ObjectReceiver(wall, door, window, pI, pF);
+        Construction.ObjectReceiver(wall, door, window, pI, pF, cenario);
+        Construction.JoystickReceiver(jL, jR);
+    }
+    public static GameObject GetScene()
+    {
+        GameObject cenarioRes = cenario;
+        Scene scene = SceneManager.GetActiveScene();
+        List<GameObject> rootObjects = new List<GameObject>();
+        scene.GetRootGameObjects(rootObjects);
+        for (int i = 0; i < rootObjects.Count; ++i)
+        {
+            if (rootObjects[i].tag == "SceneEditor")
+            {
+                return rootObjects[i];
+            }
+        }
+        return cenarioRes;
     }
     public static void SetOperation(Operation newOp)
     {
@@ -61,14 +80,12 @@ public class JoystickManager : MonoBehaviour
             if (jL.GetButtons()[i].IsActive() && !jL.GetButtons()[i].IsLocked() && jL.GetButtons()[i].DelayInactive())
             {
                 jL.SetButtonDelay();
-                
+
                 ButtonCallAction(jL.GetButtons()[i].buttonName, jL);
             }
             if (jR.GetButtons()[i].IsActive() && !jR.GetButtons()[i].IsLocked() && jR.GetButtons()[i].DelayInactive())
             {
-                print("Operação atual: " + op);
                 jR.SetButtonDelay();
-                print("Botão pressionado: " + jR.GetButtons()[i].buttonName);
                 ButtonCallAction(jR.GetButtons()[i].buttonName, jR);
             }
         }
@@ -105,23 +122,24 @@ public class JoystickManager : MonoBehaviour
 
     void Update()
     {
-        print("Operação atual: " + op);
+        print("Rotina update joystickmanager");
         OnEnable();
         RaycastCollision();
         IsButtonPressed();
-        ButtonPressedAction();
 
+        ButtonPressedAction();
         if (Physics.Raycast(theRay, out hit, range))
         {
+            print("Hiting");
             globalHit = hit;
-            print("hiting");
+            print(hit.collider.tag);
             if (hit.collider.tag == "BaseReferencia")
             {
-                print("colidendo em SceneEditor");
+                globalHit.point = new Vector3(globalHit.point.x, 0, globalHit.point.z);
+
                 SuperExecute();
-            } 
+            }
         }
-        print("Botão decreasing");
         DecreaseButtonDelay();
     }
 
@@ -134,17 +152,26 @@ public class JoystickManager : MonoBehaviour
             case Operation.CONSTRUCTION:
                 print("Iniciando classe CONSTRUCTION");
                 Construction.IndexAction(button, joystick);
-                break;                      
+                break;
             case Operation.PAINTING:
                 Painting.IndexAction(button, joystick);
-                break;            
+                break;
             case Operation.PLACEBLES:
+                Placebles.IndexAction(button, joystick);
+                break;
+            case Operation.MENU:
                 Placebles.IndexAction(button, joystick);
                 break;
         }
     }
-}
 
+
+
+    void MenuAction()
+    {
+
+    }
+}
 public enum Operation
 {
     MENU = 0,
