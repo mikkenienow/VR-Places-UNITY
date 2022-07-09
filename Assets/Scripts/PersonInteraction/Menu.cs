@@ -7,44 +7,67 @@ public class Menu : MonoBehaviour
 
     public GameObject menuPrincipal;
     public GameObject menuPintura;
-    public GameObject menuConstrucao;
     public GameObject menuTexture;
     public GameObject menuPlaceable;
     public GameObject player;
+    public GameObject menuPosition;
     private static GameObject menu;
     private bool active = false;
 
 
     private void RecenterMenu()
     {
-        Vector3 playerPosition = player.transform.position;
-        player.transform.position = new Vector3(playerPosition.x, 120, playerPosition.z);
-        playerPosition = player.transform.position;
-        menu.transform.position = new Vector3(playerPosition.x, playerPosition.y, playerPosition.z + 40);
+        Person.SetLevel(7);
+        //menuPosition.transform.position = new Vector3(menuPosition.transform.position.x, menuPosition.transform.position.y, menuPosition.transform.position.z + 10);
+        menu.transform.position = menuPosition.transform.position;
+        menu.transform.rotation = menuPosition.transform.rotation;
+        menu.transform.position = new Vector3(menu.transform.position.x, 8, menu.transform.position.z);
     }
     [ContextMenu("Fechar Menu")]
     public void CloseMenu()
     {
         menu.SetActive(false);
         active = false;
+        Person.SetLevel(0);
     }
 
     [ContextMenu("Menu Principal")]
     public void OpenMenuPrincipal()
     {
-        if (menu)
+        if (active && menu == menuPrincipal)
         {
-            menu.SetActive(false);
-        }
-        active = false;
-        if (!active)
+            CloseMenu();
+        } else
         {
-            menuPrincipal.SetActive(true);
-            menu = menuPrincipal;
-            RecenterMenu();
-            active = true;
+            if (menu)
+            {
+                menu.SetActive(false);
+                active = false;
+            }
+            if (!active)
+            {
+                menuPrincipal.SetActive(true);
+                menu = menuPrincipal;
+                RecenterMenu();
+                active = true;
+            }
         }
+        
     }
+
+    public void MenuCallAction()
+    {
+        if (active)
+        {
+            CloseMenu();
+        }
+        else
+        {
+            OpenMenuPrincipal();
+        }
+
+    }
+
 
     [ContextMenu("Menu Pintura")]
     public void OpenMenuPintura()
@@ -149,7 +172,7 @@ public class Menu : MonoBehaviour
         {
             JoystickManager.SetOperation(Operation.PAINTING);
         }
-        if (menu == menuConstrucao)
+        if (menu == menuPrincipal)
         {
             JoystickManager.SetOperation(Operation.CONSTRUCTION);
         }

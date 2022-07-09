@@ -16,6 +16,10 @@ TagManager:
   - BaseReferencia
   - Limits
   - paredePorta
+  - VRGazeInteractable
+  - LeftHand
+  - Person
+  - RightHand
   layers:
   - Default
   - TransparentFX
