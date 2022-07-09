@@ -7,7 +7,7 @@ public class Menu : MonoBehaviour
 
     public GameObject menuPrincipal;
     public GameObject menuPintura;
-    public GameObject menuConstrução;
+    public GameObject menuConstrucao;
     public GameObject menuTexture;
     public GameObject menuPlaceable;
     public GameObject player;
@@ -149,7 +149,7 @@ public class Menu : MonoBehaviour
         {
             JoystickManager.SetOperation(Operation.PAINTING);
         }
-        if (menu == menuConstrução)
+        if (menu == menuConstrucao)
         {
             JoystickManager.SetOperation(Operation.CONSTRUCTION);
         }
