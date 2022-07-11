@@ -33,6 +33,7 @@ public class TransferDown : MonoBehaviour
         DirectoryInfo di = Directory.CreateDirectory(filePathLocal);
         using (WebClient client = new WebClient())
         {
+            //client.Credentials = new NetworkCredential(Autentication.FtpUserName, Autentication.FtpPassword);
             client.DownloadFile(urlFileOrigin, di + nameFile + formatFile);
         }
     }

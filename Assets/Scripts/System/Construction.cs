@@ -6,7 +6,7 @@ using UnityEngine.XR;
 public class Construction : MonoBehaviour
 {
     public static Operation op = JoystickManager.GetOperation();
-    public static SubOperation subOp = SubOperation.NULL;
+    public static ConstructionSubOperation subOp = ConstructionSubOperation.NULL;
     public static Joystick jL;
     public static Joystick jR;
     public static GameObject wall;
@@ -40,38 +40,38 @@ public class Construction : MonoBehaviour
         jR = jROrigin;
     }
 
-    static void SetSubOperation(SubOperation newOp)
+    static void SetSubOperation(ConstructionSubOperation newOp)
     {
         subOp = newOp;
         jR.UnlockAll();
         jL.UnlockAll();
         switch (newOp)
         {
-            case SubOperation.WALLCREATION:
+            case ConstructionSubOperation.WALLCREATION:
                 ;
                 break;
-            case SubOperation.WALLTRANSFORMATION:
+            case ConstructionSubOperation.WALLTRANSFORMATION:
                 ;
                 break;
-            case SubOperation.DOORCREATION:
+            case ConstructionSubOperation.DOORCREATION:
                 ;
                 break;
-            case SubOperation.DOORTRANSFORMATION:
+            case ConstructionSubOperation.DOORTRANSFORMATION:
                 jR.LockAllButOne(ButtonName.PRIMARYBUTTON);
                 jL.LockAll();
                 ;
                 break;
-            case SubOperation.WINDOWCREATION:
+            case ConstructionSubOperation.WINDOWCREATION:
                 ;
                 break;
-            case SubOperation.WINDOWTRANSFORMATION:
+            case ConstructionSubOperation.WINDOWTRANSFORMATION:
                 jR.LockAllButOne(ButtonName.SECONDARYBUTTON);
                 jL.LockAll();
                 break;
-            case SubOperation.SELECTION:
+            case ConstructionSubOperation.SELECTION:
                 ;
                 break;
-            case SubOperation.NULL:
+            case ConstructionSubOperation.NULL:
                 ;
                 break;
         }
@@ -124,10 +124,10 @@ public class Construction : MonoBehaviour
             if (!joystick.jTrigger.SecondAction())
             {
                 print("Ação do trigger: WALLCREATION" );
-                SetSubOperation(SubOperation.WALLCREATION);
+                SetSubOperation(ConstructionSubOperation.WALLCREATION);
             } else
             {
-                SetSubOperation(SubOperation.NULL);
+                SetSubOperation(ConstructionSubOperation.NULL);
             }
         } else
         { //caso seja esquerdo
@@ -139,7 +139,7 @@ public class Construction : MonoBehaviour
     {
         if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
-            if (subOp == SubOperation.WALLTRANSFORMATION)
+            if (subOp == ConstructionSubOperation.WALLTRANSFORMATION)
             {
                 freeAngle = true;
             }
@@ -155,10 +155,10 @@ public class Construction : MonoBehaviour
         { //caso seja direito
             if (!joystick.jPrimaryButton.SecondAction())
             {
-                SetSubOperation(SubOperation.DOORCREATION);
+                SetSubOperation(ConstructionSubOperation.DOORCREATION);
             } else
             {
-                SetSubOperation(SubOperation.WALLCREATION);
+                SetSubOperation(ConstructionSubOperation.WALLCREATION);
                 wallExtension = true;
             }
         }
@@ -173,11 +173,11 @@ public class Construction : MonoBehaviour
         { //caso seja direito
             if (!joystick.jSecondaryButton.SecondAction())
             {
-                SetSubOperation(SubOperation.WINDOWCREATION);
+                SetSubOperation(ConstructionSubOperation.WINDOWCREATION);
             }
             else
             {
-                SetSubOperation(SubOperation.WALLCREATION);
+                SetSubOperation(ConstructionSubOperation.WALLCREATION);
                 wallExtension = true;
             }
                 
@@ -187,12 +187,12 @@ public class Construction : MonoBehaviour
             
         }
     }
-    void Create(Joystick jL, Joystick jR)
+    void Create()
     {
         switch (subOp)
         {
-            case SubOperation.WALLCREATION:
-                SetSubOperation(SubOperation.WALLTRANSFORMATION);
+            case ConstructionSubOperation.WALLCREATION:
+                SetSubOperation(ConstructionSubOperation.WALLTRANSFORMATION);
                 if (wallExtension)
                 {
                     print("Criando parede continuada...");
@@ -204,20 +204,21 @@ public class Construction : MonoBehaviour
                 }
                 else
                 {
+                    //VRPNewMaterial vrp = new VRPNewMaterial(wall.transform, new VRPMaterial(Color.white, "none/none"), true);
                     print("criando parede do 0");
                     pI = Instantiate(pI, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                     pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                     wall = Instantiate(wall, pI.transform.position, Quaternion.identity, cenario.transform);
                 };
                 break;
-            case SubOperation.DOORCREATION:
-                SetSubOperation(SubOperation.DOORTRANSFORMATION);
+            case ConstructionSubOperation.DOORCREATION:
+                SetSubOperation(ConstructionSubOperation.DOORTRANSFORMATION);
                 pI = Instantiate(pI, pF2, wall.transform.rotation);
                 pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                 door = Instantiate(door, pI.transform.position, wall.transform.rotation, cenario.transform);
                 break;
-            case SubOperation.WINDOWCREATION:
-                SetSubOperation(SubOperation.WINDOWTRANSFORMATION);
+            case ConstructionSubOperation.WINDOWCREATION:
+                SetSubOperation(ConstructionSubOperation.WINDOWTRANSFORMATION);
                 pI = Instantiate(pI, pF2, wall.transform.rotation);
                 pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                 window = Instantiate(window, pI.transform.position, wall.transform.rotation, cenario.transform);
@@ -244,30 +245,30 @@ public class Construction : MonoBehaviour
         pF2 = EndPoint(target.transform.position, distance, direction2.y);
         freeAngle = false;
     }
-    public void FinalExecute(Joystick jL, Joystick jR)
+    public void FinalExecute()
     {
         switch (subOp)
         {
-            case SubOperation.WALLCREATION:
-                Create(jL, jR);
+            case ConstructionSubOperation.WALLCREATION:
+                Create();
                 break;            
-            case SubOperation.WALLTRANSFORMATION:
+            case ConstructionSubOperation.WALLTRANSFORMATION:
                 Transform(wall);
                 break;            
-            case SubOperation.DOORCREATION:
-                Create(jL, jR);
+            case ConstructionSubOperation.DOORCREATION:
+                Create();
                 break;            
-            case SubOperation.DOORTRANSFORMATION:
+            case ConstructionSubOperation.DOORTRANSFORMATION:
                 Transform(door);
                 break;            
-            case SubOperation.WINDOWCREATION:
+            case ConstructionSubOperation.WINDOWCREATION:
                 wallExtension = true;
-                Create(jL, jR);
+                Create();
                 break;            
-            case SubOperation.WINDOWTRANSFORMATION:
+            case ConstructionSubOperation.WINDOWTRANSFORMATION:
                 Transform(window);
                 break;            
-            case SubOperation.SELECTION:
+            case ConstructionSubOperation.SELECTION:
                 ;
                 break;
         }
@@ -276,7 +277,7 @@ public class Construction : MonoBehaviour
 
 
 }
-public enum SubOperation
+public enum ConstructionSubOperation
 {
     WALLCREATION,
     WALLTRANSFORMATION,

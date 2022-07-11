@@ -8,46 +8,140 @@ public class Menu : MonoBehaviour
     public GameObject menuPrincipal;
     public GameObject menuPintura;
     public GameObject menuTexture;
-    public GameObject menuPlaceable;
-    public GameObject player;
-    public GameObject menuPosition;
-    private static GameObject menu;
+    public GameObject menuPlaceable;    
+    public GameObject subMenu;    
+    public GameObject subMenuButtons;    
+
+    public GameObject modeConstruction;    
+    public GameObject modePainting;    
+    public GameObject modePlacebles;
+
+    public Material selected;
+    public Material deselected;
+    public Operation operation;
+
+
+    public GameObject staticMenuPosition;
+    private static GameObject staticMenu;
     private bool active = false;
 
 
     private void RecenterMenu()
     {
         Person.SetLevel(7);
-        //menuPosition.transform.position = new Vector3(menuPosition.transform.position.x, menuPosition.transform.position.y, menuPosition.transform.position.z + 10);
-        menu.transform.position = menuPosition.transform.position;
-        menu.transform.rotation = menuPosition.transform.rotation;
-        menu.transform.position = new Vector3(menu.transform.position.x, 8, menu.transform.position.z);
+        staticMenu.transform.position = staticMenuPosition.transform.position;
+        staticMenu.transform.rotation = staticMenuPosition.transform.rotation;
+        staticMenu.transform.position = new Vector3(staticMenu.transform.position.x, 8, staticMenu.transform.position.z);
     }
-    [ContextMenu("Fechar Menu")]
+
     public void CloseMenu()
     {
-        menu.SetActive(false);
+        staticMenu.SetActive(false);
         active = false;
         Person.SetLevel(0);
     }
+    public void ChangeOperationMenu(int i)
+    {
+        switch (i)
+        {
+            case 0:
+                ChangeOperation(Operation.MENU);
+                break;
+            case 1:
+                ChangeOperation(Operation.CONSTRUCTION);
+                break;
+            case 2:
+                ChangeOperation(Operation.PAINTING);
+                break;
+            case 3:
+                ChangeOperation(Operation.PLACEBLES);
+                break;
+        }
+    }
+    public void ChangeOperation(Operation op)
+    {
+        ButtonsStateUpdate(op);
+        HideSubMenu(true);
+        switch (op)
+        {
+            case Operation.MENU:
+                ;
+                break;
+            case Operation.CONSTRUCTION:
+                JoystickManager.SetOperation(op);
+                ;
+                break;
+            case Operation.PAINTING:
+                JoystickManager.SetOperation(op);
+                Painting.SetSubOperation(PaintingSubOperation.NULL);
+                Painting.VoidTrigger();
+                ;
+                break;
+            case Operation.PLACEBLES:
+                JoystickManager.SetOperation(op);
+                ;
+                break;
+                
+        }
+    }
+    public void HideSubMenu(bool hide)
+    {
+        subMenu.SetActive(!hide);
+        subMenuButtons.SetActive(!hide);
+    }
+    public void SetOperation(int i)
+    {
 
-    [ContextMenu("Menu Principal")]
+    }
+    public void ButtonsStateUpdate(Operation op)
+    {
+        if (op == Operation.MENU) 
+        {
+            modeConstruction.GetComponent<Renderer>().material.color = deselected.color;
+            modePainting.GetComponent<Renderer>().material.color = deselected.color;
+            modePlacebles.GetComponent<Renderer>().material.color = deselected.color;
+        }
+        if (op == Operation.CONSTRUCTION) 
+        {
+            modeConstruction.GetComponent<Renderer>().material.color = selected.color;
+            modePainting.GetComponent<Renderer>().material.color = deselected.color;
+            modePlacebles.GetComponent<Renderer>().material.color = deselected.color;
+        }
+        if (op == Operation.PAINTING) 
+        {
+            modeConstruction.GetComponent<Renderer>().material.color = deselected.color;
+            modePainting.GetComponent<Renderer>().material.color = selected.color;
+            modePlacebles.GetComponent<Renderer>().material.color = deselected.color;
+        }
+        if (op == Operation.PLACEBLES) 
+        {
+            modeConstruction.GetComponent<Renderer>().material.color = deselected.color;
+            modePainting.GetComponent<Renderer>().material.color = deselected.color;
+            modePlacebles.GetComponent<Renderer>().material.color = selected.color;
+        }
+            
+      
+
+    }
+
+
     public void OpenMenuPrincipal()
     {
-        if (active && menu == menuPrincipal)
+        JoystickManager.SetOperation(Operation.MENU);
+        if (active && staticMenu == menuPrincipal)
         {
             CloseMenu();
         } else
         {
-            if (menu)
+            if (staticMenu)
             {
-                menu.SetActive(false);
+                staticMenu.SetActive(false);
                 active = false;
             }
             if (!active)
             {
                 menuPrincipal.SetActive(true);
-                menu = menuPrincipal;
+                staticMenu = menuPrincipal;
                 RecenterMenu();
                 active = true;
             }
@@ -64,65 +158,88 @@ public class Menu : MonoBehaviour
         else
         {
             OpenMenuPrincipal();
+            HideSubMenu(true);
         }
 
     }
 
 
-    [ContextMenu("Menu Pintura")]
+
     public void OpenMenuPintura()
     {
-        if (menu)
+        if (active && staticMenu == menuPintura)
         {
-            menu.SetActive(false);
+            CloseMenu();
         }
-        active = false;
-        if (!active)
+        else
         {
-            menuPintura.SetActive(true);
-            menu = menuPintura;
-            RecenterMenu();
-            active = true;
-        } 
+            if (staticMenu)
+            {
+                staticMenu.SetActive(false);
+                active = false;
+            }
+            if (!active)
+            {
+                menuPintura.SetActive(true);
+                staticMenu = menuPintura;
+                RecenterMenu();
+                active = true;
+            } 
+        }
+
     }
 
     public void OpenMenuTexture()
     {
-        if (menu)
+        if (active && staticMenu == menuTexture)
         {
-            menu.SetActive(false);
+            CloseMenu();
         }
-        active = false;
-        if (!active)
+        else
         {
-            menuTexture.SetActive(true);
-            menu = menuTexture;
-            RecenterMenu();
-            active = true;
+            if (staticMenu)
+            {
+                staticMenu.SetActive(false);
+                active = false;
+            }
+            if (!active)
+            {
+                menuTexture.SetActive(true);
+                staticMenu = menuTexture;
+                RecenterMenu();
+                active = true;
+            }
         }
+        
     }
 
-    [ContextMenu("Menu Placeable")]
+
     public void OpenMenuPlaceable()
     {
-        if (menu)
+        if (active && staticMenu == menuPlaceable)
         {
-            RecenterMenu();
-            menu.SetActive(false);
-            print("aqui2222");
+            CloseMenu();
         }
-        active = false;
-        if (!active)
+        else
         {
-            print("aqui333333");
-            menuPlaceable.SetActive(true);
-            menu = menuPlaceable;
-            RecenterMenu();
-            active = true;
+            if (staticMenu)
+            {
+                staticMenu.SetActive(false);
+                active = false;
+            }
+            
+            if (!active)
+            {
+                menuPlaceable.SetActive(true);
+                staticMenu = menuPlaceable;
+                RecenterMenu();
+                active = true;
+            }
         }
+
+        
     }
 
-    [ContextMenu("Salvar")]
     public void Save()
     {
         GameObject cenario = new GameObject();
@@ -143,7 +260,6 @@ public class Menu : MonoBehaviour
 
     }
 
-    [ContextMenu("sair")]
     public void Exit()
     {
         print("saindo");
@@ -151,7 +267,6 @@ public class Menu : MonoBehaviour
 
     }
 
-    [ContextMenu("Exportar")]
     public void Export()
     {
         print(GetProjectsPanel.projetoSelecionado.idprojeto);
@@ -160,24 +275,19 @@ public class Menu : MonoBehaviour
 
     public void Confirm()
     {
-        if (menu == menuPintura || menu == menuTexture)
-        {
-            JoystickManager.SetOperation(Operation.PAINTING);
-        }
-        if (menu == menuPlaceable) 
-        {
-            JoystickManager.SetOperation(Operation.PLACEBLES);
-        }
-        if (menu == menuTexture)
-        {
-            JoystickManager.SetOperation(Operation.PAINTING);
-        }
-        if (menu == menuPrincipal)
-        {
-            JoystickManager.SetOperation(Operation.CONSTRUCTION);
-        }
 
-
+        if (staticMenu == menuPintura || staticMenu == menuTexture)
+        {
+            ChangeOperation(Operation.PAINTING);
+        }
+        if (staticMenu == menuPlaceable) 
+        {
+            ChangeOperation(Operation.PLACEBLES);
+        }
+        if (staticMenu == menuPrincipal)
+        {
+            ChangeOperation(Operation.CONSTRUCTION);
+        }
         CloseMenu();
 
     }

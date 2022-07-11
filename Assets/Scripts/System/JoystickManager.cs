@@ -13,12 +13,14 @@ public class JoystickManager : MonoBehaviour
     public GameObject pI;
     public GameObject pF;
     static public GameObject cenario;
+    public GameObject target;
 
     private Joystick jL = new Joystick();
     private Joystick jR = new Joystick();
     private static Operation op;
     private static Operation lastOp = Operation.CONSTRUCTION;
     public RaycastHit hit;
+    public static string targetTag = "";
     public static RaycastHit globalHit;
     Ray theRay;
     Vector3 direction = Vector3.forward;
@@ -43,6 +45,19 @@ public class JoystickManager : MonoBehaviour
     {
         Construction.ObjectReceiver(wall, door, window, pI, pF, cenario);
         Construction.JoystickReceiver(jL, jR);
+        Painting.JoystickReceiver(jL, jR);
+    }
+
+    static public void LayersUpdate(string newLayer)
+    {
+        Transform[] objectsFromLayer = GetScene().GetComponentsInChildren<Transform>();
+        for (int i = 0; i < objectsFromLayer.Length; i++)
+        {
+            if (objectsFromLayer[i].tag == "parede" || objectsFromLayer[i].tag == "wallpaper")
+            {
+                objectsFromLayer[i].gameObject.layer = LayerMask.NameToLayer(newLayer);
+            }
+        }
     }
     public static GameObject GetScene()
     {
@@ -64,6 +79,17 @@ public class JoystickManager : MonoBehaviour
         if (newOp != Operation.MENU)
         {
             lastOp = op;
+        }
+        switch (newOp)
+        {
+            case Operation.CONSTRUCTION:
+                targetTag = "BaseReferencia";
+                LayersUpdate("Ignore Raycast");
+                break;
+            case Operation.PAINTING:
+                targetTag = "wallpaper";
+                LayersUpdate("Default");
+                break;
         }
         op = newOp;
     }
@@ -105,9 +131,20 @@ public class JoystickManager : MonoBehaviour
 
     void SuperExecute()
     {
-        construction.FinalExecute(jL, jR);
-        placebles.FinalExecute();
-        painting.FinalExecute();
+        switch (op)
+        {
+            case Operation.CONSTRUCTION:
+                construction.FinalExecute();
+                break;
+            case Operation.PAINTING:
+                SelectTarget(targetTag);
+                painting.FinalExecute();
+                break;
+            case Operation.PLACEBLES:
+                placebles.FinalExecute();
+                break;
+        }
+        
     }
     void RaycastCollision()
     {
@@ -119,21 +156,29 @@ public class JoystickManager : MonoBehaviour
         jL.OnEnable();
         jR.OnEnable();
     }
-
+    void SelectTarget(string targetTag)
+    {
+        if (hit.collider.tag == targetTag)
+        {
+            target = hit.transform.gameObject;
+            Painting.TargerReceiver(target);
+        }
+    }
     void Update()
     {
         OnEnable();
         RaycastCollision();
         IsButtonPressed();
 
-        ButtonPressedAction();
+        
         if (Physics.Raycast(theRay, out hit, range))
         {
             print("Hiting");
             globalHit = hit;
             print(hit.collider.tag);
-            if (hit.collider.tag == "BaseReferencia")
+            if (hit.collider.tag == targetTag) // BaseReferencia
             {
+                ButtonPressedAction();
                 globalHit.point = new Vector3(globalHit.point.x, 0, globalHit.point.z);
 
                 SuperExecute();

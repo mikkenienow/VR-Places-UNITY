@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ItensMenuTexture : MonoBehaviour
 {
-    public Texture texture ;
-    public static Texture selectedtexture;
+    public string idColecao;
+    public string idTextura;
+    public static string selectedtexture = "none/none";
 
     public void SelectTexture()
     {
-        selectedtexture = texture;
-        print(selectedtexture.ToString());
+        selectedtexture = idColecao + "/" + idTextura;
     }
 }

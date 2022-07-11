@@ -149,13 +149,13 @@ public class RotinaDeTeste : MonoBehaviour
     [ContextMenu("Teste de conceito")]
     void TesteDeConceito()
     {
-        string file = Application.persistentDataPath + "/temp/_materials/" + colecaoId + "/" + texturaId + ".jpg";
+        string file = Application.persistentDataPath + "/temp/_materials/" + colecaoId + "/" + texturaId + ".PNG";
         
         Renderer rend = wallpaper.GetComponent<Renderer>();
         rend.enabled = true;
         rend.sharedMaterial = this.material;
 
-        VRPMaterial material = new VRPMaterial(color, "none/none");
+        VRPMaterial material = new VRPMaterial(color, colecaoId + "/" + texturaId);
         VRPNewMaterial vrpm = new VRPNewMaterial(wallpaper.transform, material, true);
 
     }
