@@ -5,7 +5,6 @@ using UnityEngine.XR;
 
 public class Construction : MonoBehaviour
 {
-    public static Operation op = JoystickManager.GetOperation();
     public static ConstructionSubOperation subOp = ConstructionSubOperation.NULL;
     public static Joystick jL;
     public static Joystick jR;

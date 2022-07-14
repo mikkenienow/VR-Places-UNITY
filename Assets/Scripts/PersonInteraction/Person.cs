@@ -11,6 +11,9 @@ public class Person : MonoBehaviour
     static public bool locationStatus = false;
     static public float level = 0;
 
+
+
+
     public GameObject XROrigin;
     public GameObject XRLeftHand;
     public GameObject XRRightHand;
@@ -80,6 +83,7 @@ public class Person : MonoBehaviour
 
             rightHand.transform.position = XRRightHand.transform.position;
             rightHand.transform.rotation = XRRightHand.transform.rotation;
+
         }
         
     }

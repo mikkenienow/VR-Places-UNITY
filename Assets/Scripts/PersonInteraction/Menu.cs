@@ -11,10 +11,18 @@ public class Menu : MonoBehaviour
     public GameObject menuPlaceable;    
     public GameObject subMenu;    
     public GameObject subMenuButtons;    
+    public GameObject placebleView;
+    public GameObject prefab;
+    public GameObject userPos;
+
+    private List<GameObject> previewList = new List<GameObject>();
+
 
     public GameObject modeConstruction;    
     public GameObject modePainting;    
     public GameObject modePlacebles;
+
+
 
     public Material selected;
     public Material deselected;
@@ -25,6 +33,7 @@ public class Menu : MonoBehaviour
     private static GameObject staticMenu;
     private bool active = false;
 
+    public Operation selectedOp = Operation.MENU;
 
     private void RecenterMenu()
     {
@@ -54,7 +63,7 @@ public class Menu : MonoBehaviour
                 ChangeOperation(Operation.PAINTING);
                 break;
             case 3:
-                ChangeOperation(Operation.PLACEBLES);
+                ChangeOperation(Operation.PLACEABLES);
                 break;
         }
     }
@@ -77,7 +86,7 @@ public class Menu : MonoBehaviour
                 Painting.VoidTrigger();
                 ;
                 break;
-            case Operation.PLACEBLES:
+            case Operation.PLACEABLES:
                 JoystickManager.SetOperation(op);
                 ;
                 break;
@@ -113,20 +122,39 @@ public class Menu : MonoBehaviour
             modePainting.GetComponent<Renderer>().material.color = selected.color;
             modePlacebles.GetComponent<Renderer>().material.color = deselected.color;
         }
-        if (op == Operation.PLACEBLES) 
+        if (op == Operation.PLACEABLES) 
         {
             modeConstruction.GetComponent<Renderer>().material.color = deselected.color;
             modePainting.GetComponent<Renderer>().material.color = deselected.color;
             modePlacebles.GetComponent<Renderer>().material.color = selected.color;
         }
-            
-      
+    }
+    [ContextMenu("TEstar")]
+    public void PlacebleView()
+    {
+        ClearPreview();
+        GameObject preview = Instantiate(prefab, placebleView.transform.position, placebleView.transform.rotation, placebleView.transform);
+        previewList.Add(preview);
+        placebleView.GetComponent<MeshRenderer>().forceRenderingOff = true;
+    }
 
+    public void PlacebleViewOff()
+    {
+        ClearPreview();
+        placebleView.GetComponent<MeshRenderer>().forceRenderingOff = false;
     }
 
 
+    public void ClearPreview()
+    {
+        for (int i = 0; i < previewList.Count; i++)
+        {
+            Destroy(previewList[i]);
+        }
+    }
     public void OpenMenuPrincipal()
     {
+        selectedOp = Operation.MENU;
         JoystickManager.SetOperation(Operation.MENU);
         if (active && staticMenu == menuPrincipal)
         {
@@ -173,6 +201,7 @@ public class Menu : MonoBehaviour
         }
         else
         {
+            selectedOp = Operation.PAINTING;
             if (staticMenu)
             {
                 staticMenu.SetActive(false);
@@ -197,6 +226,7 @@ public class Menu : MonoBehaviour
         }
         else
         {
+            selectedOp = Operation.PAINTING;
             if (staticMenu)
             {
                 staticMenu.SetActive(false);
@@ -222,6 +252,7 @@ public class Menu : MonoBehaviour
         }
         else
         {
+            selectedOp = Operation.PLACEABLES;
             if (staticMenu)
             {
                 staticMenu.SetActive(false);
@@ -275,20 +306,18 @@ public class Menu : MonoBehaviour
 
     public void Confirm()
     {
-
-        if (staticMenu == menuPintura || staticMenu == menuTexture)
+        switch (selectedOp)
         {
-            ChangeOperation(Operation.PAINTING);
-        }
-        if (staticMenu == menuPlaceable) 
-        {
-            ChangeOperation(Operation.PLACEBLES);
-        }
-        if (staticMenu == menuPrincipal)
-        {
-            ChangeOperation(Operation.CONSTRUCTION);
+            case Operation.CONSTRUCTION:
+                ChangeOperation(Operation.CONSTRUCTION);
+                break;
+            case Operation.PAINTING:
+                ChangeOperation(Operation.PAINTING);
+                break;
+            case Operation.PLACEABLES:
+                ChangeOperation(Operation.PLACEABLES);
+                break;
         }
         CloseMenu();
-
     }
 }

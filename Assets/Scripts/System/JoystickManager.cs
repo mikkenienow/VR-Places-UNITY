@@ -12,8 +12,8 @@ public class JoystickManager : MonoBehaviour
     public GameObject window;
     public GameObject pI;
     public GameObject pF;
-    static public GameObject cenario;
-    public GameObject target;
+    public static GameObject cenario;
+    public static GameObject target;
 
     private Joystick jL = new Joystick();
     private Joystick jR = new Joystick();
@@ -22,11 +22,13 @@ public class JoystickManager : MonoBehaviour
     public RaycastHit hit;
     public static string targetTag = "";
     public static RaycastHit globalHit;
+    
+
     Ray theRay;
     Vector3 direction = Vector3.forward;
     float range = 50;
     Construction construction = new Construction();
-    Placebles placebles = new Placebles();
+    Placeables placebles = new Placeables();
     Painting painting = new Painting();
 
 
@@ -90,6 +92,10 @@ public class JoystickManager : MonoBehaviour
                 targetTag = "wallpaper";
                 LayersUpdate("Default");
                 break;
+            case Operation.PLACEABLES:
+                targetTag = "";
+                LayersUpdate("Default");
+                break;
         }
         op = newOp;
     }
@@ -137,10 +143,13 @@ public class JoystickManager : MonoBehaviour
                 construction.FinalExecute();
                 break;
             case Operation.PAINTING:
-                SelectTarget(targetTag);
+                target = hit.transform.gameObject;
+                Painting.TargerReceiver(target);
                 painting.FinalExecute();
                 break;
-            case Operation.PLACEBLES:
+            case Operation.PLACEABLES:
+                target = hit.transform.gameObject;
+                Placeables.TargerReceiver(target);
                 placebles.FinalExecute();
                 break;
         }
@@ -160,8 +169,7 @@ public class JoystickManager : MonoBehaviour
     {
         if (hit.collider.tag == targetTag)
         {
-            target = hit.transform.gameObject;
-            Painting.TargerReceiver(target);
+            
         }
     }
     void Update()
@@ -173,16 +181,29 @@ public class JoystickManager : MonoBehaviour
         
         if (Physics.Raycast(theRay, out hit, range))
         {
-            print("Hiting");
+            print("Hiting e operação: " + op);
             globalHit = hit;
             print(hit.collider.tag);
-            if (hit.collider.tag == targetTag) // BaseReferencia
+            
+            if (targetTag == "")
             {
+                print("Target '' '' ");
+
+                ButtonPressedAction();
+                SuperExecute();
+            }
+            else if(hit.collider.tag == targetTag) // BaseReferencia
+            {
+                print("Target ''"+ targetTag + "'' ");
                 ButtonPressedAction();
                 globalHit.point = new Vector3(globalHit.point.x, 0, globalHit.point.z);
 
                 SuperExecute();
             }
+
+
+
+
         }
         DecreaseButtonDelay();
     }
@@ -200,11 +221,11 @@ public class JoystickManager : MonoBehaviour
             case Operation.PAINTING:
                 Painting.IndexAction(button, joystick);
                 break;
-            case Operation.PLACEBLES:
-                Placebles.IndexAction(button, joystick);
+            case Operation.PLACEABLES:
+                Placeables.IndexAction(button, joystick);
                 break;
             case Operation.MENU:
-                Placebles.IndexAction(button, joystick);
+                //Placebles.IndexAction(button, joystick);
                 break;
         }
     }
@@ -221,5 +242,5 @@ public enum Operation
     MENU = 0,
     CONSTRUCTION = 1,
     PAINTING = 2,
-    PLACEBLES = 3
+    PLACEABLES = 3
 }
