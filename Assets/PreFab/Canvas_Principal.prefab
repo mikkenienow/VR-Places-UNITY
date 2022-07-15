@@ -556,7 +556,19 @@ MonoBehaviour:
   menuPintura: {fileID: 0}
   menuTexture: {fileID: 0}
   menuPlaceable: {fileID: 0}
+  subMenu: {fileID: 0}
+  subMenuButtons: {fileID: 0}
+  placebleView: {fileID: 0}
+  prefab: {fileID: 0}
+  userPos: {fileID: 0}
+  modeConstruction: {fileID: 0}
+  modePainting: {fileID: 0}
+  modePlacebles: {fileID: 0}
+  selected: {fileID: 0}
+  deselected: {fileID: 0}
+  operation: 0
   staticMenuPosition: {fileID: 0}
+  selectedOp: 0
 --- !u!114 &9210367830067413336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -573,7 +585,19 @@ MonoBehaviour:
   menuPintura: {fileID: 0}
   menuTexture: {fileID: 0}
   menuPlaceable: {fileID: 0}
+  subMenu: {fileID: 0}
+  subMenuButtons: {fileID: 0}
+  placebleView: {fileID: 0}
+  prefab: {fileID: 0}
+  userPos: {fileID: 0}
+  modeConstruction: {fileID: 0}
+  modePainting: {fileID: 0}
+  modePlacebles: {fileID: 0}
+  selected: {fileID: 0}
+  deselected: {fileID: 0}
+  operation: 0
   staticMenuPosition: {fileID: 0}
+  selectedOp: 0
 --- !u!1 &9210367830279896776
 GameObject:
   m_ObjectHideFlags: 0
@@ -836,7 +860,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9210367830400207839}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -852,7 +876,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9210367830400207810
@@ -1066,7 +1090,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 24.277, y: 25.743}
+  m_AnchoredPosition: {x: 24.276949, y: 25.743036}
   m_SizeDelta: {x: 9.0872, y: 6.0945}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9210367830637905393
@@ -1179,7 +1203,19 @@ MonoBehaviour:
   menuPintura: {fileID: 0}
   menuTexture: {fileID: 0}
   menuPlaceable: {fileID: 0}
+  subMenu: {fileID: 0}
+  subMenuButtons: {fileID: 0}
+  placebleView: {fileID: 0}
+  prefab: {fileID: 0}
+  userPos: {fileID: 0}
+  modeConstruction: {fileID: 0}
+  modePainting: {fileID: 0}
+  modePlacebles: {fileID: 0}
+  selected: {fileID: 0}
+  deselected: {fileID: 0}
+  operation: 0
   staticMenuPosition: {fileID: 0}
+  selectedOp: 0
 --- !u!1 &9210367830644110037
 GameObject:
   m_ObjectHideFlags: 0
@@ -1949,7 +1985,19 @@ MonoBehaviour:
   menuPintura: {fileID: 0}
   menuTexture: {fileID: 0}
   menuPlaceable: {fileID: 0}
+  subMenu: {fileID: 0}
+  subMenuButtons: {fileID: 0}
+  placebleView: {fileID: 0}
+  prefab: {fileID: 0}
+  userPos: {fileID: 0}
+  modeConstruction: {fileID: 0}
+  modePainting: {fileID: 0}
+  modePlacebles: {fileID: 0}
+  selected: {fileID: 0}
+  deselected: {fileID: 0}
+  operation: 0
   staticMenuPosition: {fileID: 0}
+  selectedOp: 0
 --- !u!114 &9210367831310343019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2152,12 +2200,24 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7825098779126010778, guid: 42f1efcf9f155074e982ad6932ef85fc, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 57.531116
+      objectReference: {fileID: 0}
+    - target: {fileID: 7825098779126010778, guid: 42f1efcf9f155074e982ad6932ef85fc, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 45.594135
+      objectReference: {fileID: 0}
+    - target: {fileID: 7825098779126010778, guid: 42f1efcf9f155074e982ad6932ef85fc, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7825098779126010778, guid: 42f1efcf9f155074e982ad6932ef85fc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.082
+      value: -0.081999786
       objectReference: {fileID: 0}
     - target: {fileID: 7825098779126010778, guid: 42f1efcf9f155074e982ad6932ef85fc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.082
+      value: -0.08200011
       objectReference: {fileID: 0}
     - target: {fileID: 7825098779126010778, guid: 42f1efcf9f155074e982ad6932ef85fc, type: 3}
       propertyPath: m_LocalPosition.z

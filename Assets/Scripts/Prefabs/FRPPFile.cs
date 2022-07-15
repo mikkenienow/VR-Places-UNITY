@@ -111,17 +111,19 @@ public class FRPPFile : MonoBehaviour
     {
         if (selected)
         {
-            selectionBox.SetActive(true);
+            selectionBox.SetActive(selected);
             Renderer rend = selectionBox.GetComponent<Renderer>();
             if (ValidatePosition())
             {
                 target = Placeables.placeableTarget;
                 rend.sharedMaterial = placeble;
+
             } else
             {
                 target = null;
                 rend.sharedMaterial = notPlaceble;
             }
+            MaterialTransform(selectionBox);
         }
         else
         {
@@ -157,12 +159,15 @@ public class FRPPFile : MonoBehaviour
         {
             if (ValidatePosition())
             {
+
                 selected = false;
                 CheckSelection();
                 if (transformFromTarget)
                 {
+                    target.gameObject.GetComponent<PlaceableSpace>().SetAttached(this.gameObject);
                     this.transform.localPosition = GetAnchorAdjust();
                     this.transform.localRotation = target.transform.rotation;
+                    this.transform.parent = JoystickManager.cenario.transform;
                     ObjectUpdateSize();
 
                 } else
@@ -199,6 +204,12 @@ public class FRPPFile : MonoBehaviour
         return output;
     }
 
+    public void MaterialTransform(GameObject target)
+    {
+        float x = target.transform.parent.transform.lossyScale.z;
+        float y = target.transform.parent.transform.lossyScale.y;
+        target.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(x, y));
+    }
 
     public void ObjectUpdateSize()
     {

@@ -35,12 +35,12 @@ public class JoystickManager : MonoBehaviour
     public void Start()
     {
         print("start");
+        ObjectSender();
         jL.xrNode = XRNode.LeftHand;
         jL.jGrip.defaultDelay = 0;
         jR.xrNode = XRNode.RightHand;
         jR.jGrip.defaultDelay = 0;
         SetOperation(Operation.MENU);
-        ObjectSender();
     }
 
     public void ObjectSender()

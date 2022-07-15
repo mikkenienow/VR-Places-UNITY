@@ -30,7 +30,7 @@ public class Menu : MonoBehaviour
 
 
     public GameObject staticMenuPosition;
-    private static GameObject staticMenu;
+    public static GameObject staticMenu;
     private bool active = false;
 
     public Operation selectedOp = Operation.MENU;
@@ -38,9 +38,7 @@ public class Menu : MonoBehaviour
     private void RecenterMenu()
     {
         Person.SetLevel(7);
-        staticMenu.transform.position = staticMenuPosition.transform.position;
-        staticMenu.transform.rotation = staticMenuPosition.transform.rotation;
-        staticMenu.transform.position = new Vector3(staticMenu.transform.position.x, 8, staticMenu.transform.position.z);
+
     }
 
     public void CloseMenu()

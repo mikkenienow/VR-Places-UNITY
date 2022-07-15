@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -11,6 +9,9 @@ public class Construction : MonoBehaviour
     public static GameObject wall;
     public static GameObject door;
     public static GameObject window;
+    public GameObject tempWall = null;
+    public GameObject tempDoor = null;
+    public GameObject tempWindow = null;
     public static GameObject pI;
     public static GameObject pF;
     public static GameObject cenario;
@@ -197,8 +198,10 @@ public class Construction : MonoBehaviour
                     print("Criando parede continuada...");
                     pI = Instantiate(pI, pF2, door.transform.rotation);
                     pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                    wall = Instantiate(wall, pI.transform.position, pI.transform.rotation, cenario.transform);
+                    tempWall = Instantiate(wall, pI.transform.position, pI.transform.rotation, cenario.transform);
                     wallExtension = false;
+                    tempDoor.GetComponentInChildren<PlaceableSpace>().changing = false;
+                    tempWindow.GetComponentInChildren<PlaceableSpace>().changing = false;
                     //jR.jTrigger.SecondAction();
                 }
                 else
@@ -207,20 +210,22 @@ public class Construction : MonoBehaviour
                     print("criando parede do 0");
                     pI = Instantiate(pI, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                     pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                    wall = Instantiate(wall, pI.transform.position, Quaternion.identity, cenario.transform);
+                    tempWall = Instantiate(wall, pI.transform.position, Quaternion.identity, cenario.transform);
                 };
                 break;
             case ConstructionSubOperation.DOORCREATION:
                 SetSubOperation(ConstructionSubOperation.DOORTRANSFORMATION);
                 pI = Instantiate(pI, pF2, wall.transform.rotation);
                 pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                door = Instantiate(door, pI.transform.position, wall.transform.rotation, cenario.transform);
+                tempDoor = Instantiate(door, pI.transform.position, wall.transform.rotation, cenario.transform);
+                tempDoor.GetComponentInChildren<PlaceableSpace>().changing = true;
                 break;
             case ConstructionSubOperation.WINDOWCREATION:
                 SetSubOperation(ConstructionSubOperation.WINDOWTRANSFORMATION);
                 pI = Instantiate(pI, pF2, wall.transform.rotation);
                 pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                window = Instantiate(window, pI.transform.position, wall.transform.rotation, cenario.transform);
+                tempWindow = Instantiate(window, pI.transform.position, wall.transform.rotation, cenario.transform);
+                tempWindow.GetComponentInChildren<PlaceableSpace>().changing = true;
                 break;
         }
     }
@@ -252,20 +257,19 @@ public class Construction : MonoBehaviour
                 Create();
                 break;            
             case ConstructionSubOperation.WALLTRANSFORMATION:
-                Transform(wall);
+                Transform(tempWall);
                 break;            
             case ConstructionSubOperation.DOORCREATION:
                 Create();
                 break;            
             case ConstructionSubOperation.DOORTRANSFORMATION:
-                Transform(door);
+                Transform(tempDoor);
                 break;            
             case ConstructionSubOperation.WINDOWCREATION:
-                wallExtension = true;
                 Create();
                 break;            
             case ConstructionSubOperation.WINDOWTRANSFORMATION:
-                Transform(window);
+                Transform(tempWindow);
                 break;            
             case ConstructionSubOperation.SELECTION:
                 ;
