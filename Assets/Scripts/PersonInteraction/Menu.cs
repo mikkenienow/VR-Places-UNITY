@@ -12,7 +12,7 @@ public class Menu : MonoBehaviour
     public GameObject subMenu;    
     public GameObject subMenuButtons;    
     public GameObject placebleView;
-    public GameObject prefab;
+    public static GameObject prefab;
     public GameObject userPos;
 
     private List<GameObject> previewList = new List<GameObject>();

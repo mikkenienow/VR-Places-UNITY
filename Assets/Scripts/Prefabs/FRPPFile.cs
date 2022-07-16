@@ -175,6 +175,7 @@ public class FRPPFile : MonoBehaviour
                     this.transform.localPosition = followPoint;
                     this.transform.localRotation = defaultRotation;
                     this.transform.localScale = defaultScale;
+                    this.transform.parent = JoystickManager.cenario.transform;
                 }
                 return true;
             }
