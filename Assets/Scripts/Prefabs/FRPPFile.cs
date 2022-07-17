@@ -56,13 +56,17 @@ public class FRPPFile : MonoBehaviour
         defaultScale = this.transform.lossyScale;
         defaultRotation = this.transform.localRotation;
 
-        listXScale = GetStartScale(fixedSizeX);
-        listYScale = GetStartScale(fixedSizeY);
-        listZScale = GetStartScale(fixedSizeZ);
-        
-        listXPos = GetStartPos(fixedPosX);
-        listYPos = GetStartPos(fixedPosY);
-        listZPos = GetStartPos(fixedPosZ);
+        if (x) listXScale = GetStartScale(fixedSizeX);
+        if (x) listXPos = GetStartPos(fixedPosX);
+
+        if (y) listYScale = GetStartScale(fixedSizeY);
+        if (y) listYPos = GetStartPos(fixedPosY);
+
+        if (z) listZScale = GetStartScale(fixedSizeZ);
+        if (z) listZPos = GetStartPos(fixedPosZ);
+
+
+
     }
     public void FollowPoint()
     {
@@ -107,6 +111,19 @@ public class FRPPFile : MonoBehaviour
         return output;
     }
 
+    public void RotateObject(bool side)
+    {
+        if (side)
+        {
+            Quaternion rot = this.transform.rotation;
+            this.transform.rotation = new Quaternion(rot.x, rot.y + 15, rot.z, rot.w);
+        }
+        else
+        {
+            Quaternion rot = this.transform.rotation;
+            this.transform.rotation = new Quaternion(rot.x, rot.y - 15, rot.z, rot.w);
+        }
+    }
     public void CheckSelection()
     {
         if (selected)
@@ -167,7 +184,7 @@ public class FRPPFile : MonoBehaviour
                     target.gameObject.GetComponent<PlaceableSpace>().SetAttached(this.gameObject);
                     this.transform.localPosition = GetAnchorAdjust();
                     this.transform.localRotation = target.transform.rotation;
-                    this.transform.parent = JoystickManager.cenario.transform;
+                    
                     ObjectUpdateSize();
 
                 } else
@@ -175,7 +192,7 @@ public class FRPPFile : MonoBehaviour
                     this.transform.localPosition = followPoint;
                     this.transform.localRotation = defaultRotation;
                     this.transform.localScale = defaultScale;
-                    this.transform.parent = JoystickManager.cenario.transform;
+                    
                 }
                 return true;
             }

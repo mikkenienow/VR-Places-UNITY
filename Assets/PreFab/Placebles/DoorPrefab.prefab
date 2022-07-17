@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &690413351
 Transform:
   m_ObjectHideFlags: 0
@@ -506,10 +506,7 @@ MonoBehaviour:
   fixedSizeY:
   - {fileID: 7982493321995026597}
   - {fileID: 3168781258594187230}
-  fixedSizeZ:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  fixedSizeZ: []
   fixedPosX: []
   fixedPosY: []
   fixedPosZ:

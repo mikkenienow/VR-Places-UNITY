@@ -42,6 +42,7 @@ public class Placeables : MonoBehaviour
                 {
                     subOp = PlaceableSubOperation.SELECTION;
                     FRPPFile.SetLayerRecursively(selectedPlaceable, 0);
+                    Placeables.selectedPlaceable = null;
                 }
             }
         }
@@ -66,7 +67,10 @@ public class Placeables : MonoBehaviour
     {
         if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
-
+            if (selectedPlaceable)
+            {
+                selectedPlaceable.GetComponent<FRPPFile>().RotateObject(true);
+            }
         }
         else
         { //caso seja esquerdo
@@ -77,7 +81,10 @@ public class Placeables : MonoBehaviour
     {
         if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
-
+            if (selectedPlaceable)
+            {
+                selectedPlaceable.GetComponent<FRPPFile>().RotateObject(false);
+            }
         }
         else
         { //caso seja esquerdo

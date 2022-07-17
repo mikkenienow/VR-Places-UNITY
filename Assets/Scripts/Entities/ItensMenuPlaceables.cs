@@ -11,8 +11,8 @@ public class ItensMenuPlaceables : MonoBehaviour
     public void SelectPlaceable()
     {
 
-        placeableInstatiate = Instantiate(placeable, JoystickManager.globalHit.transform.position, new Quaternion(0, 0, 0, 1));
-
+        placeableInstatiate = Instantiate(placeable, JoystickManager.globalHit.transform.position, new Quaternion(0, 0, 0, 1), JoystickManager.GetScene().transform);
+        
         selectedPlaceable = placeableInstatiate.GetComponent<Transform>();
         selectedPlaceable.gameObject.layer = 2;
         FRPPFile.SetLayerRecursively(selectedPlaceable.gameObject, 2);
