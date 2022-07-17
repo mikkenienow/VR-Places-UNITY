@@ -27,24 +27,30 @@ public class Login : MonoBehaviour
         print(this.token);
     }
 
-    public void UserLogin()
+    public void UserLogin(GameObject msgOutput)
     {
+        Usuario user;
         try
         {
             print(this.token);
             DataBase db = new DataBase();
-            Usuario user = db.GetUser(db.loginByToken(this.token), this.token);
+            user = db.GetUser(db.loginByToken(this.token), this.token);
             if (user.Status)
             {
+
                 Cookie cookie = new Cookie(user, this.token);
                 //SceneManager.LoadScene("MainScene");
-                SceneLoader.Instance.LoadNewScene("MainScene");
-
+                SceneLoader.Instance.LoadNewScene(2);
+                msgOutput.GetComponent<TMP_Text>().text = "Deu certo";
+                print("Deu certo");
             }
+            msgOutput.GetComponent<TMP_Text>().text = user.GetIdusuario();
+            print("Token invalido");
         }
-        catch
+        catch (System.Exception e)
         {
-            print("Usuário não cadastrado");
+            msgOutput.GetComponent<TMP_Text>().text = "Erro: " + e;
+            print("Não cadastrado");
         }
 
     }
@@ -59,7 +65,7 @@ public class Login : MonoBehaviour
             if (cookie.Authorization)
             {
                 //SceneManager.LoadScene("MainScene");
-                SceneLoader.Instance.LoadNewScene("MainScene");
+                SceneLoader.Instance.LoadNewScene(2);
                 print("token valido");
             }
 

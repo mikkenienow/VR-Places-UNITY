@@ -4,6 +4,6 @@ public class ButtonObject : MonoBehaviour
 {
     public void LoadGame()
     {
-        SceneLoader.Instance.LoadNewScene("MainScene");
+        SceneLoader.Instance.LoadNewScene(2);
     }
 }

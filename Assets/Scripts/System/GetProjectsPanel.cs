@@ -25,7 +25,7 @@ public class GetProjectsPanel : MonoBehaviour
     {
         //xrOrigin.SetActive(false);
         projetoSelecionado = pjList[i];
-        SceneLoader.Instance.LoadNewScene("VRPEditor");
+        SceneLoader.Instance.LoadNewScene(3);
         JoystickManager.SetOperation(Operation.MENU);
         //SceneManager.LoadScene("VRPEditor");
     }

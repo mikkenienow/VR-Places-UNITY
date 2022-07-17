@@ -1,6 +1,8 @@
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using UnityEngine.Networking;
 
 public class DataBase
 {
@@ -60,8 +62,10 @@ public class DataBase
             reader.Close();
             return result;
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
+            result = new Usuario("Erro: " + e,"", "","",0,"","");
+            result.Status = false;
             return result;
             throw;
         }
@@ -102,4 +106,93 @@ public class DataBase
         }
     }
 
+}
+
+
+
+
+public class BD : MonoBehaviour
+{
+    // Start is called before the first frame update
+    public string idUsuario;
+    public string nome;
+    public string sobrenome;
+    public string email;
+    public string funcao;
+    public string assinatura;
+    public Usuario user;
+    /*
+    public Usuario GetUser(string idusuario, string token)
+    {
+        MySqlConnection conn = new MySqlConnection(connSrt);
+        Usuario result = null;
+        try
+        {
+            conn.Open();
+            string sqlSelect = "SELECT * FROM usuario WHERE idusuario=" + idusuario + ";";
+
+            MySqlCommand cmd = new MySqlCommand(sqlSelect, conn);
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string nome = reader["nome"].ToString();
+                string sobrenome = reader["sobrenome"].ToString();
+                string email = reader["email"].ToString();
+                int funcao = (int)reader["funcao"];
+                string assinatura = reader["assinatura"].ToString();
+
+                result = new Usuario(idusuario, nome, sobrenome, email, funcao, assinatura, token);
+            }
+            reader.Close();
+            return result;
+        }
+        catch (System.Exception e)
+        {
+            result = new Usuario("Erro: " + e,"", "","",0,"","");
+            result.Status = false;
+            return result;
+            throw;
+        }
+    }*/
+
+
+    IEnumerator GetUser(string idusuario, string token)
+    {
+
+        UnityWebRequest www = UnityWebRequest.Get("https://www.vrplaces.com.br/Unity_database/Get.php?op=getId&token=" + token);
+        yield return www.SendWebRequest();
+        if ((www.result == UnityWebRequest.Result.ProtocolError) || (www.result == UnityWebRequest.Result.ConnectionError))
+        {
+            Debug.Log("Connection Error!");
+        }
+        else
+        {
+            //echo $row["nome"]. "-" . $row["sobrenome"] . "-". $row["email"]."-". $row["funcao"] ."-". $row["assinatura"] . "<br>";
+            string s = www.downloadHandler.text;
+            nome = s.Split("-")[0];
+        }
+
+
+
+
+    }
+
+
+    IEnumerator loginByToken(string token)
+    {
+        UnityWebRequest www = UnityWebRequest.Get("https://www.vrplaces.com.br/Unity_database/Get.php?op=getId&token=" + token);
+        yield return www.SendWebRequest();
+        if ((www.result == UnityWebRequest.Result.ProtocolError) || (www.result == UnityWebRequest.Result.ConnectionError))
+        {
+            Debug.Log("Connection Error!");
+        }
+        else
+        {
+            string s = www.downloadHandler.text;
+            idUsuario = s;
+        }
+    }
+    
+    
 }

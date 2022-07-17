@@ -21,15 +21,15 @@ public class SceneLoader : Singleton<SceneLoader>
         SceneManager.sceneLoaded += SetActiveScene;
     }
 
-    public void LoadNewScene(string sceneName)
+    public void LoadNewScene(int sceneNumber)
     {
         if (!isLoading)
         {
-            StartCoroutine(LoadScene(sceneName));
+            StartCoroutine(LoadScene(sceneNumber));
         }
     }
 
-    private IEnumerator LoadScene(string sceneName)
+    private IEnumerator LoadScene(int sceneNumber)
     {
         isLoading = true;
 
@@ -38,7 +38,7 @@ public class SceneLoader : Singleton<SceneLoader>
         yield return StartCoroutine(UnloadCurrent());
         yield return new WaitForSeconds(3.0f);
 
-        yield return StartCoroutine(LoadNew(sceneName));
+        yield return StartCoroutine(LoadNew(sceneNumber));
         //yield return screenFader.StartFadeOut();
         //OnLoadEnd?.Invoke();
 
@@ -58,10 +58,10 @@ public class SceneLoader : Singleton<SceneLoader>
         yield return null;
     }
 
-    private IEnumerator LoadNew(string sceneName)
+    private IEnumerator LoadNew(int sceneNumber)
     {
         int i = 0;
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneNumber, LoadSceneMode.Additive);
         yield return new WaitForSeconds(5.0f);
         /*while (!loadOperation.isDone)
         {
