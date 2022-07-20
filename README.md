@@ -24,15 +24,6 @@ Somos uma equipe de estudantes do curso técnico de desenvolvimento de software 
 ## 🔗 Links
 [WEbsite VrPLaces](https://vrplaces.com.br/)
 
-## Contribuindo
-
-Contribuições são sempre bem-vindas!
-
-Veja `contribuindo.md` para saber como começar.
-
-Por favor, siga o `código de conduta` desse projeto.
-
-
 
 
 ## Stack utilizada
@@ -40,4 +31,3 @@ Por favor, siga o `código de conduta` desse projeto.
 **Front-end:** PHP, HTML, CSS
 
 **Back-end:** C#
-
