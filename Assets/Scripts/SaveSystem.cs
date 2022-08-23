@@ -149,7 +149,9 @@ public class SaveMethods : MonoBehaviour
         GameObject sceneEditor = Instantiate(cenario, cenario.transform.position, cenario.transform.rotation);
         sceneEditor.transform.localScale = new Vector3(1, 1, 1);
         GameObject baseReferencia = Instantiate(baseRef, baseRef.transform.position, baseRef.transform.rotation, sceneEditor.transform);
-        baseReferencia.transform.localScale = projeto.GetDimensao();
+        Vector3 newscale = projeto.GetDimensao();
+        newscale = new Vector3(newscale.x / 5, 1, newscale.z / 5);
+        baseReferencia.transform.localScale = newscale;
 
         SaveSystem saveSystem = projeto.projetovrp;
 

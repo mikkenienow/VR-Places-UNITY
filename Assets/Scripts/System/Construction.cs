@@ -19,7 +19,7 @@ public class Construction : MonoBehaviour
 
     Vector3 pF2 = new Vector3();
     public static bool wallExtension = false;
-    bool snapSwitch = false;
+    bool snapSwitch = true;
     public static bool freeAngle = false;
     Vector3 direction = Vector3.forward;
     Vector3 direction2 = new Vector3();
@@ -81,7 +81,7 @@ public class Construction : MonoBehaviour
         Vector3 result = originalPosition;
         if (snapSwitch)
         {
-            float granularity = 0.15f;
+            float granularity = 0.05f;
             Vector3 snappedPosition = new Vector3(Mathf.Floor(originalPosition.x / granularity) * granularity, originalPosition.y, Mathf.Floor(originalPosition.z / granularity) * granularity);
             result = snappedPosition;
         }
@@ -198,7 +198,7 @@ public class Construction : MonoBehaviour
                     print("Criando parede continuada...");
                     pI = Instantiate(pI, pF2, door.transform.rotation);
                     pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                    tempWall = Instantiate(wall, pI.transform.position, pI.transform.rotation, cenario.transform);
+                    tempWall = Instantiate(wall, pI.transform.position, tempWall.transform.rotation, cenario.transform);
                     wallExtension = false;
                     tempDoor.GetComponentInChildren<PlaceableSpace>().changing = false;
                     tempWindow.GetComponentInChildren<PlaceableSpace>().changing = false;
@@ -217,14 +217,15 @@ public class Construction : MonoBehaviour
                 SetSubOperation(ConstructionSubOperation.DOORTRANSFORMATION);
                 pI = Instantiate(pI, pF2, wall.transform.rotation);
                 pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                tempDoor = Instantiate(door, pI.transform.position, wall.transform.rotation, cenario.transform);
+                tempDoor = Instantiate(door, pI.transform.position, tempWall.transform.rotation, cenario.transform);
                 tempDoor.GetComponentInChildren<PlaceableSpace>().changing = true;
+
                 break;
             case ConstructionSubOperation.WINDOWCREATION:
                 SetSubOperation(ConstructionSubOperation.WINDOWTRANSFORMATION);
                 pI = Instantiate(pI, pF2, wall.transform.rotation);
                 pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
-                tempWindow = Instantiate(window, pI.transform.position, wall.transform.rotation, cenario.transform);
+                tempWindow = Instantiate(window, pI.transform.position, tempWall.transform.rotation, cenario.transform);
                 tempWindow.GetComponentInChildren<PlaceableSpace>().changing = true;
                 break;
         }

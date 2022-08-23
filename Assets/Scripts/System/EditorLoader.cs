@@ -64,6 +64,8 @@ public class EditorLoader : MonoBehaviour
 
     void AdjustScenarioLimits(GameObject limits, Projeto projeto)
     {
-        limits.transform.localScale = projeto.GetDimensao();
+        Vector3 newscale = projeto.GetDimensao();
+        newscale = new Vector3(newscale.x / 5, 1, newscale.z / 5);
+        limits.transform.localScale = newscale;
     }
 }

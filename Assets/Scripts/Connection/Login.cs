@@ -24,16 +24,27 @@ public class Login : MonoBehaviour
     public void GetToken(TMP_InputField token)
     {
         this.token = token.text;
-        print(this.token);
     }
 
     public void UserLogin()
     {
         try
         {
-            print(this.token);
+            //print(this.token);
             DataBase db = new DataBase();
+            //BD bdados = new BD();
+
+            //print("Criou BD");
+            
+            //StartCoroutine(bdados.loginByToken(this.token));
+
+            //StartCoroutine(bdados.GetUser(BD.idUsuario, this.token));
+
+            
+              print("Pegou usuario");
             Usuario user = db.GetUser(db.loginByToken(this.token), this.token);
+            //Usuario user = BD.user;
+                
             if (user.Status)
             {
                 Cookie cookie = new Cookie(user, this.token);
@@ -42,9 +53,9 @@ public class Login : MonoBehaviour
 
             }
         }
-        catch
+        catch (System.Exception e)
         {
-            print("Usuário não cadastrado");
+            print("errp: " + e);
         }
 
     }
