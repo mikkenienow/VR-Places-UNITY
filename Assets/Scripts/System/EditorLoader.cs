@@ -32,13 +32,15 @@ public class EditorLoader : MonoBehaviour
         sm.LoadOnScene(GetProjectsPanel.projetoSelecionado, cenario, parede, baseReferencia);
         if (GetProjectsPanel.projetoSelecionado.GetReferencia() != null)
         {
+            print("Carregando refefrrencia");
             LoadBaseReferencia(GetProjectsPanel.projetoSelecionado.GetReferencia());
+            //teste
         }
         print(GetProjectsPanel.projetoSelecionado.titulo);
         //SceneManager.UnloadSceneAsync("MainScene");
     }
 
-    void LoadBaseReferencia(byte[] referencia)
+    void LoadBaseReferencia(Texture2D referencia) // parametro original byte[]
     {
         List<GameObject> rootObjects = new List<GameObject>();
         Scene scene = SceneManager.GetActiveScene();
@@ -54,7 +56,7 @@ public class EditorLoader : MonoBehaviour
                     {
                         print(rootObjects[i].name);
                         Texture2D texture2 = new Texture2D(1, 1);
-                        texture2.LoadImage(referencia);
+                        texture2 = referencia;
                         list[i2].GetComponent<Renderer>().material.SetTexture("_MainTex", texture2);
                     }
                 }

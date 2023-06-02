@@ -11,15 +11,22 @@ public class GetProjectsPanel : MonoBehaviour
     public GameObject projectButtonTemplate;
     public GameObject panel;
     public GameObject xrOrigin;
+    public Texture2D[] images;
     public string userid;
     public static Projeto projetoSelecionado;
     public List<Projeto> pjList = new List<Projeto>();
-
+    
 
     public List<Projeto> GetList()
     {
-        DataBase db = new DataBase();
-        return db.GetProjects(userid);
+        //DataBase db = new DataBase();
+        List<Projeto> projetos = new List<Projeto>();
+        for (int i = 0; i < images.Length; i++)
+        {
+            projetos.Add(new Projeto("0" + i , "", "Exemplo 0" + i, "5 x 4", "", "", images[i]));
+        }
+        
+        return projetos;
     }
     void Load(int i)
     {
@@ -39,6 +46,8 @@ public class GetProjectsPanel : MonoBehaviour
             g = Instantiate(projectButtonTemplate, panel.transform);
             g.GetComponentsInChildren<TextMeshProUGUI>()[0].text = pjList[i].titulo;
             g.GetComponentsInChildren<TextMeshProUGUI>()[1].text = pjList[i].dimensao;
+            g.GetComponentsInChildren<TextMeshProUGUI>()[2].text = "Com referencia";
+            /*
             if (pjList[i].referencia_tipo == "")
             {
                 g.GetComponentsInChildren<TextMeshProUGUI>()[2].text = "Sem referencia";
@@ -46,8 +55,9 @@ public class GetProjectsPanel : MonoBehaviour
             else
             {
                 g.GetComponentsInChildren<TextMeshProUGUI>()[2].text = "Com referencia";
-            }
+            }*/
             g.GetComponent<Button>().AddEventListener(i, Load);
+            // teste
         }
         Destroy(projectButtonTemplate);
     }

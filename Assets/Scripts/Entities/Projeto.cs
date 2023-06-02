@@ -13,10 +13,10 @@ public class Projeto
     public string dimensao;
     public string criacao;
     public string modificacao;
-    public string referencia_tipo;
+    public Texture2D referencia_tipo;
     public SaveSystem projetovrp;
 
-    public Projeto(string idprojeto, string idusuario, string titulo, string dimensao, string criacao, string modificacao, string referencia_tipo)
+    public Projeto(string idprojeto, string idusuario, string titulo, string dimensao, string criacao, string modificacao, Texture2D referencia_tipo)
     {
         this.idprojeto = idprojeto;
         this.idusuario = idusuario;
@@ -40,12 +40,12 @@ public class Projeto
         return new Vector3(size[0], 1, size[1]);
     }
     public SaveSystem GetProjetoVRP()
-    {
-        string fileOrigin = "https://vrplaces.com.br/_files/_projetos/" + this.idusuario + "/" + this.idprojeto + ".vrp";
-        if (TransferDown.URLExists(fileOrigin))
+    {   // File.Exists(Application.persistentDataPath
+        string fileOrigin = "/temp/projetos/" + this.idprojeto + ".vrp";
+        if (File.Exists(Application.persistentDataPath + fileOrigin))
         {
            
-            TransferDown td = new TransferDown("/temp/projetos/", this.idprojeto, ".vrp", fileOrigin);
+            //TransferDown td = new TransferDown("/temp/projetos/", this.idprojeto, ".vrp", fileOrigin);
             SaveMethods sm = new SaveMethods();           
             SaveSystem projetoVRP = sm.Load(this.idprojeto);
 
@@ -57,8 +57,14 @@ public class Projeto
         return new SaveSystem();
     }
 
-    public byte[] GetReferencia()
+    public Texture2D GetReferencia() // return original byte[]
     {
+
+        //byte[] referencia = referencia_tipo. GetRawTextureData();
+
+
+
+        /*
         byte[] referencia = null;
         string fileOrigin = "https://vrplaces.com.br/_files/_referencia/" + this.idprojeto + "/" + this.referencia_tipo;
         if (TransferDown.URLExists(fileOrigin))
@@ -74,7 +80,7 @@ public class Projeto
         else
         {
             Debug.Log("Arquivo não localizado");
-        }
-        return referencia;
+        }*/
+        return referencia_tipo;
     }
 }

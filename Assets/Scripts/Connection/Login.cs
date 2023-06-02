@@ -31,7 +31,7 @@ public class Login : MonoBehaviour
         try
         {
             //print(this.token);
-            DataBase db = new DataBase();
+            //DataBase db = new DataBase();
             //BD bdados = new BD();
 
             //print("Criou BD");
@@ -41,13 +41,13 @@ public class Login : MonoBehaviour
             //StartCoroutine(bdados.GetUser(BD.idUsuario, this.token));
 
             
-              print("Pegou usuario");
-            Usuario user = db.GetUser(db.loginByToken(this.token), this.token);
+              //print("Pegou usuario");
+            //Usuario user = db.GetUser(db.loginByToken(this.token), this.token);
             //Usuario user = BD.user;
                 
-            if (user.Status)
+            if (true)
             {
-                Cookie cookie = new Cookie(user, this.token);
+                //Cookie cookie = new Cookie(user, this.token);
                 //SceneManager.LoadScene("MainScene");
                 SceneLoader.Instance.LoadNewScene("MainScene");
 
@@ -61,13 +61,13 @@ public class Login : MonoBehaviour
     }
 
     public void UserLoginByCookie()
-    {
+    {/*
         DataBase db = new DataBase();
-        Cookie cookie = new Cookie();
+        Cookie cookie = new Cookie();*/
        
         try
         {
-            if (cookie.Authorization)
+            if (true)
             {
                 //SceneManager.LoadScene("MainScene");
                 SceneLoader.Instance.LoadNewScene("MainScene");
@@ -78,7 +78,7 @@ public class Login : MonoBehaviour
         catch
         {
             print("token nao confere com o atual");
-            print(cookie.User.Token);
+            //print(cookie.User.Token);
         }
     }
 }

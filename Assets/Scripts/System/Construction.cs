@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -200,9 +201,16 @@ public class Construction : MonoBehaviour
                     pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                     tempWall = Instantiate(wall, pI.transform.position, tempWall.transform.rotation, cenario.transform);
                     wallExtension = false;
-                    tempDoor.GetComponentInChildren<PlaceableSpace>().changing = false;
-                    tempWindow.GetComponentInChildren<PlaceableSpace>().changing = false;
-                    //jR.jTrigger.SecondAction();
+                    
+                    try
+                    {
+                        tempDoor.GetComponentInChildren<PlaceableSpace>().changing = false;
+                        tempWindow.GetComponentInChildren<PlaceableSpace>().changing = false;
+                    } catch (Exception e)
+                    {
+                        print(e);
+                    }
+                        //jR.jTrigger.SecondAction();
                 }
                 else
                 {
@@ -218,8 +226,16 @@ public class Construction : MonoBehaviour
                 pI = Instantiate(pI, pF2, wall.transform.rotation);
                 pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                 tempDoor = Instantiate(door, pI.transform.position, tempWall.transform.rotation, cenario.transform);
-                tempDoor.GetComponentInChildren<PlaceableSpace>().changing = true;
-
+                //tempDoor.GetComponentInChildren<PlaceableSpace>().changing = true;
+                try
+                {
+                    tempDoor.GetComponentInChildren<PlaceableSpace>().changing = true;
+                    
+                }
+                catch (Exception e)
+                {
+                    print(e);
+                }
                 break;
             case ConstructionSubOperation.WINDOWCREATION:
                 SetSubOperation(ConstructionSubOperation.WINDOWTRANSFORMATION);
@@ -227,6 +243,15 @@ public class Construction : MonoBehaviour
                 pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                 tempWindow = Instantiate(window, pI.transform.position, tempWall.transform.rotation, cenario.transform);
                 tempWindow.GetComponentInChildren<PlaceableSpace>().changing = true;
+                try
+                {
+                    //tempDoor.GetComponentInChildren<PlaceableSpace>().changing = false;
+                    tempWindow.GetComponentInChildren<PlaceableSpace>().changing = true;
+                }
+                catch (Exception e)
+                {
+                    print(e);
+                }
                 break;
         }
     }

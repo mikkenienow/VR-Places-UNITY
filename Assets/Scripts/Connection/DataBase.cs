@@ -69,7 +69,7 @@ public class DataBase
             throw;
         }
     }
-
+    /*
     public List<Projeto> GetProjects(string idusuario)
     {
         MySqlConnection conn = new MySqlConnection(connSrt);
@@ -90,7 +90,7 @@ public class DataBase
                 string dimensao = reader["dimensao"].ToString();
                 string criacao = reader["criacao"].ToString();
                 string modificacao = reader["modificacao"].ToString();
-                string referencia_tipo = reader["referencia_tipo"].ToString();
+                Texture2D referencia_tipo = reader["referencia_tipo"].ToString();
 
                 result.Add(new Projeto(idprojeto, idusuarioBD, titulo, dimensao, criacao, modificacao, referencia_tipo));
             }
@@ -103,7 +103,7 @@ public class DataBase
             return result;
             throw;
         }
-    }
+    }*/
 
 }
 
