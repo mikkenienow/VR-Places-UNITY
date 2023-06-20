@@ -42,7 +42,7 @@ Além disso, o VRPlaces possibilita aos usuários explorar um mundo virtual pers
 > Outras: **Dependências e pacotes serão instalados com o Unity** </br>
 
 > ## Desenvolvimento </br>
-> [@mikkenienow](https://github.com/mikkenienow) </br>.
+> [@mikkenienow](https://github.com/mikkenienow) </br>
 > [@Gustavo-Campestrini](https://github.com/Gustavo-Campestrini) 
 
 > ## Outros
