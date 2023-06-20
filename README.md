@@ -33,12 +33,6 @@ Além disso, o VRPlaces possibilita aos usuários explorar um mundo virtual pers
 </br>
 </br>
 
-## Autores
-- [@Gustavo-Campestrini](https://github.com/Gustavo-Campestrini)
-- [@mikkenienow](https://github.com/mikkenienow)
-
-https://youtube.com/shorts/9UmndiLite0?feature=share
-
 > ## Pré-requisitos
 > Antes de executar o VRPlaces certifique-se de ter os seguintes requisitos instalados em seu ambiente de desenvolvimento:
 > </br></br>
@@ -48,5 +42,8 @@ https://youtube.com/shorts/9UmndiLite0?feature=share
 > Outras: **Dependências e pacotes serão instalados com o Unity** </br>
 
 > ## Desenvolvimento </br>
-> Levantamento & Backend: **Mikke Nienow** </br>
-> UX/UI Design: **Nicolas Ceruti**
+> [@Gustavo-Campestrini](https://github.com/Gustavo-Campestrini)
+> [@mikkenienow](https://github.com/mikkenienow)
+
+> ## Outros
+> Provas de conceito [(Youtube)](https://www.youtube.com/playlist?list=PLATIUl68nA-L4Qma3bb-0s9M2semk0vwM)
