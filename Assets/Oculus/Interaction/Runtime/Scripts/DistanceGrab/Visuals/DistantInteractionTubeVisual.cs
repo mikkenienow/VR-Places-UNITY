@@ -66,7 +66,7 @@ namespace Oculus.Interaction.DistanceReticles
                 Vector3 difference = i == 0 ? linePoints[i + 1] - linePoints[i]
                     : linePoints[i] - linePoints[i - 1];
                 _tubePoints[i].position = linePoints[i];
-                _tubePoints[i].direction = difference;
+                _tubePoints[i].rotation = Quaternion.LookRotation(difference);
                 _tubePoints[i].relativeLength = i == 0 ? 0f
                     : _tubePoints[i - 1].relativeLength + (difference.magnitude / totalLength);
             }

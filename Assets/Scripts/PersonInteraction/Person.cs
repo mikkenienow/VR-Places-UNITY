@@ -46,20 +46,20 @@ public class Person : MonoBehaviour
         {
             if (rootObjects[i].tag == "Person")
             {
-                print("Achou PERSON");
+                //print("Achou PERSON");
                 Transform[] personObjects = rootObjects[i].GetComponentsInChildren<Transform>();
-                print("Total em PERSON: " + personObjects.Length);
+                //print("Total em PERSON: " + personObjects.Length);
                 for (int i2 = 0; i2 < personObjects.Length;  i2++)
                 {
 
                     if (personObjects[i2].tag == "LeftHand")
                     {
-                        print("Achou LEFT");
+                        //print("Achou LEFT");
                         leftHand = personObjects[i2].gameObject;
                     }
                     if (personObjects[i2].tag == "RightHand")
                     {
-                        print("Achou RIGHT");
+                        //print("Achou RIGHT");
                         rightHand = personObjects[i2].gameObject;
                     }
                 }

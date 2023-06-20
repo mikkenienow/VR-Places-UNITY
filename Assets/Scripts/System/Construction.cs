@@ -119,12 +119,12 @@ public class Construction : MonoBehaviour
     }
     public static void TriggerAction(Joystick joystick)
     {
-        print("Ação do trigger");
+        ////print("Ação do trigger");
         if (joystick.xrNode == XRNode.RightHand)
         { //caso seja direito
             if (!joystick.jTrigger.SecondAction())
             {
-                print("Ação do trigger: WALLCREATION" );
+                ////print("Ação do trigger: WALLCREATION" );
                 SetSubOperation(ConstructionSubOperation.WALLCREATION);
             } else
             {
@@ -196,7 +196,7 @@ public class Construction : MonoBehaviour
                 SetSubOperation(ConstructionSubOperation.WALLTRANSFORMATION);
                 if (wallExtension)
                 {
-                    print("Criando parede continuada...");
+                    ////print("Criando parede continuada...");
                     pI = Instantiate(pI, pF2, door.transform.rotation);
                     pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                     tempWall = Instantiate(wall, pI.transform.position, tempWall.transform.rotation, cenario.transform);
@@ -208,14 +208,14 @@ public class Construction : MonoBehaviour
                         tempWindow.GetComponentInChildren<PlaceableSpace>().changing = false;
                     } catch (Exception e)
                     {
-                        print(e);
+                        ////print(e);
                     }
                         //jR.jTrigger.SecondAction();
                 }
                 else
                 {
                     //VRPNewMaterial vrp = new VRPNewMaterial(wall.transform, new VRPMaterial(Color.white, "none/none"), true);
-                    print("criando parede do 0");
+                    ////print("criando parede do 0");
                     pI = Instantiate(pI, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                     pF = Instantiate(pF, JoystickManager.globalHit.point, new Quaternion(0, 0, 0, 1));
                     tempWall = Instantiate(wall, pI.transform.position, Quaternion.identity, cenario.transform);
@@ -234,7 +234,7 @@ public class Construction : MonoBehaviour
                 }
                 catch (Exception e)
                 {
-                    print(e);
+                    ////print(e);
                 }
                 break;
             case ConstructionSubOperation.WINDOWCREATION:
@@ -250,7 +250,7 @@ public class Construction : MonoBehaviour
                 }
                 catch (Exception e)
                 {
-                    print(e);
+                    ////print(e);
                 }
                 break;
         }

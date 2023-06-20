@@ -13,14 +13,14 @@ public class PassthroughProjectionSurface : MonoBehaviour
         GameObject ovrCameraRig = GameObject.Find("OVRCameraRig");
         if (ovrCameraRig == null)
         {
-            Debug.LogError("Scene does not contain an OVRCameraRig");
+            //Debug.LogError("Scene does not contain an OVRCameraRig");
             return;
         }
 
         passthroughLayer = ovrCameraRig.GetComponent<OVRPassthroughLayer>();
         if (passthroughLayer == null)
         {
-            Debug.LogError("OVRCameraRig does not contain an OVRPassthroughLayer component");
+            //Debug.LogError("OVRCameraRig does not contain an OVRPassthroughLayer component");
         }
 
         passthroughLayer.AddSurfaceGeometry(projectionObject.gameObject, true);

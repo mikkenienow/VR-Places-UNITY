@@ -285,21 +285,21 @@ public class Menu : MonoBehaviour
         }
 
         save.SaveProjectFile(GetProjectsPanel.projetoSelecionado.idprojeto, GetProjectsPanel.projetoSelecionado.idusuario, cenario);
-        print("foi");
+        //print("foi");
 
     }
 
     public void Exit()
     {
-        print("saindo");
+        //print("saindo");
         SceneManager.LoadScene("MainScene");
 
     }
 
     public void Export()
     {
-        print(GetProjectsPanel.projetoSelecionado.idprojeto);
-        print(GetProjectsPanel.projetoSelecionado.idusuario);
+        //print(GetProjectsPanel.projetoSelecionado.idprojeto);
+        //print(GetProjectsPanel.projetoSelecionado.idusuario);
     }
 
     public void Confirm()

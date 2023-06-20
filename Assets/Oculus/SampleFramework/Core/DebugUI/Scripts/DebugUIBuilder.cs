@@ -126,7 +126,7 @@ public class DebugUIBuilder : MonoBehaviour
     lp = FindObjectOfType<LaserPointer>();
     if (!lp)
     {
-      Debug.LogError("Debug UI requires use of a LaserPointer and will not function without it. Add one to your scene, or assign the UIHelpers prefab to the DebugUIBuilder in the inspector.");
+      //Debug.LogError("Debug UI requires use of a LaserPointer and will not function without it. Add one to your scene, or assign the UIHelpers prefab to the DebugUIBuilder in the inspector.");
       return;
     }
     lp.laserBeamBehavior = laserBeamBehavior;
@@ -236,7 +236,7 @@ public class DebugUIBuilder : MonoBehaviour
 
   private void PanelCentricRelayout(){
     if(!isHorizontal){
-      Debug.Log("Error:Panel Centeric relayout is implemented only for horizontal panels");
+      //Debug.Log("Error:Panel Centeric relayout is implemented only for horizontal panels");
       return;
     }
 
@@ -287,7 +287,7 @@ public class DebugUIBuilder : MonoBehaviour
   {
     if (targetCanvas > targetContentPanels.Length)
     {
-      Debug.LogError("Attempted to add debug panel to canvas " + targetCanvas + ", but only " + targetContentPanels.Length + " panels were provided. Fix in the inspector or pass a lower value for target canvas.");
+      //Debug.LogError("Attempted to add debug panel to canvas " + targetCanvas + ", but only " + targetContentPanels.Length + " panels were provided. Fix in the inspector or pass a lower value for target canvas.");
       return;
     }
 

@@ -59,7 +59,7 @@ public class SaveMethods : MonoBehaviour
         SaveSystem save = CreateVRPFile(cenario);
         string fileNameComplete = idprojeto + ".vrp";
         string filePath = "temp/projetos/";
-        print(SaveExecute(filePath, fileNameComplete, save));
+        ////print(SaveExecute(filePath, fileNameComplete, save));
         string filePathOut = "/public_html/_files/_projetos/" + idusuario + "/" + idprojeto + ".vrp";
         TransferUp tu = new TransferUp(filePath + fileNameComplete, filePathOut);
         tu.UploadFile();
@@ -158,8 +158,8 @@ public class SaveMethods : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/temp/projetos/" + projeto.idprojeto + ".vrp"))
         {
 
-            print("Carregando VRPFile na cena");
-            print(saveSystem.GetListObj().Count);
+            ////print("Carregando VRPFile na cena");
+            ////print(saveSystem.GetListObj().Count);
             for (int i = 0; i < saveSystem.GetListObj().Count; i++)
             {
                 VRPfile get = saveSystem.GetListObj()[i];
@@ -171,18 +171,18 @@ public class SaveMethods : MonoBehaviour
 
                 paredePrefab.transform.localScale = get.GetScale();
                 Transform[] walpapers = paredePrefab.GetComponentsInChildren<Transform>();
-                print("total de filhos" + paredePrefab.GetComponentsInChildren<Transform>().Length);
+                ////print("total de filhos" + paredePrefab.GetComponentsInChildren<Transform>().Length);
                 for (int i2 = 0; i2 < walpapers.Length; i2++)
                 {
-                    print("objeto" + walpapers[i2].name);
+                    ////print("objeto" + walpapers[i2].name);
                     if(walpapers[i2].tag == "wallpaper")
                     {
                         for (int w = 0; w < get.GetMaterialList().Count; w++)
                         {
-                            print(walpapers[i2].name);
+                            ////print(walpapers[i2].name);
                             VRPMaterial material = get.GetMaterialList()[w];
-                            print("Material encontrado" + get.GetMaterialList().Count);
-                            print("maintexture:" + material.GetMainTexture());
+                            ////print("Material encontrado" + get.GetMaterialList().Count);
+                            ////print("maintexture:" + material.GetMainTexture());
                             VRPNewMaterial newMaterial = new VRPNewMaterial(walpapers[i2], material, true);
                             i2++;
                         }
@@ -194,7 +194,7 @@ public class SaveMethods : MonoBehaviour
         }
         else
         {
-            print("arquivo n encontrado");
+            ////print("arquivo n encontrado");
         }
     }
 

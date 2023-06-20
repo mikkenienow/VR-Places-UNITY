@@ -94,7 +94,7 @@ public class Painting : MonoBehaviour
 
     public void Paint()
     {
-        print("Pintando");
+        //print("Pintando");
         PaintSetUpdate();
         VRPNewMaterial paint = new VRPNewMaterial(wallpaperTarget.transform, paintSet, true);
         SetSubOperation(PaintingSubOperation.NULL);

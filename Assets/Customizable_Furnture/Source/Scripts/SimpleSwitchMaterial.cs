@@ -9,31 +9,39 @@ public class SimpleSwitchMaterial : MonoBehaviour {
 	public Material[] newMaterials;
 
 	public void SwitchMaterial(){
-		if (initialMaterials.Length==newMaterials.Length){
-			MeshRenderer[] allVisibleMeshRenderers = GameObject.FindObjectsOfType<MeshRenderer> ();
-			foreach(MeshRenderer mesh in allVisibleMeshRenderers){
-				for (int i=0;i<initialMaterials.Length;i++){
-					if (mesh.sharedMaterial==initialMaterials[i]){
-						mesh.sharedMaterial=newMaterials[i];
+		if (initialMaterials.Length == newMaterials.Length)
+		{
+			MeshRenderer[] allVisibleMeshRenderers = GameObject.FindObjectsOfType<MeshRenderer>();
+			foreach (MeshRenderer mesh in allVisibleMeshRenderers)
+			{
+				for (int i = 0; i < initialMaterials.Length; i++)
+				{
+					if (mesh.sharedMaterial == initialMaterials[i])
+					{
+						mesh.sharedMaterial = newMaterials[i];
 						break;
 					}
 				}
 			}
 		}
-		else Debug.Log ("initial Material variable Array length is different than new Materials variable Array length, please fix :)");
+		else; //Debug.Log ("initial Material variable Array length is different than new Materials variable Array length, please fix :)");
 	}
 	public void SwitchMaterialReverse(){
-		if (initialMaterials.Length==newMaterials.Length){
-			MeshRenderer[] allVisibleMeshRenderers = GameObject.FindObjectsOfType<MeshRenderer> ();
-			foreach(MeshRenderer mesh in allVisibleMeshRenderers){
-				for (int i=0;i<initialMaterials.Length;i++){
-					if (mesh.sharedMaterial==newMaterials[i]){
-						mesh.sharedMaterial=initialMaterials[i];
+		if (initialMaterials.Length == newMaterials.Length)
+		{
+			MeshRenderer[] allVisibleMeshRenderers = GameObject.FindObjectsOfType<MeshRenderer>();
+			foreach (MeshRenderer mesh in allVisibleMeshRenderers)
+			{
+				for (int i = 0; i < initialMaterials.Length; i++)
+				{
+					if (mesh.sharedMaterial == newMaterials[i])
+					{
+						mesh.sharedMaterial = initialMaterials[i];
 						break;
 					}
 				}
 			}
 		}
-		else Debug.Log ("initial Material variable Array length is different than new Materials variable Array length, please fix :)");
+		else; //Debug.Log ("initial Material variable Array length is different than new Materials variable Array length, please fix :)");
 	}
 }

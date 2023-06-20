@@ -113,7 +113,7 @@ namespace VRKeyboard.Utils
         {
             if (circle == null)
             {
-                Debug.LogError("Please assign target loading image, (ie. circle image)");
+                //Debug.LogError("Please assign target loading image, (ie. circle image)");
                 return;
             }
 

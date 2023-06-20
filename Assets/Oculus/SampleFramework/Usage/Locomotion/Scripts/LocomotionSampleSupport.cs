@@ -42,7 +42,7 @@ public class LocomotionSampleSupport : MonoBehaviour
         EventSystem eventSystem = FindObjectOfType<EventSystem>();
         if (eventSystem == null)
         {
-            Debug.LogError("Need EventSystem");
+            //Debug.LogError("Need EventSystem");
         }
 		SetupTwoStickTeleport();
 
@@ -66,7 +66,7 @@ public class LocomotionSampleSupport : MonoBehaviour
     [Conditional("DEBUG_LOCOMOTION_PANEL")]
     static void Log(string msg)
     {
-        Debug.Log(msg);
+        //Debug.Log(msg);
     }
 
     /// <summary>

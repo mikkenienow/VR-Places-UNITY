@@ -11,13 +11,13 @@ public class Login : MonoBehaviour
     {
         if (File.Exists(Application.persistentDataPath + "/user/userSession.sess"))
         {
-            print("existe");
+            ////print("existe");
             UserLoginByCookie();
         }
         else
         {
             //manda fazer login
-            print("nao existe");
+            ////print("nao existe");
         }
     }
 
@@ -30,18 +30,18 @@ public class Login : MonoBehaviour
     {
         try
         {
-            //print(this.token);
+            //////print(this.token);
             //DataBase db = new DataBase();
             //BD bdados = new BD();
 
-            //print("Criou BD");
+            //////print("Criou BD");
             
             //StartCoroutine(bdados.loginByToken(this.token));
 
             //StartCoroutine(bdados.GetUser(BD.idUsuario, this.token));
 
             
-              //print("Pegou usuario");
+              //////print("Pegou usuario");
             //Usuario user = db.GetUser(db.loginByToken(this.token), this.token);
             //Usuario user = BD.user;
                 
@@ -55,7 +55,7 @@ public class Login : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            print("errp: " + e);
+            ////print("errp: " + e);
         }
 
     }
@@ -71,14 +71,14 @@ public class Login : MonoBehaviour
             {
                 //SceneManager.LoadScene("MainScene");
                 SceneLoader.Instance.LoadNewScene("MainScene");
-                print("token valido");
+                ////print("token valido");
             }
 
         }
         catch
         {
-            print("token nao confere com o atual");
-            //print(cookie.User.Token);
+            ////print("token nao confere com o atual");
+            //////print(cookie.User.Token);
         }
     }
 }

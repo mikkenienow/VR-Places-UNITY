@@ -230,6 +230,6 @@ public class MoviePlayerSampleControls : MonoBehaviour
         Player.DisplayMono = visible;
         LeftHand.SetActive(visible);
         RightHand.SetActive(visible);
-        Debug.Log("Controls Visible: " + visible);
+        //Debug.Log("Controls Visible: " + visible);
     }
 }

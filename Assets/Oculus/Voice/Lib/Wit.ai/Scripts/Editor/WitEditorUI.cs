@@ -69,7 +69,10 @@ namespace Meta.WitAi
             EditorGUI.indentLevel++;
             foreach (var field in obj.GetType().GetFields())
             {
-                LayoutKeyLabel(field.Name, field.GetValue(obj).ToString());
+                if (field.IsPublic && !field.IsStatic)
+                {
+                    LayoutKeyLabel(field.Name, field.GetValue(obj).ToString());
+                }
             }
             EditorGUI.indentLevel--;
         }
@@ -124,7 +127,7 @@ namespace Meta.WitAi
             return GUILayout.Button(content, style, options);
         }
         // Layout header button
-        public static void LayoutHeaderButton(Texture2D headerTexture, string headerURL)
+        public static void LayoutHeaderButton(Texture2D headerTexture, string headerURL, string docsUrl)
         {
             if (headerTexture != null)
             {
@@ -137,11 +140,11 @@ namespace Meta.WitAi
                 {
                     Application.OpenURL(headerURL);
                 }
-                GUILayout.FlexibleSpace();
-                if (LayoutIconButton(WitStyles.HelpIcon))
+                if (!string.IsNullOrEmpty(docsUrl) && LayoutIconButton(WitStyles.HelpIcon))
                 {
-                    Application.OpenURL(headerURL);
+                    Application.OpenURL(docsUrl);
                 }
+                GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
             }
         }
@@ -400,7 +403,7 @@ namespace Meta.WitAi
         #endregion
 
         #region WINDOW
-        public static void LayoutWindow(string windowTitle, Texture2D windowHeader, string windowHeaderUrl, Action windowContentLayout, ref Vector2 offset, out Vector2 size)
+        public static void LayoutWindow(string windowTitle, Texture2D windowHeader, string windowHeaderUrl, string windowInfoUrl, Action windowContentLayout, ref Vector2 offset, out Vector2 size)
         {
             // Get minimum width
             float minWidth = WitStyles.WindowMinWidth;
@@ -414,7 +417,7 @@ namespace Meta.WitAi
                         // Layout header image
                         if (windowHeader != null)
                         {
-                            LayoutHeaderButton(windowHeader, windowHeaderUrl);
+                            LayoutHeaderButton(windowHeader, windowHeaderUrl, windowInfoUrl);
                         }
                         // Layout header label
                         if (!string.IsNullOrEmpty(windowTitle))

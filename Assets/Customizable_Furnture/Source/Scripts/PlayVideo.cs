@@ -11,7 +11,7 @@ public class PlayVideo : MonoBehaviour {
 //	// Update is called once per frame
 //	void Update () {
 //		if (Input.GetButtonDown ("Jump")) {
-//			Debug.Log("hello");
+//			//Debug.Log("hello");
 //	//		Renderer r = GetComponent<Renderer>();
 //			//MovieTexture movie = (MovieTexture)r.material.mainTexture;
 //			

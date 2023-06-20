@@ -15,8 +15,8 @@ public class JoystickManager : MonoBehaviour
     public static GameObject cenario;
     public static GameObject target;
 
-    private Joystick jL = new Joystick();
-    private Joystick jR = new Joystick();
+    private readonly Joystick jL = new Joystick();
+    private readonly Joystick jR = new Joystick();
     private static Operation op;
     private static Operation lastOp = Operation.CONSTRUCTION;
     public RaycastHit hit;
@@ -34,7 +34,7 @@ public class JoystickManager : MonoBehaviour
 
     public void Start()
     {
-        print("start");
+        ////print("start");
         ObjectSender();
         jL.xrNode = XRNode.LeftHand;
         jL.jGrip.defaultDelay = 0;
@@ -107,18 +107,22 @@ public class JoystickManager : MonoBehaviour
 
     void ButtonPressedAction()
     {
+        
         for (int i = 0; i < 5; i++)
         {
+            print("Descobrir botão pressionado " + i);
             if (jL.GetButtons()[i].IsActive() && !jL.GetButtons()[i].IsLocked() && jL.GetButtons()[i].DelayInactive())
             {
                 jL.SetButtonDelay();
 
                 ButtonCallAction(jL.GetButtons()[i].buttonName, jL);
+                print(jL.GetButtons()[i].buttonName);
             }
             if (jR.GetButtons()[i].IsActive() && !jR.GetButtons()[i].IsLocked() && jR.GetButtons()[i].DelayInactive())
             {
                 jR.SetButtonDelay();
                 ButtonCallAction(jR.GetButtons()[i].buttonName, jR);
+                print(jR.GetButtons()[i].buttonName);
             }
         }
     }
@@ -181,20 +185,21 @@ public class JoystickManager : MonoBehaviour
         
         if (Physics.Raycast(theRay, out hit, range))
         {
-            print("Hiting e operação: " + op);
+            ////print("Hiting e operação: " + op);
             globalHit = hit;
-            print(hit.collider.tag);
+            ////print(hit.collider.tag);
             
             if (targetTag == "")
             {
-                print("Target '' '' ");
-
+                ////print("Target '' '' ");
+                
                 ButtonPressedAction();
                 SuperExecute();
             }
             else if(hit.collider.tag == targetTag) // BaseReferencia
             {
-                print("Target ''"+ targetTag + "'' ");
+                ////print("Target ''"+ targetTag + "'' ");
+                print("entrou no target " + targetTag);
                 ButtonPressedAction();
                 globalHit.point = new Vector3(globalHit.point.x, 0, globalHit.point.z);
 
@@ -215,7 +220,7 @@ public class JoystickManager : MonoBehaviour
         switch (op)
         {
             case Operation.CONSTRUCTION:
-                print("Iniciando classe CONSTRUCTION");
+                ////print("Iniciando classe CONSTRUCTION");
                 Construction.IndexAction(button, joystick);
                 break;
             case Operation.PAINTING:

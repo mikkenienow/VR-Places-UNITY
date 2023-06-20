@@ -10,8 +10,6 @@ ANY KIND, either express or implied. See the License for the specific language g
 permissions and limitations under the License.
 ************************************************************************************/
 
-#pragma vertex outlineVertex
-#pragma fragment outlineFragment
 #pragma multi_compile_local __ CONFIDENCE
 
 #pragma prefer_hlslcc gles
@@ -20,82 +18,97 @@ permissions and limitations under the License.
 
 //
 
-struct OutlineVertexInput
-{
-    float4 vertex : POSITION;
-    float3 normal : NORMAL;
-    float4 texcoord : TEXCOORD0;
-    UNITY_VERTEX_INPUT_INSTANCE_ID
+struct OutlineVertexInput {
+float4 vertex : POSITION;
+  float3 normal : NORMAL;
+  float4 texcoord : TEXCOORD0;
+  float4 texcoord1 : TEXCOORD1;
+  UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
-struct OutlineVertexOutput
-{
-    float4 vertex : SV_POSITION;
-    half4 glowColor : TEXCOORD1;
-    UNITY_VERTEX_INPUT_INSTANCE_ID
-    UNITY_VERTEX_OUTPUT_STEREO
+struct OutlineVertexOutput {
+  float4 vertex : SV_POSITION;
+  half4 color : TEXCOORD1;
+  float3 worldPos : TEXCOORD2;
+  float4 texcoord1 : TEXCOORD3;
+  UNITY_VERTEX_INPUT_INSTANCE_ID
+  UNITY_VERTEX_OUTPUT_STEREO
 };
 
-OutlineVertexOutput outlineVertex(OutlineVertexInput v)
-{
-    OutlineVertexOutput o;
-    UNITY_SETUP_INSTANCE_ID(v);
-    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-    UNITY_TRANSFER_INSTANCE_ID(v, o);
-    v.vertex.xyz += v.normal * _OutlineWidth;
-    o.vertex = UnityObjectToClipPos(v.vertex);
+OutlineVertexOutput outlineVertex(OutlineVertexInput v) {
+  OutlineVertexOutput o;
+  UNITY_SETUP_INSTANCE_ID(v);
+  UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+  UNITY_TRANSFER_INSTANCE_ID(v, o);
 
-    half4 maskPixelColor = tex2Dlod(_FingerGlowMask, v.texcoord);
-    
-#if CONFIDENCE
-    int glowMaskR = maskPixelColor.r * 255;
-    int jointMaskB = maskPixelColor.b * 255;
-
-    int thumbMask = (glowMaskR >> 3) & 0x1;
-    int indexMask = (glowMaskR >> 4) & 0x1;
-    int middleMask = (glowMaskR >> 5) & 0x1;
-    int ringMask = (glowMaskR >> 6) & 0x1;
-    int pinkyMask = (glowMaskR >> 7) & 0x1;
-
-    int joint0 = (jointMaskB >> 4) & 0x1;
-    int joint1 = (jointMaskB >> 5) & 0x1;
-    int joint2 = (jointMaskB >> 6) & 0x1;
-    int joint3 = (jointMaskB >> 7) & 0x1;
-
-    half jointIntensity = saturate(
-        ((1 - saturate(glowMaskR)) * _JointsGlow[0])
-        + thumbMask * (joint0 * _JointsGlow[1]
-            + joint1 * _JointsGlow[2]
-            + joint2 * _JointsGlow[3]
-            + joint3 * _JointsGlow[4])
-        + indexMask * (joint1 * _JointsGlow[5]
-            + joint2 * _JointsGlow[6]
-            + joint3 * _JointsGlow[7])
-        + middleMask * (joint1 * _JointsGlow[8]
-            + joint2 * _JointsGlow[9]
-            + joint3 * _JointsGlow[10])
-        + ringMask * (joint1 * _JointsGlow[11]
-            + joint2 * _JointsGlow[12]
-            + joint3 * _JointsGlow[13])
-        + pinkyMask * (joint0 * _JointsGlow[14]
-            + joint1 * _JointsGlow[15]
-            + joint2 * _JointsGlow[16]
-            + joint3 * _JointsGlow[17]));
-
-    half4 glow = lerp(_OutlineColor, _OutlineJointColor, jointIntensity);
-    o.glowColor.rgb = glow.rgb;
-    o.glowColor.a = saturate(maskPixelColor.a + _WristFade) * glow.a * _OutlineOpacity;
-#else
-    o.glowColor.rgb = _OutlineColor;
-    o.glowColor.a = saturate(maskPixelColor.a + _WristFade) * _OutlineColor.a * _OutlineOpacity;
-#endif
-
-    return o;
+  o.worldPos = mul(unity_ObjectToWorld, v.vertex);
+  v.vertex.xyz += v.normal * _OutlineWidth;
+  o.vertex = UnityObjectToClipPos(v.vertex);
+  o.texcoord1 = v.texcoord1;
+  half4 maskPixelColor = tex2Dlod(_FingerGlowMask, v.texcoord);
+  o.color.rgb = _OutlineColor;
+  o.color.a = saturate(maskPixelColor.a + _WristFade) * _OutlineColor.a *
+      _OutlineOpacity;
+  return o;
 }
 
-half4 outlineFragment(OutlineVertexOutput i) : SV_Target
-{
-    UNITY_SETUP_INSTANCE_ID(i);
-    UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
-    return i.glowColor;
+#include "GlowFunctions.cginc"
+
+void getFingerStrength(out float fingerStrength[5]) {
+  float strengthValuesUniforms[5] = {
+    _ThumbGlowValue,
+    _IndexGlowValue,
+    _MiddleGlowValue,
+    _RingGlowValue,
+    _PinkyGlowValue
+  };
+  fingerStrength = strengthValuesUniforms;
+}
+
+void getOutlineFingerLines(out float4 lines[5]) {
+  float4 _lines[5] = {
+    _PalmThumbLine,
+    _PalmIndexLine,
+    _PalmMiddleLine,
+    _PalmRingLine,
+    _PalmPinkyLine
+};
+  lines = _lines;
+}
+
+half4 applyGlow(int glowType, float3 color, float alpha, float2 texCoord, float3 worldPosition) {
+  if (glowType == 28 || glowType == 29) {
+    float fingerStrength[5];
+    getFingerStrength(fingerStrength);
+    float4 lines[5];
+    getOutlineFingerLines(lines);
+    float2 fingerRadius[5];
+    getPalmFingerRadius(fingerRadius);
+    float glowValue = fingerLineGlow(texCoord, fingerStrength, 30, lines, fingerRadius);
+    return half4(color + _GlowColor * glowValue, alpha);
+  }
+  if (glowType == 16 || glowType == 18) {
+    float gradient = invertedSphereGradient(_GlowPosition, worldPosition, _GlowMaxLength);
+    float3 glowColor = _GlowColor * gradient * _GlowParameter;
+    return float4(saturate(color + glowColor), alpha);
+  }
+  if (glowType == 12 || glowType == 15) {
+    float gradient = movingSphereGradient(_GlowPosition, worldPosition, _GlowMaxLength, _GlowParameter, 1.5);
+    float3 glowColor = _GlowColor * gradient;
+    return float4(saturate(color + glowColor), alpha);
+  }
+  return float4(color, alpha);
+}
+
+half4 outlineFragment(OutlineVertexOutput i) : SV_Target {
+  UNITY_SETUP_INSTANCE_ID(i);
+  UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
+  half4 fragColor;
+
+  if (_GenerateGlow == 1) {
+    fragColor = applyGlow(_GlowType, i.color.rgb, i.color.a, i.texcoord1, i.worldPos);
+  } else {
+    fragColor = i.color;
+  }
+  return fragColor;
 }

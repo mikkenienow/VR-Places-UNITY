@@ -31,12 +31,12 @@ public class Projeto
     }
     public Vector3 GetDimensao()
     {
-        string[] origin = dimensao.Split(" x ");
+        string[] origin = dimensao.Split('x');
         float[] size = new float[2];
         Single.TryParse(origin[0],out size[0]);
         Single.TryParse(origin[1],out size[1]);
-        Debug.Log(size[0]);
-        Debug.Log(size[1]);
+        //Debug.Log(size[0]);
+        //Debug.Log(size[1]);
         return new Vector3(size[0], 1, size[1]);
     }
     public SaveSystem GetProjetoVRP()
@@ -52,7 +52,7 @@ public class Projeto
             return projetoVRP;
         } else
         {
-            Debug.Log("Arquivo não localizado");
+            //Debug.Log("Arquivo não localizado");
         }
         return new SaveSystem();
     }
@@ -79,7 +79,7 @@ public class Projeto
         }
         else
         {
-            Debug.Log("Arquivo não localizado");
+            //Debug.Log("Arquivo não localizado");
         }*/
         return referencia_tipo;
     }

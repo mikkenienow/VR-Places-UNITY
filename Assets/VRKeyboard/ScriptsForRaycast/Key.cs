@@ -8,7 +8,7 @@ public class Key : MonoBehaviour
     public string character;
     public void InsertText(GameObject obj)
     {
-        print("Inserindo txto: " + character);
+        //print("Inserindo txto: " + character);
         string output = character;
         TMP_InputField input = obj.GetComponent<TMP_InputField>();
 
@@ -32,6 +32,6 @@ public class Key : MonoBehaviour
         }
 
         obj.GetComponent<TMP_InputField>().text = input.text + output;
-        print("Inserido: " + character);
+        //print("Inserido: " + character);
     }
 }

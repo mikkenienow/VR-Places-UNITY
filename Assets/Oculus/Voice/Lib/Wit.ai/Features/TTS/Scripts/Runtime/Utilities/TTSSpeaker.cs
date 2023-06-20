@@ -11,8 +11,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using Meta.WitAi.TTS.Data;
 using UnityEngine.Serialization;
+using Meta.WitAi.TTS.Data;
+using Meta.WitAi.TTS.Interfaces;
 
 namespace Meta.WitAi.TTS.Utilities
 {
@@ -80,6 +81,12 @@ namespace Meta.WitAi.TTS.Utilities
         public TTSSpeakerEvent OnClipLoadSuccess;
         [Tooltip("Called when TTS audio clip load is cancelled")]
         public TTSSpeakerEvent OnClipLoadAbort;
+
+        [Header("Queue Events")]
+        [Tooltip("Called when a tts request is added to an empty queue")]
+        public UnityEvent OnPlaybackQueueBegin;
+        [Tooltip("Called the final request is removed from a queue")]
+        public UnityEvent OnPlaybackQueueComplete;
     }
 
     public class TTSSpeaker : MonoBehaviour
@@ -117,20 +124,50 @@ namespace Meta.WitAi.TTS.Utilities
 
         // Current tts service
         private TTSService _tts;
+        // Check if queued
+        private bool _hasQueue = false;
+        private bool _willHaveQueue = false;
+
+        private ISpeakerTextPreprocessor[] _textPreprocessors;
+        private ISpeakerTextPostprocessor[] _textPostprocessors;
 
         // Automatically generate source if needed
         protected virtual void Awake()
         {
+            // Find base audio source if possible
             if (AudioSource == null)
             {
                 AudioSource = gameObject.GetComponentInChildren<AudioSource>();
-                if (AudioSource == null)
-                {
-                    AudioSource = gameObject.AddComponent<AudioSource>();
-                }
             }
+
+            // Generate audio source instance
+            AudioSource instance = new GameObject($"{gameObject.name}_AudioOneShot").AddComponent<AudioSource>();
+            instance.PreloadCopyData();
+            VLog.D($"Preload AudioSources: {DateTime.Now.ToLongTimeString()}");
+            // Move under this speaker
+            if (AudioSource == null)
+            {
+                instance.transform.SetParent(transform, false);
+                instance.spread = 1f;
+            }
+            // Move into audio source & copy source values
+            else
+            {
+                instance.transform.SetParent(AudioSource.transform, false);
+                instance.Copy(AudioSource);
+            }
+
+            // Apply & setup new audio source
+            AudioSource = instance;
             AudioSource.playOnAwake = false;
+            AudioSource.transform.localPosition = Vector3.zero;
+            AudioSource.transform.localRotation = Quaternion.identity;
+            AudioSource.transform.localScale = Vector3.one;
             _tts = TTSService.Instance;
+
+            // Get text processors
+            _textPreprocessors = GetComponents<ISpeakerTextPreprocessor>();
+            _textPostprocessors = GetComponents<ISpeakerTextPostprocessor>();
         }
         // Add listener for clip unload
         protected virtual void OnEnable()
@@ -140,6 +177,7 @@ namespace Meta.WitAi.TTS.Utilities
                 return;
             }
             _tts.Events.OnClipUnloaded.AddListener(OnClipUnload);
+            _tts.Events.Stream.OnStreamClipUpdate.AddListener(OnClipUpdated);
         }
         // Stop speaking & remove listener
         protected virtual void OnDisable()
@@ -150,10 +188,8 @@ namespace Meta.WitAi.TTS.Utilities
                 return;
             }
             _tts.Events.OnClipUnloaded.RemoveListener(OnClipUnload);
+            _tts.Events.Stream.OnStreamClipUpdate.RemoveListener(OnClipUpdated);
         }
-        #endregion
-
-        #region HELPERS
         // Format text
         public string GetFormattedText(string format, params string[] textsToSpeak)
         {
@@ -169,17 +205,70 @@ namespace Meta.WitAi.TTS.Utilities
         protected virtual void OnClipUnload(TTSClipData clipData)
         {
             // Cancel load
-            if (_queuedClips.Contains(clipData))
+            if (QueueContainsClip(clipData))
             {
                 // Remove all references of the clip
                 RemoveLoadingClip(clipData, true);
                 // Perform cancell callbacks
                 OnLoadCancel(clipData);
+                return;
             }
             // Cancel playback
-            if (clipData == SpeakingClip)
+            if (clipData.Equals(SpeakingClip))
             {
                 StopSpeaking();
+                return;
+            }
+        }
+        // Clip stream complete
+        protected virtual void OnClipUpdated(TTSClipData clipData)
+        {
+            // Ignore if not speaking clip
+            if (!clipData.Equals(SpeakingClip) || AudioSource == null || !AudioSource.isPlaying)
+            {
+                return;
+            }
+
+            // Stop previous clip playback
+            int elapsedSamples = AudioSource.timeSamples;
+            AudioSource.Stop();
+
+            // Apply new clip
+            SpeakingClip = clipData;
+            AudioSource.clip = SpeakingClip.clip;
+            AudioSource.timeSamples = elapsedSamples;
+            AudioSource.Play();
+        }
+        // Check queue
+        private bool QueueContainsClip(TTSClipData clipData)
+        {
+            if (_queuedClips != null)
+            {
+                foreach (var clip in _queuedClips)
+                {
+                    if (clip.Equals(clipData))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        // Refresh queue
+        private void RefreshQueued()
+        {
+            bool newHasQueueStatus = IsLoading || IsSpeaking || _willHaveQueue;
+            if (_hasQueue != newHasQueueStatus)
+            {
+                _hasQueue = newHasQueueStatus;
+                if (_hasQueue)
+                {
+                    Events?.OnPlaybackQueueBegin?.Invoke();
+                }
+                else
+                {
+                    Events?.OnPlaybackQueueComplete?.Invoke();
+                }
             }
         }
         #endregion
@@ -224,7 +313,9 @@ namespace Meta.WitAi.TTS.Utilities
         /// <param name="diskCacheSettings">Specific tts load caching settings</param>
         public IEnumerator SpeakAsync(string textToSpeak, TTSDiskCacheSettings diskCacheSettings)
         {
+            _willHaveQueue = true;
             Stop();
+            _willHaveQueue = false;
             yield return SpeakQueuedAsync(new string[] {textToSpeak}, diskCacheSettings);
         }
         public IEnumerator SpeakAsync(string textToSpeak)
@@ -259,15 +350,27 @@ namespace Meta.WitAi.TTS.Utilities
         /// <param name="addToQueue">Whether or not this phrase should be enqueued into the speak queue</param>
         protected virtual void Speak(string textToSpeak, TTSDiskCacheSettings diskCacheSettings, bool addToQueue)
         {
+            foreach (var pre in _textPreprocessors)
+            {
+                if (!pre.OnPreprocessTTS(this, ref textToSpeak)) return;
+            }
+
             if (prependedText.Length > 0 && !prependedText.EndsWith(" "))
             {
                 prependedText += " ";
             }
+
             if (appendedText.Length > 0 && !appendedText.StartsWith(" "))
             {
                 appendedText = " " + appendedText;
             }
+
             textToSpeak = prependedText + textToSpeak + appendedText;
+
+            foreach (var post in _textPostprocessors)
+            {
+                if (!post.OnPostprocessTTS(this, ref textToSpeak)) return;
+            }
 
             // Ensure voice settings exist
             TTSVoiceSettings voiceSettings = VoiceSettings;
@@ -290,7 +393,9 @@ namespace Meta.WitAi.TTS.Utilities
             // Cancel previous loading queue
             if (!addToQueue)
             {
+                _willHaveQueue = true;
                 StopLoading();
+                _willHaveQueue = false;
             }
 
             // Begin playback
@@ -304,6 +409,7 @@ namespace Meta.WitAi.TTS.Utilities
 
                 // Add to queue
                 _queuedClips.Enqueue(newClipData);
+                RefreshQueued();
                 Events?.OnClipDataQueued?.Invoke(newClipData);
 
                 // Begin playback
@@ -329,6 +435,9 @@ namespace Meta.WitAi.TTS.Utilities
             {
                 OnLoadCancel(_queuedClips.Dequeue());
             }
+
+            // Refresh in queue check
+            RefreshQueued();
         }
         // Stop playback if possible
         public virtual void StopSpeaking()
@@ -361,6 +470,7 @@ namespace Meta.WitAi.TTS.Utilities
 
             // Load begin
             VLog.D($"Load Begin\nText: {textToSpeak}");
+            RefreshQueued();
             Events?.OnClipDataQueued?.Invoke(newClip);
             Events?.OnClipDataLoadBegin?.Invoke(newClip);
             Events?.OnClipLoadBegin?.Invoke(this, newClip.textToSpeak);
@@ -369,7 +479,7 @@ namespace Meta.WitAi.TTS.Utilities
         protected virtual void OnClipLoadComplete(TTSClipData clipData, string error, bool addToQueue, DateTime startTime)
         {
             // Invalid clip, ignore
-            if (!_queuedClips.Contains(clipData))
+            if (!QueueContainsClip(clipData))
             {
                 return;
             }
@@ -378,17 +488,25 @@ namespace Meta.WitAi.TTS.Utilities
             double loadDuration = (DateTime.Now - startTime).TotalMilliseconds;
 
             // No clip returned
-            if (clipData.clip == null)
+            if (string.IsNullOrEmpty(error) && clipData.clip == null)
             {
                 error = "No clip returned";
             }
             // Load failed
             if (!string.IsNullOrEmpty(error))
             {
-                RemoveLoadingClip(clipData, false);
-                VLog.E($"Load Failed\nText: {clipData?.textToSpeak}\nDuration: {loadDuration:0.00}ms\n{error}");
-                Events?.OnClipDataLoadFailed?.Invoke(clipData);
-                Events?.OnClipLoadFailed?.Invoke(this, clipData.textToSpeak);
+                if (string.Equals(WitConstants.CANCEL_ERROR, error))
+                {
+                    RemoveLoadingClip(clipData, false);
+                    OnLoadCancel(clipData);
+                }
+                else
+                {
+                    RemoveLoadingClip(clipData, false);
+                    VLog.E($"Load Failed\nText: {clipData?.textToSpeak}\nDuration: {loadDuration:0.00}ms\n{error}");
+                    Events?.OnClipDataLoadFailed?.Invoke(clipData);
+                    Events?.OnClipLoadFailed?.Invoke(this, clipData.textToSpeak);
+                }
                 return;
             }
 
@@ -420,6 +538,7 @@ namespace Meta.WitAi.TTS.Utilities
             if (!allInstances && _queuedClips.Peek().Equals(clipData))
             {
                 _queuedClips.Dequeue();
+                RefreshQueued();
                 return;
             }
 
@@ -454,6 +573,9 @@ namespace Meta.WitAi.TTS.Utilities
                     _queuedClips.Enqueue(check);
                 }
             }
+
+            // Refresh in queue check
+            RefreshQueued();
         }
         #endregion
 
@@ -465,7 +587,7 @@ namespace Meta.WitAi.TTS.Utilities
         protected virtual void OnPlaybackReady(TTSClipData clipData)
         {
             // Invalid clip, ignore
-            if (!_queuedClips.Contains(clipData))
+            if (!QueueContainsClip(clipData))
             {
                 return;
             }
@@ -498,6 +620,11 @@ namespace Meta.WitAi.TTS.Utilities
             {
                 return;
             }
+            // No audio source
+            if (AudioSource == null)
+            {
+                return;
+            }
             // Somehow clip unloaded
             if (clipData.clip == null)
             {
@@ -510,7 +637,9 @@ namespace Meta.WitAi.TTS.Utilities
 
             // Started speaking
             VLog.D($"Playback Begin\nText: {SpeakingClip.textToSpeak}");
-            AudioSource.PlayOneShot(SpeakingClip.clip);
+            AudioSource.clip = SpeakingClip.clip;
+            AudioSource.timeSamples = 0;
+            AudioSource.Play();
 
             // Callback events
             Events?.OnStartSpeaking?.Invoke(this, SpeakingClip.textToSpeak);
@@ -560,7 +689,7 @@ namespace Meta.WitAi.TTS.Utilities
                 _waitForCompletion = null;
             }
             // Stop audio source playback
-            if (AudioSource.isPlaying)
+            if (AudioSource != null && AudioSource.isPlaying)
             {
                 AudioSource.Stop();
             }
@@ -583,6 +712,9 @@ namespace Meta.WitAi.TTS.Utilities
                 Events?.OnAudioClipPlaybackCancelled?.Invoke(lastClipData.clip);
                 Events?.OnClipDataPlaybackCancelled?.Invoke(lastClipData);
             }
+
+            // Refresh in queue check
+            RefreshQueued();
 
             // Attempt to play next in queue
             OnPlaybackBegin();

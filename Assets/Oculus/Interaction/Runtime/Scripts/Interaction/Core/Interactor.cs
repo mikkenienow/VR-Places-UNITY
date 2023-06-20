@@ -37,12 +37,16 @@ namespace Oculus.Interaction
                                     where TInteractable : Interactable<TInteractor, TInteractable>
     {
         [SerializeField, Interface(typeof(IActiveState)), Optional]
-        private MonoBehaviour _activeState;
+        private UnityEngine.Object _activeState;
         private IActiveState ActiveState = null;
 
         [SerializeField, Interface(typeof(IGameObjectFilter)), Optional]
-        private List<MonoBehaviour> _interactableFilters = new List<MonoBehaviour>();
+        private List<UnityEngine.Object> _interactableFilters = new List<UnityEngine.Object>();
         private List<IGameObjectFilter> InteractableFilters = null;
+
+        [SerializeField, Interface(nameof(CandidateTiebreaker)), Optional]
+        private UnityEngine.Object _candidateTiebreaker;
+        private IComparer<TInteractable> CandidateTiebreaker;
 
         private Func<TInteractable> _computeCandidateOverride;
         private bool _clearComputeCandidateOverrideOnSelect = false;
@@ -263,6 +267,7 @@ namespace Oculus.Interaction
         {
             _identifier = UniqueIdentifier.Generate();
             ActiveState = _activeState as IActiveState;
+            CandidateTiebreaker = _candidateTiebreaker as IComparer<TInteractable>;
             InteractableFilters =
                 _interactableFilters.ConvertAll(mono => mono as IGameObjectFilter);
         }
@@ -494,6 +499,16 @@ namespace Oculus.Interaction
         // Returns the best interactable for selection or null
         protected abstract TInteractable ComputeCandidate();
 
+        protected virtual int ComputeCandidateTiebreaker(TInteractable a, TInteractable b)
+        {
+            if (CandidateTiebreaker == null)
+            {
+                return 0;
+            }
+
+            return CandidateTiebreaker.Compare(a, b);
+        }
+
         public virtual bool CanSelect(TInteractable interactable)
         {
             if (InteractableFilters == null)
@@ -705,7 +720,7 @@ namespace Oculus.Interaction
         #region Inject
         public void InjectOptionalActiveState(IActiveState activeState)
         {
-            _activeState = activeState as MonoBehaviour;
+            _activeState = activeState as UnityEngine.Object;
             ActiveState = activeState;
         }
 
@@ -713,7 +728,13 @@ namespace Oculus.Interaction
         {
             InteractableFilters = interactableFilters;
             _interactableFilters = interactableFilters.ConvertAll(interactableFilter =>
-                                    interactableFilter as MonoBehaviour);
+                                    interactableFilter as UnityEngine.Object);
+        }
+
+        public void InjectOptionalCandidateTiebreaker(IComparer<TInteractable> candidateTiebreaker)
+        {
+            _candidateTiebreaker = candidateTiebreaker as UnityEngine.Object;
+            CandidateTiebreaker = candidateTiebreaker;
         }
 
         public void InjectOptionalData(object data)

@@ -21,7 +21,7 @@ public class Cookie
     public Cookie()
     {
         this.LoadUserData();
-        Debug.Log(this.User.Token);
+        //Debug.Log(this.User.Token);
     }
 
 
@@ -40,7 +40,7 @@ public class Cookie
         }
         catch (System.Exception e)
         {
-            Debug.Log("Keep user logged failed " + e);
+            //Debug.Log("Keep user logged failed " + e);
         }
     }
 
@@ -49,19 +49,19 @@ public class Cookie
         Cookie cookie;
         try
         {
-            Debug.Log("existe mesmo");
+            //Debug.Log("existe mesmo");
             SaveMethods save = new SaveMethods();
             DataBase db = new DataBase();
             cookie = (Cookie)save.LoadExecute("/user/", "userSession.sess");
             
             if (db.loginByToken(cookie.User.Token) != null)
             {
-                Debug.Log("Token confere");
+                //Debug.Log("Token confere");
                 this.CreatedAt = cookie.CreatedAt;
                 this.User = cookie.User;
                 this.Authorization = true;
                 cookie.LastAccess = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
-                Debug.Log("Data atualizada");
+                //Debug.Log("Data atualizada");
             }
             else
             {
@@ -72,7 +72,7 @@ public class Cookie
         }
         catch (System.Exception e)
         {
-            Debug.Log(e);
+            //Debug.Log(e);
             return null;
         }
     }

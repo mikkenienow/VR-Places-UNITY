@@ -35,11 +35,11 @@ public class RotinaDeTeste : MonoBehaviour
             if (rootObjects[i].tag == "SceneEditor")
             {
                 Transform[] lista = rootObjects[i].transform.GetComponentsInChildren<Transform>();
-                //print(lista.Length);
+                //////print(lista.Length);
                 for (int i2 = 0; i2 < lista.Length; i2++)
                 {
-                    //print(i2);
-                    //print(lista[i2].name);
+                    //////print(i2);
+                    //////print(lista[i2].name);
                     if (lista[i2].tag == "parede")
                     {
                         Transform[] lista2 = lista[i2].transform.GetComponentsInChildren<Transform>();
@@ -48,7 +48,7 @@ public class RotinaDeTeste : MonoBehaviour
                         {
                             if (lista2[i3].tag == "wallpaper")
                             {
-                                print(lista2[i3].name);
+                                ////print(lista2[i3].name);
                             }
                             
                         }
@@ -74,7 +74,7 @@ public class RotinaDeTeste : MonoBehaviour
         request.Credentials = new NetworkCredential(Autentication.FtpUserName, Autentication.FtpPassword);
         using (var resp = (FtpWebResponse)request.GetResponse())
         {
-            print(resp.StatusCode);
+            ////print(resp.StatusCode);
         }
 
     }
@@ -166,10 +166,10 @@ public class RotinaDeTeste : MonoBehaviour
     {
         string name = source.GetComponent<Renderer>().material.mainTexture.name;
         Color color = source.GetComponent<Renderer>().material.color;
-        string colecaoId = name.Split("/")[0];
-        string texturaId = name.Split("/")[1];
-        print(colecaoId);
-        print(texturaId);
+        string colecaoId = name.Split('/')[0];
+        string texturaId = name.Split('/')[1];
+        ////print(colecaoId);
+        ////print(texturaId);
         string file = Application.persistentDataPath + "/temp/_materials/" + colecaoId + "/" + texturaId + ".jpg";
         //VRPNewMaterial vrpm = new VRPNewMaterial(target, file, true, color);
     }

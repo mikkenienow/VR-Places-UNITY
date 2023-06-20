@@ -47,7 +47,7 @@ public abstract class TeleportSupport : MonoBehaviour
 	[System.Diagnostics.Conditional("DEBUG_TELEPORT_EVENT_HANDLERS")]
 	void LogEventHandler(string msg)
 	{
-		Debug.Log("EventHandler: " + GetType().Name + ": " + msg);
+		//Debug.Log("EventHandler: " + GetType().Name + ": " + msg);
 	}
 
 	/// <summary>

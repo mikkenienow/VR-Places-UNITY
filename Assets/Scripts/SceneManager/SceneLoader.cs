@@ -52,7 +52,7 @@ public class SceneLoader : Singleton<SceneLoader>
         yield return new WaitForSeconds(5.0f);
         /*while (!unloadOperation.isDone)
         {
-            print(i);
+            //print(i);
             i++;
         }*/
         yield return null;
@@ -65,7 +65,7 @@ public class SceneLoader : Singleton<SceneLoader>
         yield return new WaitForSeconds(5.0f);
         /*while (!loadOperation.isDone)
         {
-            print(i);
+            //print(i);
             i++;
         }*/
         yield return null;

@@ -11,7 +11,7 @@ public class SimpleResizer
         resizable.NewSize = newSize;
         if (resizable == null)
         {
-            Debug.LogError("Resizable component missing.");
+            //Debug.LogError("Resizable component missing.");
             return;
         }
 

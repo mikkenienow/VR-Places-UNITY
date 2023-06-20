@@ -39,6 +39,12 @@ namespace Meta.WitAi.Windows
         private bool _didCheckAutoTrainAvailability = false;
         private bool _isAutoTrainAvailable = false;
 
+        /// <summary>
+        /// Whether or not server specific functionality like sync
+        /// should be disabled for this configuration
+        /// </summary>
+        protected virtual bool _disableServerPost => false;
+
         internal static readonly AssemblyWalker AssemblyWalker = new AssemblyWalker();
         private static ConduitStatistics _statistics;
         private static readonly AssemblyMiner AssemblyMiner = new AssemblyMiner(new WitParameterValidator());
@@ -72,6 +78,7 @@ namespace Meta.WitAi.Windows
 
         protected virtual Texture2D HeaderIcon => WitTexts.HeaderIcon;
         public virtual string HeaderUrl => WitTexts.GetAppURL(Configuration.GetApplicationId(), WitTexts.WitAppEndpointType.Settings);
+        protected virtual string DocsUrl => WitTexts.Texts.WitDocsUrl;
         protected virtual string OpenButtonLabel => WitTexts.Texts.WitOpenButtonLabel;
 
         public void Initialize()
@@ -114,7 +121,7 @@ namespace Meta.WitAi.Windows
             // Draw header
             if (drawHeader)
             {
-                WitEditorUI.LayoutHeaderButton(HeaderIcon, HeaderUrl);
+                WitEditorUI.LayoutHeaderButton(HeaderIcon, HeaderUrl, DocsUrl);
                 GUILayout.Space(WitStyles.HeaderPaddingBottom);
                 EditorGUI.indentLevel++;
             }
@@ -150,7 +157,7 @@ namespace Meta.WitAi.Windows
         private void LayoutConduitContent()
         {
             var isServerTokenValid = WitConfigurationUtility.IsServerTokenValid(_serverToken);
-            if (!isServerTokenValid)
+            if (!isServerTokenValid && !_disableServerPost)
             {
                 GUILayout.TextArea(WitTexts.Texts.ConfigurationConduitMissingTokenLabel, WitStyles.LabelError);
             }
@@ -197,23 +204,23 @@ namespace Meta.WitAi.Windows
                         PresentAssemblySelectionDialog();
                     }
 
-                    GUILayout.FlexibleSpace();
-                    GUI.enabled = Configuration.useConduit && _manifestAvailable && !_syncInProgress;
-                    if (isServerTokenValid && WitEditorUI.LayoutTextButton("Sync Entities"))
-                    {
-                        SyncEntities();
-                        GUIUtility.ExitGUI();
-                    }
-
-                    if (isServerTokenValid && _isAutoTrainAvailable)
+                    if (isServerTokenValid && !_disableServerPost)
                     {
                         GUI.enabled = Configuration.useConduit && _manifestAvailable && !_syncInProgress;
-                        if (WitEditorUI.LayoutTextButton("Auto train") && _manifestAvailable)
+                        if (WitEditorUI.LayoutTextButton("Sync Entities"))
                         {
-                            SyncEntities(() => { AutoTrainOnWitAi(Configuration); });
+                            SyncEntities();
+                            GUIUtility.ExitGUI();
+                            return;
+                        }
+                        if (_isAutoTrainAvailable)
+                        {
+                            if (WitEditorUI.LayoutTextButton("Auto Train") && _manifestAvailable)
+                            {
+                                SyncEntities(() => { AutoTrainOnWitAi(Configuration); });
+                            }
                         }
                     }
-
                     GUI.enabled = true;
                 }
                 GUILayout.EndHorizontal();
@@ -560,11 +567,11 @@ namespace Meta.WitAi.Windows
 
         [UnityEditor.Callbacks.DidReloadScripts]
         private static void OnScriptsReloaded() {
-            foreach (var witConfig in WitConfigurationUtility.WitConfigs)
+            foreach (var configuration in WitConfigurationUtility.GetLoadedConfigurations())
             {
-                if (witConfig.useConduit)
+                if (configuration != null && configuration.useConduit)
                 {
-                    GenerateManifest(witConfig, false);
+                    GenerateManifest(configuration, false);
                 }
             }
         }
@@ -643,7 +650,7 @@ namespace Meta.WitAi.Windows
         {
             if (!EditorUtility.DisplayDialog("Synchronizing with Wit.Ai entities", "This will synchronize local enums with Wit.Ai entities. Part of this process involves generating code locally and may result in overwriting existing code. Please make sure to backup your work before proceeding.", "Proceed", "Cancel", DialogOptOutDecisionType.ForThisSession, ENTITY_SYNC_CONSENT_KEY))
             {
-                Debug.Log("Entity Sync cancelled");
+                VLog.D("Entity Sync cancelled");
                 return;
             }
 
@@ -668,7 +675,7 @@ namespace Meta.WitAi.Windows
             var manifest = ManifestLoader.LoadManifest(Configuration.ManifestLocalPath);
             const float initializationProgress = 0.1f;
             EditorUtility.DisplayProgressBar("Conduit Entity Sync", "Synchronizing entities. Please wait...", initializationProgress);
-            Debug.Log("Synchronizing enums with Wit.Ai entities");
+            VLog.D("Synchronizing enums with Wit.Ai entities");
             CoroutineUtility.StartCoroutine(_enumSynchronizer.SyncWitEntities(manifest, (success, data) =>
                 {
                     _syncInProgress = false;
@@ -679,7 +686,7 @@ namespace Meta.WitAi.Windows
                     }
                     else
                     {
-                        Debug.Log("Conduit successfully synchronized entities");
+                        VLog.D("Conduit successfully synchronized entities");
                         successCallback?.Invoke();
                     }
                 },

@@ -48,7 +48,7 @@ public class SelectionToolRight : MonoBehaviour
 
         if (deviceRight.TryGetFeatureValue(CommonUsages.triggerButton, out triggerButtonAction) && triggerButtonAction)
         {
-            print("Trigger on");
+            //print("Trigger on");
 
 
             Vector3 direction = Vector3.forward;
@@ -58,8 +58,8 @@ public class SelectionToolRight : MonoBehaviour
 
             if (Physics.Raycast(theRay, out hit, range))
             {
-                print("Hit detectado");
-                print(hit.collider.transform.rotation.eulerAngles.y);
+                //print("Hit detectado");
+                //print(hit.collider.transform.rotation.eulerAngles.y);
             }
             
 

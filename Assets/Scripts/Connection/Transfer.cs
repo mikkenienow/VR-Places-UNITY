@@ -52,7 +52,7 @@ public class TransferDown : MonoBehaviour
         }
         catch (WebException webException)
         {
-            Debug.Log(url + " Não encontrado: " + webException.Message);
+            //Debug.Log(url + " Não encontrado: " + webException.Message);
         }
 
         finally
@@ -102,7 +102,7 @@ public class TransferUp : MonoBehaviour
     {
         WebClient client = new System.Net.WebClient();
         string uriPath = ftpHostUpload + filePathOut;
-        string[] directoryCreate = filePathOut.Split("/");
+        string[] directoryCreate = filePathOut.Split('/');
         string directory = "";
         for (int i = 0; i < directoryCreate.Length; i++)
         {
@@ -112,7 +112,7 @@ public class TransferUp : MonoBehaviour
             }
         }
         directory = directory.Substring(0, directory.Length - 1);
-        print(directory);
+        ////print(directory);
         Uri fullUri = new Uri(uriPath);
         CheckMakeDir(directory);
         client.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
@@ -135,7 +135,7 @@ public class TransferUp : MonoBehaviour
 
     private void CheckMakeDir(string pathToCreate)
     {
-        print("Verificando se diretorio existe: " + Directory.Exists("ftp://vrplaces@ftp.vrplaces.com.br" + pathToCreate));
+        ////print("Verificando se diretorio existe: " + Directory.Exists("ftp://vrplaces@ftp.vrplaces.com.br" + pathToCreate));
 
         if (!Directory.Exists("ftp://vrplaces@ftp.vrplaces.com.br" + pathToCreate))
         {
@@ -146,12 +146,12 @@ public class TransferUp : MonoBehaviour
             {
                 using (var resp = (FtpWebResponse)request.GetResponse())
                 {
-                    print(resp.StatusCode);
+                    ////print(resp.StatusCode);
                 }
             }
             catch (WebException ex)
             {
-                print(ex);
+                ////print(ex);
                 /*if (ex.Response != null)
                 {
                     FtpWebResponse response = (FtpWebResponse)ex.Response;

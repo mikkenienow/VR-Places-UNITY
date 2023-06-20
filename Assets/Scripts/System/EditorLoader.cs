@@ -32,11 +32,11 @@ public class EditorLoader : MonoBehaviour
         sm.LoadOnScene(GetProjectsPanel.projetoSelecionado, cenario, parede, baseReferencia);
         if (GetProjectsPanel.projetoSelecionado.GetReferencia() != null)
         {
-            print("Carregando refefrrencia");
+            ////print("Carregando refefrrencia");
             LoadBaseReferencia(GetProjectsPanel.projetoSelecionado.GetReferencia());
             //teste
         }
-        print(GetProjectsPanel.projetoSelecionado.titulo);
+        ////print(GetProjectsPanel.projetoSelecionado.titulo);
         //SceneManager.UnloadSceneAsync("MainScene");
     }
 
@@ -54,7 +54,7 @@ public class EditorLoader : MonoBehaviour
                 {
                     if(list[i2].tag == "BaseReferencia")
                     {
-                        print(rootObjects[i].name);
+                        ////print(rootObjects[i].name);
                         Texture2D texture2 = new Texture2D(1, 1);
                         texture2 = referencia;
                         list[i2].GetComponent<Renderer>().material.SetTexture("_MainTex", texture2);

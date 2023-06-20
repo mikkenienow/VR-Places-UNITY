@@ -29,7 +29,7 @@ public class StartMenu : MonoBehaviour
     void LoadScene(int idx)
     {
         DebugUIBuilder.instance.Hide();
-        Debug.Log("Load scene: " + idx);
+        //Debug.Log("Load scene: " + idx);
         UnityEngine.SceneManagement.SceneManager.LoadScene(idx);
     }
 }

@@ -42,12 +42,12 @@ namespace Meta.WitAi
         private static LogType _editorLogLevel = (LogType)(-1);
         private const string EDITOR_LOG_LEVEL_KEY = "VSDK_EDITOR_LOG_LEVEL";
         private const LogType EDITOR_LOG_LEVEL_DEFAULT = LogType.Warning;
-        #endif
 
         /// <summary>
-        /// Allows supression of all vlog errors
+        /// Hides all errors from the console
         /// </summary>
         public static bool SuppressErrors { get; set; } = false;
+        #endif
 
         /// <summary>
         /// Event for appending custom data to a log before logging to console
@@ -90,6 +90,11 @@ namespace Meta.WitAi
             #if UNITY_EDITOR
             // Skip logs with higher log type then global log level
             if ((int) logType > (int)EditorLogLevel)
+            {
+                return;
+            }
+            // Suppress errors in editor
+            if (SuppressErrors)
             {
                 return;
             }
@@ -138,14 +143,7 @@ namespace Meta.WitAi
             switch (logType)
             {
                 case LogType.Error:
-                    if (SuppressErrors)
-                    {
-                        UnityEngine.Debug.LogWarning(result);
-                    }
-                    else
-                    {
-                        UnityEngine.Debug.LogError(result);
-                    }
+                    UnityEngine.Debug.LogError(result);
                     break;
                 case LogType.Warning:
                     UnityEngine.Debug.LogWarning(result);
@@ -163,22 +161,10 @@ namespace Meta.WitAi
         private static string GetCallingCategory()
         {
             // Get stack trace method
-            string path = new StackTrace()?.GetFrame(3)?.GetMethod().DeclaringType.FullName;
+            string path = new StackTrace()?.GetFrame(3)?.GetMethod().DeclaringType.Name;
             if (string.IsNullOrEmpty(path))
             {
-                return "VLog";
-            }
-            // Remove additional data
-            int index = path.LastIndexOf(".");
-            if (index != -1)
-            {
-                path = path.Substring(index + 1);
-            }
-            // Remove additional data
-            index = path.IndexOf("+<");
-            if (index != -1)
-            {
-                path = path.Substring(0, index);
+                return "NoStacktrace";
             }
             // Return path
             return path;
@@ -219,7 +205,7 @@ namespace Meta.WitAi
                     hex = "00FF00";
                     break;
             }
-            builder.Insert(startIndex, $"<color=\"#{hex}\">");
+            builder.Insert(startIndex, $"<color=#{hex}>");
             builder.Append("</color>");
             #endif
         }

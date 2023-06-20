@@ -17,7 +17,7 @@ public class Download : MonoBehaviour
     [ContextMenu("StartWork")]
     public void StartDownloadfile()
     {
-        print("Setup WebClient");
+        //print("Setup WebClient");
 
         WebClient webClient = new WebClient();
         webClient.DownloadDataAsync(new Uri(urlFile));
@@ -26,12 +26,12 @@ public class Download : MonoBehaviour
 
     public void DownloadComplete(object sender, DownloadDataCompletedEventArgs e)
     {
-        print("Finish download and convert to bytes dor file..");
+        //print("Finish download and convert to bytes dor file..");
         string nameFileFinal = string.Concat(nameFile, formatFile);
-        print(nameFileFinal);
+        //print(nameFileFinal);
         //string pathCompleteFile = Path.Combine(pathOutput, nameFileFinal);
         string pathCompleteFile = Path.Combine(Application.persistentDataPath + "/", nameFileFinal);
-        print(pathCompleteFile);
+        //print(pathCompleteFile);
         File.WriteAllBytes(pathCompleteFile, e.Result);
     }
 

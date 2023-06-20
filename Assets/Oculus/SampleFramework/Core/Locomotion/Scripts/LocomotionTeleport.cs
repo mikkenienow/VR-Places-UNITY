@@ -351,7 +351,7 @@ public class LocomotionTeleport : MonoBehaviour
 	[Conditional("DEBUG_TELEPORT_STATES")]
 	protected void LogState(string msg)
 	{
-		Debug.Log(Time.frameCount + ": " +  msg);
+		//Debug.Log(Time.frameCount + ": " +  msg);
 	}
 
 	/// <summary>
@@ -778,7 +778,7 @@ public class LocomotionTeleport : MonoBehaviour
 #if false
 		Quaternion destRotation = destTransform.rotation;
 
-		//Debug.Log("Rots: " + destRotation + " " + destTransform.rotation * Quaternion.Euler(0, -LocomotionController.CameraRig.trackingSpace.localEulerAngles.y, 0));
+		////Debug.Log("Rots: " + destRotation + " " + destTransform.rotation * Quaternion.Euler(0, -LocomotionController.CameraRig.trackingSpace.localEulerAngles.y, 0));
 
 		destRotation = destRotation * Quaternion.Euler(0, -LocomotionController.CameraRig.trackingSpace.localEulerAngles.y, 0);
 #endif

@@ -169,7 +169,7 @@ namespace OculusSampleFramework
             cameraRenderOverlay.enabled = false;
             renderingLabelOverlay.enabled = true;
             renderingLabelOverlay.textures[0] = applicationLabelTexture;
-            Debug.Log("Switched to ActivateWorldGeo");
+            //Debug.Log("Switched to ActivateWorldGeo");
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace OculusSampleFramework
             uiGeoParent.SetActive(true);
             renderingLabelOverlay.enabled = true;
             renderingLabelOverlay.textures[0] = compositorLabelTexture;
-            Debug.Log("Switched to ActivateOVROVerlay");
+            //Debug.Log("Switched to ActivateOVROVerlay");
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace OculusSampleFramework
             cameraRenderOverlay.enabled = false;
             uiGeoParent.SetActive(false);
             renderingLabelOverlay.enabled = false;
-            Debug.Log("Switched to ActivateNone");
+            //Debug.Log("Switched to ActivateNone");
         }
 
 
@@ -294,7 +294,7 @@ namespace OculusSampleFramework
                     0,
                     RenderTextureFormat.ARGB32,
                     RenderTextureReadWrite.sRGB);
-            Debug.Log("Created RT of resolution w: " + renderTargetWidth + " and h: " + renderTargetHeight);
+            //Debug.Log("Created RT of resolution w: " + renderTargetWidth + " and h: " + renderTargetHeight);
 
             overlayRT.hideFlags = HideFlags.DontSave;
             overlayRT.useMipMap = true;
@@ -316,12 +316,12 @@ namespace OculusSampleFramework
         /// </summary>
         void SimulateLevelLoad()
         {
-            int numToPrint = 0;
+            int numToprint = 0;
             for (int p = 0; p < numLoopsTrigger; p++)
             {
-                numToPrint++;
+                numToprint++;
             }
-            Debug.Log("Finished " + numToPrint + " Loops");
+            //Debug.Log("Finished " + numToprint + " Loops");
             Vector3 playerPos = mainCamera.transform.position;
             playerPos.y = 0.5f;
             // Generate a bunch of blocks, "blocking" the mainthread ;)

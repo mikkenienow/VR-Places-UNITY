@@ -78,7 +78,7 @@ public class FRPPFile : MonoBehaviour
                 this.transform.position = GetAnchorAdjust();
             } else
             {
-                print("carregando objeto...........");
+                ////print("carregando objeto...........");
                 this.transform.position = followPoint;
             }
             
@@ -99,11 +99,11 @@ public class FRPPFile : MonoBehaviour
     {
         Vector3 output = target.transform.position;
         Vector3 scale = target.transform.lossyScale;
-        print("Ancoragem atual: " + this.anchorPoint);
+        ////print("Ancoragem atual: " + this.anchorPoint);
         switch (this.anchorPoint)
         {
             case AnchorPoint.BOTTONLEFT:
-                print("Novo ponto de ancora");
+                ////print("Novo ponto de ancora");
                 output = new Vector3(output.x, output.y - (scale.y / 2), output.z - (scale.z / 2));
                 break;
         }
@@ -294,7 +294,7 @@ public class FRPPFile : MonoBehaviour
                         float yList = listZScale[i].y;
                         float zList = listZScale[i].z;
 
-                        print(fixedSizeZ[i].name + " scale " + zList);
+                        ////print(fixedSizeZ[i].name + " scale " + zList);
                         fixedSizeZ[i].transform.localScale = new Vector3(xList, yList, (zList / z));
 
                     }

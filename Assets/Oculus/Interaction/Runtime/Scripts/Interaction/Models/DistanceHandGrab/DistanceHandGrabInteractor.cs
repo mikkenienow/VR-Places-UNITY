@@ -37,7 +37,7 @@ namespace Oculus.Interaction.HandGrab
         , IHandGrabState, IHandGrabber, IDistanceInteractor
     {
         [SerializeField, Interface(typeof(IHand))]
-        private MonoBehaviour _hand;
+        private UnityEngine.Object _hand;
         public IHand Hand { get; private set; }
 
         [SerializeField]
@@ -57,7 +57,7 @@ namespace Oculus.Interaction.HandGrab
         private Transform _pinchPoint;
 
         [SerializeField, Interface(typeof(IVelocityCalculator)), Optional]
-        private MonoBehaviour _velocityCalculator;
+        private UnityEngine.Object _velocityCalculator;
         public IVelocityCalculator VelocityCalculator { get; set; }
 
         [SerializeField]
@@ -404,7 +404,7 @@ namespace Oculus.Interaction.HandGrab
             }
 
             Pose offset = GetGrabAnchorOffset(anchorMode, grabPose);
-            _cachedResult.SnapPose = PoseUtils.Multiply(_cachedResult.SnapPose, offset);
+            _cachedResult.RelativePose = PoseUtils.Multiply(_cachedResult.RelativePose, offset);
             _currentTarget.Set(interactable.RelativeTo, interactable.HandAlignment, anchorMode, _cachedResult);
 
             return interactable;
@@ -441,7 +441,7 @@ namespace Oculus.Interaction.HandGrab
 
         public void InjectHand(IHand hand)
         {
-            _hand = hand as MonoBehaviour;
+            _hand = hand as UnityEngine.Object;
             Hand = hand;
         }
 
@@ -462,7 +462,7 @@ namespace Oculus.Interaction.HandGrab
 
         public void InjectOptionalVelocityCalculator(IVelocityCalculator velocityCalculator)
         {
-            _velocityCalculator = velocityCalculator as MonoBehaviour;
+            _velocityCalculator = velocityCalculator as UnityEngine.Object;
             VelocityCalculator = velocityCalculator;
         }
         #endregion

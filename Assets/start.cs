@@ -17,7 +17,7 @@ public class start : MonoBehaviour
     void ChangeRoof()
     {
 
-        print("Iniciando modificador de material");
+        //print("Iniciando modificador de material");
         List<GameObject> rootObjects = new List<GameObject>();
         Scene scene = SceneManager.GetActiveScene();
         scene.GetRootGameObjects(rootObjects);
@@ -26,10 +26,10 @@ public class start : MonoBehaviour
             if (rootObjects[i].tag == "Plane")
             {
                 string filepath = Application.persistentDataPath + "/referencia.jpg";
-                print("Objeto plane encontrado");
+                //print("Objeto plane encontrado");
                 GameObject gameObject = rootObjects[i];
                 Texture texture = rootObjects[i].GetComponent<Renderer>().material.GetTexture("_MainTex");
-                print(texture);
+                //print(texture);
 
 
                 byte[] fileData;

@@ -28,7 +28,7 @@ namespace Oculus.Interaction.Input
     {
         [Header("Data Modifier")]
         [SerializeField, Interface(nameof(_modifyDataFromSource))]
-        protected MonoBehaviour _iModifyDataFromSourceMono;
+        protected UnityEngine.Object _iModifyDataFromSourceMono;
         private IDataSource<TData> _modifyDataFromSource;
 
         [SerializeField]
@@ -87,8 +87,9 @@ namespace Oculus.Interaction.Input
 
         protected override void Start()
         {
-            base.Start();
+            this.BeginStart(ref _started, ()=>base.Start());
             this.AssertField(ModifyDataFromSource, nameof(ModifyDataFromSource));
+            this.EndStart(ref _started);
         }
 
         #region Inject

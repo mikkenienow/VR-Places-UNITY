@@ -34,6 +34,7 @@ public class Joystick : MonoBehaviour
     }
     public void SetButtonActive()
     {
+        TestarInput();
         joystick.TryGetFeatureValue(CommonUsages.menuButton, out jMenu.bActive);
         joystick.TryGetFeatureValue(CommonUsages.triggerButton, out jTrigger.bActive);
         joystick.TryGetFeatureValue(CommonUsages.gripButton, out jGrip.bActive);

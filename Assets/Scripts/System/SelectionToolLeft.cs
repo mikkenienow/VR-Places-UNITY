@@ -192,10 +192,10 @@ public class SelectionToolLeft : MonoBehaviour
 
     void selectObject(string nomeDoObjeto)
     {
-        print("Tentando selecionar: " + nomeDoObjeto);
+        ////print("Tentando selecionar: " + nomeDoObjeto);
         if(controleEsquerdo.TryGetFeatureValue(CommonUsages.triggerButton, out triggerButtonAction) && triggerButtonAction && triggerButtonCount == 0)
         {
-            print("Trigger ativado");
+            ////print("Trigger ativado");
             if (triggerButtonCountPress == 1)
             {
                 triggerButtonCountPress = 0;
@@ -206,13 +206,13 @@ public class SelectionToolLeft : MonoBehaviour
             }
             if (hit.collider.tag == nomeDoObjeto && triggerButtonCountPress == 0)
             {
-                print("Objeto encontrado: " + nomeDoObjeto);
+                ////print("Objeto encontrado: " + nomeDoObjeto);
                 triggerButtonCountPress++;
                 triggerButtonCount = 15;
                 selectedObject = hit.transform.GetComponent<BoxCollider>();
                 selectedObject.gameObject.layer = 2;
                 followHit = true;
-                print(followHit);
+                ////print(followHit);
             }
             
         }
@@ -254,21 +254,21 @@ public class SelectionToolLeft : MonoBehaviour
         //criar ponto inicial parede
 
         // precisa de uma sintaxe que traga o angulo da porta caso seja continuação
-        print("criando parede");
+        ////print("criando parede");
         construirParede = false;
         primaryButtonLock = false;
         cont = false;
         acao = "modificarParede";
         if (hitpointUse)
         {
-            print("criando parede do 0");
+            ////print("criando parede do 0");
             pontoInicial = Instantiate(pontoInicial, hit.point, new Quaternion(0, 0, 0, 1));
             pontoFinal = Instantiate(pontoFinal, hit.point, new Quaternion(0, 0, 0, 1));
             parede = Instantiate(parede, pontoInicial.transform.position, Quaternion.identity);
         }
         else
         {
-            print("Criando parede continuada...");
+            ////print("Criando parede continuada...");
             pontoInicial = Instantiate(pontoInicial, pontoFinal2, paredePorta.transform.rotation);
             pontoFinal = Instantiate(pontoFinal, hit.point, new Quaternion(0, 0, 0, 1));
             parede = Instantiate(parede, pontoInicial.transform.position, pontoInicial.transform.rotation);
@@ -377,11 +377,11 @@ public class SelectionToolLeft : MonoBehaviour
             
             if (ferramentaAtiva.Equals("selecao"))
             {
-                print("modo seleção");
+                ////print("modo seleção");
                 selectObject("parede");
                 if (followHit)
                 {
-                    print("modificando seleção");
+                    ////print("modificando seleção");
                     selectedObject.transform.parent.position = hit.point;
                 }
                 
@@ -411,6 +411,6 @@ public class SelectionToolLeft : MonoBehaviour
 /*
 if (hit.collider.tag == "Bola Azul")
 {
-    //print("Bola Azul");
+    //////print("Bola Azul");
 }*/
 

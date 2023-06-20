@@ -59,7 +59,7 @@ public class VRPNewMaterial
             //texture.name = this.mainText;
             target.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
             target.GetComponent<Renderer>().material.name = mainText;
-            Debug.Log(target.GetComponent<Renderer>().material.name);
+            //Debug.Log(target.GetComponent<Renderer>().material.name);
         }
 
     }
@@ -87,14 +87,14 @@ public class VRPNewMaterial
 
     public static string GetTextureId(string filePath)
     {
-        string[] name = filePath.Split("/");
+        string[] name = filePath.Split('/');
         string final = name[name.Length-1];
         final = final.Substring(0, final.Length - 4);
         return final;
     }
     public static string GetColecaoId(string filePath)
     {
-        string[] name = filePath.Split("/");
+        string[] name = filePath.Split('/');
         string final = name[name.Length - 2];
         return final;
     }
@@ -107,7 +107,7 @@ public class VRPNewMaterial
             string fileFormat = ".png";
             string localPath = Application.persistentDataPath + "/temp/";
             string serverPath = "https://vrplaces.com.br/_files/" + texturePath + texturaId + fileFormat;
-            Debug.Log(serverPath);
+            //Debug.Log(serverPath);
             Texture2D texture = new Texture2D(1, 1);
 
             if (File.Exists(localPath + texturePath + texturaId + fileFormat))
@@ -149,16 +149,16 @@ public class VRPMaterial
     public string GetTexturaId()
     {
 
-        string[] name = this.mainTexture.Split("/");
+        string[] name = this.mainTexture.Split('/');
         string final = name[1];
-        Debug.Log("ID textura " + final);
+        //Debug.Log("ID textura " + final);
         return final;
     }
     public string GetColecaoId()
     {
-        string[] name = this.mainTexture.Split("/");
+        string[] name = this.mainTexture.Split('/');
         string final = name[0];
-        Debug.Log("ID coleção " + final);
+        //Debug.Log("ID coleção " + final);
         return final;
     }
 
